@@ -37,11 +37,12 @@ const Login = () => {
   const logo = theme === 'lamodaBlack' ? logoWhite : logoBlack
 
   return (
-    <section className='h-screen flex flex-col items-center justify-between m-auto'>
-      <div className='flex flex-col justify-between items-center m-auto w-full gap-8'>
-        <h2 className='text-4xl font-bold'>H2 2024</h2>
-        <h1 className='text-7xl font-bold'>Performance review</h1>
-
+    <section className='h-screen flex flex-col items-center justify-center m-auto gap-20'>
+      <div className='flex flex-col justify-between items-center gap-8 mt-64'>
+        <div className='flex flex-col items-center'>
+          <h2 className='text-4xl font-bold'>H2 2024</h2>
+          <h1 className='text-7xl font-bold'>Performance review</h1>
+        </div>
         <Form method='POST' className='p-4 flex gap-x-2'>
           <h4 className='text-xl font-bold'></h4>
           <label className='input input-bordered flex items-center gap-2'>
@@ -90,10 +91,12 @@ const Login = () => {
             <SubmitBtn text='Login' block='true' btnType='secondary' />
           </div>
         </Form>
-        <img src={logo} alt='logo' className='h-32 w-124 cover mt-36' />
+        <div className='h-64 flex justify-center items-center'>
+          <img src={logo} alt='logo' className='h-24 w-124 cover' />
+        </div>
       </div>
 
-      <div className='w-full flex flex-col items-center justify-center pb-16'>
+      <div className='w-full flex flex-col items-center justify-center'>
         <p className='pb-2'>HR PMO & Analytics Team</p>
         <span className='text-xs text-gray-500'>App v.1.0.0</span>
       </div>
