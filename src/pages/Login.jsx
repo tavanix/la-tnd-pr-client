@@ -39,10 +39,8 @@ const Login = () => {
   return (
     <section className='h-screen flex flex-col items-center justify-between m-auto'>
       <div className='flex flex-col justify-between items-center m-auto w-full gap-8'>
-        <img src={logo} alt='logo' className='h-36 w-124 cover' />
-
-        <h1 className='text-7xl font-bold'>Performance review</h1>
         <h2 className='text-4xl font-bold'>H2 2024</h2>
+        <h1 className='text-7xl font-bold'>Performance review</h1>
 
         <Form method='POST' className='p-4 flex gap-x-2'>
           <h4 className='text-xl font-bold'></h4>
@@ -92,7 +90,9 @@ const Login = () => {
             <SubmitBtn text='Login' block='true' btnType='secondary' />
           </div>
         </Form>
+        <img src={logo} alt='logo' className='h-32 w-124 cover mt-36' />
       </div>
+
       <div className='w-full flex flex-col items-center justify-center pb-16'>
         <p className='pb-2'>HR PMO & Analytics Team</p>
         <span className='text-xs text-gray-500'>App v.1.0.0</span>
