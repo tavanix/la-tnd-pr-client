@@ -19,206 +19,150 @@ import { customFetch } from '../utils'
 import authHeader from '../utils/authHeader'
 import { useSelector } from 'react-redux'
 
-// figure out
-// const validateRequired = (value) => !!value.length
-// const validateEmail = (email) =>
-//   !!email.length &&
-//   email
-//     .toLowerCase()
-//     .match(
-//       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-//     )
-
-// function validateUser(user) {
-//   return {
-//     firstName: !validateRequired(user.firstName)
-//       ? 'First Name is Required'
-//       : '',
-//     lastName: !validateRequired(user.lastName) ? 'Last Name is Required' : '',
-//     email: !validateEmail(user.email) ? 'Incorrect Email Format' : '',
-//   }
-// }
-// figure out end
-
 const Table = () => {
   const employees = useSelector((state) => state.employeesState.employees)
 
   const [validationErrors, setValidationErrors] = useState({})
 
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: 'employeeId',
-        header: 'Employee ID',
-        enableEditing: false,
-        size: 80,
+  const columns = [
+    {
+      accessorKey: 'employeeId',
+      header: 'Employee ID',
+      enableEditing: false,
+      size: 80,
+    },
+    {
+      accessorKey: 'employeeName',
+      header: 'Employee Name',
+      enableEditing: false,
+      size: 80,
+    },
+    {
+      accessorKey: 'email',
+      header: 'Email',
+      enableEditing: false,
+      size: 80,
+    },
+    {
+      accessorKey: 'level1',
+      header: 'Level 1',
+      enableEditing: false,
+      size: 80,
+    },
+    {
+      accessorKey: 'level2',
+      header: 'Level 2',
+      enableEditing: false,
+      size: 80,
+    },
+    {
+      accessorKey: 'level3',
+      header: 'Level 3',
+      enableEditing: false,
+      size: 80,
+    },
+    {
+      accessorKey: 'level4',
+      header: 'Level 4',
+      enableEditing: false,
+      size: 80,
+    },
+    {
+      accessorKey: 'level5',
+      header: 'Level 5',
+      enableEditing: false,
+      size: 80,
+    },
+    {
+      accessorKey: 'startDate',
+      header: 'Дата приема',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'positionEntryDate',
+      header: 'В должности с',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'positionTitle',
+      header: 'Должность',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'directManager',
+      header: 'Руководитель',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'levelFromCeo',
+      header: 'N- уровень',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'hasBonus',
+      header: 'hasBonus',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'isManager',
+      header: 'isManager',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'selfEvaluationPrevious',
+      header: 'Самооценка H1 2024',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'selfEvaluation',
+      header: 'Самооценка H2 2024',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'managerEvaluation',
+      header: 'Оценка руководителя',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'managerEvaluationComment',
+      header: 'Комментарий руководителя',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'calibration',
+      header: 'Calibration',
+      muiEditTextFieldProps: {
+        required: true,
       },
-      {
-        accessorKey: 'employeeName',
-        header: 'Employee Name',
-        enableEditing: false,
-        size: 80,
+    },
+    {
+      accessorKey: 'calibrationComment',
+      header: 'Calibration Comment',
+      muiEditTextFieldProps: {
+        required: true,
       },
-      {
-        accessorKey: 'email',
-        header: 'Email',
-        enableEditing: false,
-        size: 80,
-      },
-      {
-        accessorKey: 'level1',
-        header: 'Level 1',
-        enableEditing: false,
-        size: 80,
-      },
-      {
-        accessorKey: 'level2',
-        header: 'Level 2',
-        enableEditing: false,
-        size: 80,
-      },
-      {
-        accessorKey: 'level3',
-        header: 'Level 3',
-        enableEditing: false,
-        size: 80,
-      },
-      {
-        accessorKey: 'level4',
-        header: 'Level 4',
-        enableEditing: false,
-        size: 80,
-      },
-      {
-        accessorKey: 'level5',
-        header: 'Level 5',
-        enableEditing: false,
-        size: 80,
-      },
-      {
-        accessorKey: 'startDate',
-        header: 'Дата приема',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'positionEntryDate',
-        header: 'В должности с',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'positionTitle',
-        header: 'Должность',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'directManager',
-        header: 'Руководитель',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'levelFromCeo',
-        header: 'N- уровень',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'hasBonus',
-        header: 'hasBonus',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'isManager',
-        header: 'isManager',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'selfEvaluationPrevious',
-        header: 'Самооценка H1 2024',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'selfEvaluation',
-        header: 'Самооценка H2 2024',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'managerEvaluation',
-        header: 'Оценка руководителя',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'managerEvaluationComment',
-        header: 'Комментарий руководителя',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'calibration',
-        header: 'Calibration',
-        muiEditTextFieldProps: {
-          required: true,
-        },
-      },
-      {
-        accessorKey: 'calibrationComment',
-        header: 'Calibration Comment',
-        muiEditTextFieldProps: {
-          required: true,
-        },
-      },
-      {
-        accessorKey: 'feedbackPeer',
-        header: 'Оценка от коллег',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'feedbackProjectsAndTasks',
-        header: 'Проекты и задачи',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'feedbackCooperation',
-        header: 'Взаимодействие',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'feedbackComment',
-        header: 'Комментарии коллег',
-        enableEditing: false,
-      },
-      // {
-      //   accessorKey: 'employeeName',
-      //   header: 'Employee Name',
-      //   muiEditTextFieldProps: {
-      //     required: true,
-      //     error: !!validationErrors?.firstName,
-      //     helperText: validationErrors?.firstName,
-      //     //remove any previous validation errors when user focuses on the input
-      //     onFocus: () =>
-      //       setValidationErrors({
-      //         ...validationErrors,
-      //         firstName: undefined,
-      //       }),
-      //     //optionally add validation checking for onBlur or onChange
-      //   },
-      // },
-      // {
-      //   accessorKey: 'email',
-      //   header: 'Email',
-      //   muiEditTextFieldProps: {
-      //     type: 'email',
-      //     required: true,
-      //     error: !!validationErrors?.email,
-      //     helperText: validationErrors?.email,
-      //     //remove any previous validation errors when user focuses on the input
-      //     onFocus: () =>
-      //       setValidationErrors({
-      //         ...validationErrors,
-      //         email: undefined,
-      //       }),
-      //   },
-      // },
-    ],
-    [validationErrors]
-  )
+    },
+    {
+      accessorKey: 'feedbackPeer',
+      header: 'Оценка от коллег',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'feedbackProjectsAndTasks',
+      header: 'Проекты и задачи',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'feedbackCooperation',
+      header: 'Взаимодействие',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'feedbackComment',
+      header: 'Комментарии коллег',
+      enableEditing: false,
+    },
+  ]
 
   //call READ hook
   const {
@@ -233,7 +177,6 @@ const Table = () => {
 
   //UPDATE action
   const handleSaveUser = async ({ values, table }) => {
-    // const newValidationErrors = validateUser(values)
     const newValidationErrors = []
 
     if (Object.values(newValidationErrors).some((error) => error)) {
@@ -266,17 +209,24 @@ const Table = () => {
         minHeight: '500px',
       },
     },
-    // onCreatingRowCancel: () => setValidationErrors({}),
     onEditingRowCancel: () => setValidationErrors({}),
     onEditingRowSave: handleSaveUser,
+
+    muiEditRowDialogProps: ({ table, row, internalEditComponents }) => {
+      return {
+        maxWidth: 'xl',
+      }
+    },
+
     renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
         <DialogTitle variant='p'>Edit User</DialogTitle>
         <DialogContent
           sx={{
+            height: '100vh',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 1,
+            gap: 3,
           }}
         >
           {internalEditComponents} {/* or render custom edit components here */}
@@ -286,6 +236,7 @@ const Table = () => {
         </DialogActions>
       </>
     ),
+
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Tooltip title='Edit'>
@@ -295,6 +246,7 @@ const Table = () => {
         </Tooltip>
       </Box>
     ),
+
     state: {
       isLoading: isLoadingUsers,
       isSaving: isUpdatingUser,
@@ -331,12 +283,10 @@ function useUpdateUser() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (user) => {
-      console.log('update: ', user)
-
       //send api update request here
-      //TODO: update state here as well
-
       await customFetch.put(`/updateEmployee`, user)
+
+      //TODO: update state here as well
     },
     //client side optimistic update
     onMutate: (newUserInfo) => {
@@ -346,8 +296,10 @@ function useUpdateUser() {
         )
       )
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['user'] }), //refetch users after mutation
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['user'] }),
   })
 }
 
 export default Table
+
+// https://github.com/KevinVandy/material-react-table/blob/v3/apps/material-react-table-docs/examples/editing-crud-modal/sandbox/src/TS.tsx
