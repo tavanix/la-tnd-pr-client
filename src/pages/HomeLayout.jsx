@@ -3,8 +3,8 @@ import { Navbar, Loading } from '../components'
 import { toast } from 'react-toastify'
 import { redirect } from 'react-router-dom'
 
-import { customFetch } from '../utils'
 import { setEmployees } from '../features/employees/employeesSlice'
+import { customFetch } from '../utils'
 import authHeader from '../utils/authHeader'
 
 export const loader = (store, queryClient) => async () => {
@@ -42,7 +42,7 @@ const HomeLayout = () => {
       {isPageLoding ? (
         <Loading />
       ) : (
-        <section className='align-element py-24'>
+        <section className='align-element pt-24'>
           <Outlet />
         </section>
       )}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import {
   MRT_EditActionButtons,
   MaterialReactTable,
@@ -15,17 +15,73 @@ import {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import EditIcon from '@mui/icons-material/Edit'
 
+import { useDispatch, useSelector } from 'react-redux'
+import { editEmployee } from '../features/employees/employeesSlice'
 import { customFetch } from '../utils'
 import authHeader from '../utils/authHeader'
-import { useSelector } from 'react-redux'
-import { setEmployees } from '../features/employees/employeesSlice'
 
 const calibrationGrades = ['Top', 'Good', 'Bad']
 
-const Table = () => {
-  const employees = useSelector((state) => state.employeesState.employees)
+//READ hook (get users from api)
+function useGetUsers() {
+  const user = useSelector((state) => state.userState.user)
 
+  return useQuery({
+    queryKey: ['users'],
+    queryFn: async () => {
+      //send api request here
+      const employees = await customFetch.get(`/employees`, {
+        headers: authHeader(),
+      })
+
+      // user roles management here
+      let result = []
+      if (
+        user.roles.includes('ROLE_ADMIN') ||
+        user.roles.includes('ROLE_CNB') ||
+        user.roles.includes('ROLE_TND')
+      )
+        result = employees.data
+
+      if (user.roles.includes('ROLE_HRBP_IT'))
+        result = employees.data.filter(
+          (item) => item.level1 === 'IT' || item.level1 === 'HR'
+        )
+
+      return result
+    },
+    // refetchOnWindowFocus: false,
+  })
+}
+
+//UPDATE hook (put user in api)
+function useUpdateUser() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (user) => {
+      //send api update request here
+      await customFetch.put(`/updateEmployee`, user)
+    },
+    //client side optimistic update
+    onMutate: (newUserInfo) => {
+      queryClient.setQueryData(['employees'], (prevUsers) =>
+        prevUsers?.map((prevUser) =>
+          prevUser.id === newUserInfo.id ? newUserInfo : prevUser
+        )
+      )
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['user'] }),
+  })
+}
+
+const Table = () => {
+  const dispatch = useDispatch()
   const [validationErrors, setValidationErrors] = useState({})
+
+  const employeesFromStore = useSelector(
+    (state) => state.employeesState.employees
+  )
 
   const columns = [
     {
@@ -39,6 +95,15 @@ const Table = () => {
       header: 'Employee Name',
       enableEditing: false,
       size: 80,
+    },
+    {
+      accessorKey: 'calibration',
+      header: 'Calibration',
+      muiEditTextFieldProps: {
+        required: true,
+      },
+      editVariant: 'select',
+      editSelectOptions: calibrationGrades,
     },
     {
       accessorKey: 'email',
@@ -134,15 +199,15 @@ const Table = () => {
       header: 'Комментарий руководителя',
       enableEditing: false,
     },
-    {
-      accessorKey: 'calibration',
-      header: 'Calibration',
-      muiEditTextFieldProps: {
-        required: true,
-      },
-      editVariant: 'select',
-      editSelectOptions: calibrationGrades,
-    },
+    // {
+    //   accessorKey: 'calibration',
+    //   header: 'Calibration',
+    //   muiEditTextFieldProps: {
+    //     required: true,
+    //   },
+    //   editVariant: 'select',
+    //   editSelectOptions: calibrationGrades,
+    // },
     {
       accessorKey: 'calibrationComment',
       header: 'Calibration Comment',
@@ -178,7 +243,7 @@ const Table = () => {
 
   //call READ hook
   const {
-    data: fetchedUsers = [],
+    // data: fetchedUsers = [],
     isError: isLoadingUsersError,
     isFetching: isFetchingUsers,
     isLoading: isLoadingUsers,
@@ -189,23 +254,14 @@ const Table = () => {
 
   //UPDATE action
   const handleSaveUser = async ({ values, table }) => {
-    const newValidationErrors = []
-
-    if (Object.values(newValidationErrors).some((error) => error)) {
-      setValidationErrors(newValidationErrors)
-      return
-    }
-
-    setValidationErrors({})
-
     await updateUser(values)
-
+    dispatch(editEmployee(values))
     table.setEditingRow(null) //exit editing mode
   }
 
   const table = useMaterialReactTable({
     columns,
-    data: fetchedUsers,
+    data: employeesFromStore,
     createDisplayMode: 'modal', //default ('row', and 'custom' are also available)
     editDisplayMode: 'modal', //default ('row', 'cell', 'table', and 'custom' are also available)
     enableEditing: true,
@@ -268,58 +324,6 @@ const Table = () => {
   })
 
   return <MaterialReactTable table={table} />
-}
-
-//READ hook (get users from api)
-function useGetUsers() {
-  const user = useSelector((state) => state.userState.user)
-
-  return useQuery({
-    queryKey: ['users'],
-    queryFn: async () => {
-      //send api request here
-      const employees = await customFetch.get(`/employees`, {
-        headers: authHeader(),
-      })
-
-      // user roles management here
-      let result = []
-      if (
-        user.roles.includes('ROLE_ADMIN') ||
-        user.roles.includes('ROLE_CNB') ||
-        user.roles.includes('ROLE_TND')
-      )
-        result = employees.data
-
-      if (user.roles.includes('ROLE_HRBP_IT'))
-        result = employees.data.filter(
-          (item) => item.level1 === 'IT' || item.level1 === 'HR'
-        )
-
-      return result
-    },
-    refetchOnWindowFocus: false,
-  })
-}
-
-//UPDATE hook (put user in api)
-function useUpdateUser() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async (user) => {
-      //send api update request here
-      await customFetch.put(`/updateEmployee`, user)
-    },
-    //client side optimistic update
-    onMutate: (newUserInfo) => {
-      queryClient.setQueryData(['employees'], (prevUsers) =>
-        prevUsers?.map((prevUser) =>
-          prevUser.id === newUserInfo.id ? newUserInfo : prevUser
-        )
-      )
-    },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['user'] }),
-  })
 }
 
 export default Table

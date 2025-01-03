@@ -13,10 +13,15 @@ const employeesSlice = createSlice({
       state.employees = action.payload
     },
     editEmployee: (state, action) => {
-      console.log(action.payload)
-      toast.success(
-        'Изменения успешно сохранены, обновите страницу для отображения изменений!'
+      const updatedEmployee = action.payload
+      const employeeIndex = state.employees.findIndex(
+        (employee) => employee.email === updatedEmployee.email
       )
+
+      if (employeeIndex !== -1) {
+        state.employees[employeeIndex] = updatedEmployee
+        toast.success('Изменения успешно сохранены!')
+      }
     },
   },
 })
