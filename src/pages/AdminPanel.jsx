@@ -16,13 +16,13 @@ export const loader = (store, queryClient) => async () => {
   const user = store.getState().userState.user
 
   if (!user) {
-    toast.warn('You must be logged in!')
+    toast.warn('Сперва залогиньтесь, пожалуйста!')
     return redirect('/login')
   }
 
   if (!user.roles.includes('ROLE_ADMIN')) {
     toast.error(
-      'You must have the Admin role to view this page! Please contact app administrator...'
+      'У вас должны быть права администратора, чтобы видеть эту страницу... Пожалуйста обратитесь к администратору...'
     )
     return redirect('/')
   }

@@ -1,9 +1,19 @@
 import { ExportToExcel, SectionTitle } from '../components'
 import { useSelector } from 'react-redux'
 
+export const loader = (store, queryClient) => async () => {
+  // ROLES CHECK
+  const user = store.getState().userState.user
+  if (!user) {
+    toast.warn('Сперва залогиньтесь, пожалуйста!')
+    return redirect('/login')
+  }
+
+  return null
+}
+
 const Dashboard = () => {
   const employees = useSelector((state) => state.employeesState.employees)
-  console.log(employees.map((item) => item.calibration))
 
   return (
     <>

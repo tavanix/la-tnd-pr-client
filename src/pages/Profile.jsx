@@ -9,7 +9,7 @@ export const loader = (store) => () => {
   const user = store.getState().userState.user
 
   if (!user) {
-    toast.warn('You must be logged in!')
+    toast.warn('Сперва залогиньтесь, пожалуйста!')
     return redirect('/login')
   }
 
@@ -30,7 +30,7 @@ export const action =
     } catch (error) {
       const errorMesssage =
         error?.response?.data?.error?.message ||
-        'Please double check your credentials'
+        'Ошибка! Пожалуйста, проверьте корректность предоставленных данных...'
       toast.error(errorMesssage)
       return null
     }

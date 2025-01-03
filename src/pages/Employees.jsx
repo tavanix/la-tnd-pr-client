@@ -6,7 +6,7 @@ export const loader = (store, queryClient) => async () => {
   // ROLES CHECK
   const user = store.getState().userState.user
   if (!user) {
-    toast.warn('You must be logged in!')
+    toast.warn('Сперва залогиньтесь, пожалуйста!')
     return redirect('/login')
   }
 

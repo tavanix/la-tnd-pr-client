@@ -21,6 +21,7 @@ import { loader as adminLoader } from './pages/AdminPanel'
 import { loader as profileLoader } from './pages/Profile'
 import { loader as homeLoader } from './pages/HomeLayout'
 import { loader as employeesLoader } from './pages/Employees'
+import { loader as dashboardLoader } from './pages/Dashboard'
 
 // actions
 import { action as loginAction } from './pages/Login'
@@ -60,7 +61,7 @@ const router = createBrowserRouter([
       {
         path: 'dashboard',
         element: <Dashboard />,
-        // loader: employeesLoader(store, queryClient),
+        loader: dashboardLoader(store, queryClient),
       },
       { path: 'docs', element: <Docs /> },
       {
