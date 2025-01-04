@@ -42,10 +42,10 @@ const AdminPanel = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseEmployees = await customFetch.get('/admin', {
+        const employees = await customFetch.get('/employees', {
           headers: authHeader(),
         })
-        setEmployees(responseEmployees.data)
+        setEmployees(employees.data)
       } catch (error) {
         console.log(error.message)
       }
@@ -80,8 +80,7 @@ const AdminPanel = () => {
       <div className='flex flex-col mb-4 p-6 w-full border rounded shadow-lg'>
         <h3 className='font-bold'>Скинуть пароль</h3>
         <p className='text-primary'>
-          Введите username пользователя, которому нужно изменить пароль (который
-          придумаете сами)
+          Введите имя пользователя, которому нужно изменить пароль
         </p>
 
         <form className='form mt-4' onSubmit={onSubmitUserPassword}>
@@ -113,16 +112,10 @@ const AdminPanel = () => {
       {/* export data */}
       <div className='flex gap-8 mb-4 p-6 w-full border rounded shadow-lg'>
         <div className=''>
-          <h3 className='mb-4 font-bold'>Выгрузить список позиций:</h3>
+          <h3 className='mb-4 font-bold'>Выгрузить список сотрудников:</h3>
           <div className='flex gap-4 justify-center'>
-            <ExportToExcel
-              data={employees}
-              bookTitle={`List of employees_${Date.now()}`}
-            />
-            <ExportToCsv
-              data={employees}
-              bookTitle={`List of employees_${Date.now()}`}
-            />
+            <ExportToExcel data={employees} bookTitle={`PR_${Date.now()}`} />
+            <ExportToCsv data={employees} bookTitle={`PR_${Date.now()}`} />
           </div>
         </div>
       </div>
