@@ -7,8 +7,6 @@ import { loginUser } from '../features/user/userSlice'
 import logoBlack from '../assets/logoBlack.png'
 import logoWhite from '../assets/logoWhite.png'
 
-import { WiTrain } from 'react-icons/wi'
-
 export const action =
   (store) =>
   async ({ request }) => {
@@ -20,12 +18,12 @@ export const action =
 
       store.dispatch(loginUser(response.data))
 
-      toast.success('Logged in successfully')
+      toast.success('Успешный вход в систему!')
       return redirect('/')
     } catch (error) {
       const errorMesssage =
         error?.response?.data?.error?.message ||
-        'Please double check your credentials'
+        'Ошибка! Пожалуйста, проверьте корректность предоставленных данных...'
       toast.error(errorMesssage)
       return null
     }

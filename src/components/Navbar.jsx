@@ -26,8 +26,8 @@ const Navbar = () => {
   }
 
   return (
-    <div className='navbar bg-neutral fixed'>
-      <div className='navbar-start'>
+    <div className='navbar bg-neutral'>
+      <div className='navbar-start z-0'>
         <div className='dropdown'>
           <div tabIndex={0} role='button' className='btn btn-ghost btn-rounded'>
             <CiMenuBurger className='w-6 h-6 text-5xl' />

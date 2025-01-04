@@ -34,23 +34,9 @@ function useGetUsers() {
         headers: authHeader(),
       })
 
-      // user roles management here
-      let result = []
-      if (
-        user.roles.includes('ROLE_ADMIN') ||
-        user.roles.includes('ROLE_CNB') ||
-        user.roles.includes('ROLE_TND')
-      )
-        result = employees.data
-
-      if (user.roles.includes('ROLE_HRBP_IT'))
-        result = employees.data.filter(
-          (item) => item.level1 === 'IT' || item.level1 === 'HR'
-        )
-
-      return result
+      return null
     },
-    // refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false,
   })
 }
 
@@ -95,15 +81,6 @@ const Table = () => {
       header: 'Employee Name',
       enableEditing: false,
       size: 80,
-    },
-    {
-      accessorKey: 'calibration',
-      header: 'Calibration',
-      muiEditTextFieldProps: {
-        required: true,
-      },
-      editVariant: 'select',
-      editSelectOptions: calibrationGrades,
     },
     {
       accessorKey: 'email',
@@ -199,15 +176,15 @@ const Table = () => {
       header: 'Комментарий руководителя',
       enableEditing: false,
     },
-    // {
-    //   accessorKey: 'calibration',
-    //   header: 'Calibration',
-    //   muiEditTextFieldProps: {
-    //     required: true,
-    //   },
-    //   editVariant: 'select',
-    //   editSelectOptions: calibrationGrades,
-    // },
+    {
+      accessorKey: 'calibration',
+      header: 'Calibration',
+      muiEditTextFieldProps: {
+        required: true,
+      },
+      editVariant: 'select',
+      editSelectOptions: calibrationGrades,
+    },
     {
       accessorKey: 'calibrationComment',
       header: 'Calibration Comment',

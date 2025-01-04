@@ -11,7 +11,7 @@ export const loader = (store, queryClient) => async () => {
   const user = store.getState().userState.user
 
   if (!user) {
-    toast.warn('You must be logged in!')
+    toast.warn('Сперва залогиньтесь, пожалуйста!')
     return redirect('/login')
   }
 
@@ -21,10 +21,26 @@ export const loader = (store, queryClient) => async () => {
       headers: authHeader(),
     })
 
-    store.dispatch(setEmployees(employees.data))
+    // user roles and access management
+    let result = []
+    if (
+      user.roles.includes('ROLE_ADMIN') ||
+      user.roles.includes('ROLE_CNB') ||
+      user.roles.includes('ROLE_TND')
+    )
+      result = employees.data
+
+    if (user.roles.includes('ROLE_HRBP_IT'))
+      result = employees.data.filter((item) => item.level1 === 'IT')
+
+    if (user.roles.includes('ROLE_HRBP_HR'))
+      result = employees.data.filter((item) => item.level1 === 'HR')
+    //
+
+    store.dispatch(setEmployees(result))
   } catch (error) {
     const errorMesssage =
-      error?.response?.data?.error?.message || 'Something went wrong...'
+      error?.response?.data?.error?.message || 'Что-то пошло не так...'
     toast.error(errorMesssage)
     return null
   }
