@@ -252,6 +252,7 @@ const Table = () => {
     muiTableContainerProps: {
       sx: {
         minHeight: '500px',
+        padding: '8px',
       },
     },
     onEditingRowCancel: () => setValidationErrors({}),

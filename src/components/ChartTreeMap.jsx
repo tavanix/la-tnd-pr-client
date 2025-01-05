@@ -16,7 +16,7 @@ const CustomTooltip = ({ active, payload }) => {
 
 function ChartTreeMap({ title, data }) {
   return (
-    <div className='bg-gray-100 rounded-[7px] h-[480px] w-1/2 flex flex-col items-center'>
+    <div className='bg-white rounded-[7px] h-[480px] w-1/2 flex flex-col items-center border rounded shadow-lg'>
       <h1 className='font-bold text-xl m-2'>{title}</h1>
 
       <ResponsiveContainer width='95%' height='90%'>

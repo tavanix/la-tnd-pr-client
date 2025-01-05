@@ -1,4 +1,10 @@
-import { ChartDomainRadar, ChartTreeMap, SectionTitle } from '../components'
+import {
+  ChartBudget,
+  ChartDomainRadar,
+  ChartTable,
+  ChartTreeMap,
+  SectionTitle,
+} from '../components'
 import { useSelector } from 'react-redux'
 
 export const loader = (store, queryClient) => async () => {
@@ -47,6 +53,7 @@ const Dashboard = () => {
       fullMark: 100,
     },
   ]
+
   const dataBudget = [
     {
       subject: 'Top',
@@ -137,9 +144,11 @@ const Dashboard = () => {
   ]
 
   return (
-    <>
+    <div className='mb-16'>
       <SectionTitle text='Дешборд' />
       <div className='flex flex-col gap-2'>
+        <ChartBudget title='План vs Факт' />
+        <ChartTable title='Распределение до и после калибровки' />
         <div className='flex gap-2'>
           <ChartDomainRadar
             title='Распределение оценок'
@@ -159,7 +168,7 @@ const Dashboard = () => {
           <ChartTreeMap title='Распределение оценок (после)' data={dataAfter} />
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

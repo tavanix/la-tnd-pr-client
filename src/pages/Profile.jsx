@@ -44,10 +44,6 @@ const Profile = () => {
       <SectionTitle text='Информация о пользователе:' />
       <section className='flex flex-col mt-4 mb-8'>
         <div className='grid grid-cols-2 w-96 mb-2'>
-          <span className=''>User ID:</span>
-          <span className='text-primary font-light'>{user.employeeId}</span>
-        </div>
-        <div className='grid grid-cols-2 w-96 mb-2'>
           <span className=''>Username:</span>
           <span className='text-primary font-light'>{user.username}</span>
         </div>
@@ -66,7 +62,7 @@ const Profile = () => {
           </ul>
         </div>
       </section>
-      <SectionTitle text='Вы можете изменить свой текущий пароль в форме ниже:' />
+      <SectionTitle text='Здесь можно изменить свой текущий пароль:' />
       <Form
         method='POST'
         className='card mt-4 w-full bg-base-100 rounded-md flex flex-row gap-y-4 border-b border-base-300 pb-4'
