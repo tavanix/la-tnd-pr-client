@@ -31,10 +31,16 @@ export const loader = (store, queryClient) => async () => {
       result = employees.data
 
     if (user.roles.includes('ROLE_HRBP_IT'))
-      result = employees.data.filter((item) => item.level1 === 'IT')
+      result = employees.data.filter(
+        (item) => item.level1 === 'Дирекция информационных технологий'
+      )
 
     if (user.roles.includes('ROLE_HRBP_HR'))
-      result = employees.data.filter((item) => item.level1 === 'HR')
+      result = employees.data.filter(
+        (item) =>
+          item.level1 ===
+          'Дирекция по управлению персоналом и административной деятельности'
+      )
     //
 
     store.dispatch(setEmployees(result))

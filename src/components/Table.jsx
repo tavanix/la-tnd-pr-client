@@ -20,7 +20,7 @@ import { editEmployee } from '../features/employees/employeesSlice'
 import { customFetch } from '../utils'
 import authHeader from '../utils/authHeader'
 
-const calibrationGrades = ['Top', 'Good', 'Bad']
+const calibrationGrades = ['Топ', 'Отлично', 'Хорошо', 'Можешь лучше', 'Плохо']
 
 //READ hook (get users from api)
 function useGetUsers() {
@@ -74,50 +74,54 @@ const Table = () => {
       accessorKey: 'employeeId',
       header: 'Employee ID',
       enableEditing: false,
-      size: 80,
+      grow: true,
+      size: 160,
     },
     {
       accessorKey: 'employeeName',
       header: 'Employee Name',
       enableEditing: false,
-      size: 80,
     },
     {
       accessorKey: 'email',
       header: 'Email',
       enableEditing: false,
-      size: 80,
       Edit: () => null,
     },
     {
       accessorKey: 'level1',
       header: 'Level 1',
       enableEditing: false,
-      size: 80,
+      grow: true,
+      size: 300,
     },
     {
       accessorKey: 'level2',
       header: 'Level 2',
       enableEditing: false,
-      size: 80,
+      grow: true,
+      size: 350,
     },
     {
       accessorKey: 'level3',
       header: 'Level 3',
       enableEditing: false,
-      size: 80,
+      grow: true,
+      size: 300,
     },
     {
       accessorKey: 'level4',
       header: 'Level 4',
       enableEditing: false,
-      size: 80,
+      grow: true,
+      size: 300,
     },
     {
       accessorKey: 'level5',
       header: 'Level 5',
       enableEditing: false,
-      size: 80,
+      grow: true,
+      size: 300,
     },
     {
       accessorKey: 'startDate',
@@ -133,11 +137,15 @@ const Table = () => {
       accessorKey: 'positionTitle',
       header: 'Должность',
       enableEditing: false,
+      grow: true,
+      size: 350,
     },
     {
       accessorKey: 'directManager',
       header: 'Руководитель',
       enableEditing: false,
+      grow: true,
+      minSize: 200,
     },
     {
       accessorKey: 'levelFromCeo',
@@ -148,12 +156,16 @@ const Table = () => {
       accessorKey: 'hasBonus',
       header: 'hasBonus',
       enableEditing: false,
+      grow: true,
+      size: 150,
       Edit: () => null,
     },
     {
       accessorKey: 'isManager',
       header: 'isManager',
       enableEditing: false,
+      grow: true,
+      size: 150,
       Edit: () => null,
     },
     {
@@ -165,16 +177,22 @@ const Table = () => {
       accessorKey: 'selfEvaluation',
       header: 'Самооценка H2 2024',
       enableEditing: false,
+      grow: true,
+      minSize: 400,
     },
     {
       accessorKey: 'managerEvaluation',
       header: 'Оценка руководителя',
       enableEditing: false,
+      grow: true,
+      minSize: 250,
     },
     {
       accessorKey: 'managerEvaluationComment',
       header: 'Комментарий руководителя',
       enableEditing: false,
+      grow: true,
+      minSize: 300,
     },
     {
       accessorKey: 'calibration',
@@ -191,6 +209,8 @@ const Table = () => {
       muiEditTextFieldProps: {
         required: true,
       },
+      grow: true,
+      size: 250,
     },
     {
       accessorKey: 'feedbackPeer',
@@ -203,18 +223,24 @@ const Table = () => {
       header: 'Проекты и задачи',
       enableEditing: false,
       Edit: () => null,
+      grow: true,
+      size: 350,
     },
     {
       accessorKey: 'feedbackCooperation',
       header: 'Взаимодействие',
       enableEditing: false,
       Edit: () => null,
+      grow: true,
+      size: 600,
     },
     {
       accessorKey: 'feedbackComment',
       header: 'Комментарии коллег',
       enableEditing: false,
       Edit: () => null,
+      grow: true,
+      size: 600,
     },
   ]
 
@@ -242,7 +268,26 @@ const Table = () => {
     createDisplayMode: 'modal', //default ('row', and 'custom' are also available)
     editDisplayMode: 'modal', //default ('row', 'cell', 'table', and 'custom' are also available)
     enableEditing: true,
+    enableStickyHeader: true,
+    enableColumnResizing: true,
+
+    // muiTableBodyProps: {
+    //   sx: {
+    //     //stripe the rows, make odd rows a darker color
+    //     '& tr:nth-of-type(odd) > td': {
+    //       backgroundColor: '#f5f5f5',
+    //     },
+    //   },
+    // },
+
+    muiTableBodyCellProps: {
+      sx: {
+        borderRight: '1px solid #f4eeee', //add a border between columns
+      },
+    },
+
     getRowId: (row) => row.id,
+
     muiToolbarAlertBannerProps: isLoadingUsersError
       ? {
           color: 'error',
@@ -251,11 +296,12 @@ const Table = () => {
       : undefined,
     muiTableContainerProps: {
       sx: {
-        minHeight: '500px',
-        padding: '8px',
+        maxHeight: '500px',
       },
     },
+
     onEditingRowCancel: () => setValidationErrors({}),
+
     onEditingRowSave: handleSaveUser,
 
     muiEditRowDialogProps: ({ table, row, internalEditComponents }) => {
@@ -267,11 +313,13 @@ const Table = () => {
 
     renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant='p'>Edit User</DialogTitle>
+        <DialogTitle variant='p' className='font-bold'>
+          Форма каллибровки
+        </DialogTitle>
         <DialogContent
           sx={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridTemplateColumns: 'repeat(3, 4fr)',
             gap: 3,
           }}
         >
