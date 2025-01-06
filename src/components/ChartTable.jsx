@@ -1,5 +1,28 @@
 import React from 'react'
 
+const data = [
+  {
+    rate: 'Топ',
+    target: '1%',
+    beforeHc: 10,
+    beforePercent: '1%',
+    beforeFundPercent: '3%',
+    afterHc: 100,
+    afterPercent: '1%',
+    afterFundPercent: '3%',
+  },
+  {
+    rate: 'Отлично',
+    target: '12%',
+    beforeHc: 134,
+    beforePercent: '11%',
+    beforeFundPercent: '33%',
+    afterHc: 145,
+    afterPercent: '12%',
+    afterFundPercent: '35%',
+  },
+]
+
 const ChartTable = ({ title }) => {
   return (
     <div className='bg-white rounded-[7px] h-[520px] w-full flex flex-col items-center border rounded shadow-lg p-4'>
@@ -54,7 +77,7 @@ const ChartTable = ({ title }) => {
           </tr>
           <tr className='hover'>
             <td className='border'>Отлично</td>
-            <td className='text-center border'>20%</td>
+            <td className='text-center border'>12%</td>
             <td className='text-center border'>5</td>
             <td className='text-center border'>2%</td>
             <td className='text-center border'>2%</td>
@@ -64,7 +87,7 @@ const ChartTable = ({ title }) => {
           </tr>
           <tr className='hover'>
             <td className='border'>Хорошо</td>
-            <td className='text-center border'>39%</td>
+            <td className='text-center border'>75%</td>
             <td className='text-center border'>5</td>
             <td className='text-center border'>2%</td>
             <td className='text-center border'>2%</td>
@@ -73,18 +96,8 @@ const ChartTable = ({ title }) => {
             <td className='text-center border'>1%</td>
           </tr>
           <tr className='hover'>
-            <td className='border'>Можешь лучше</td>
-            <td className='text-center border'>1%</td>
-            <td className='text-center border'>5</td>
-            <td className='text-center border'>2%</td>
-            <td className='text-center border'>2%</td>
-            <td className='text-center border'>3</td>
-            <td className='text-center border'>1%</td>
-            <td className='text-center border'>1%</td>
-          </tr>
-          <tr className='hover'>
-            <td className='border'>Плохо</td>
-            <td className='text-center border'>1%</td>
+            <td className='border'>Можешь лучше / Плохо</td>
+            <td className='text-center border'>12%</td>
             <td className='text-center border'>5</td>
             <td className='text-center border'>2%</td>
             <td className='text-center border'>2%</td>

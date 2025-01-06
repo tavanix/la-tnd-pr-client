@@ -76,6 +76,7 @@ const Table = () => {
       enableEditing: false,
       grow: true,
       size: 160,
+      visibleInShowHideMenu: false,
     },
     {
       accessorKey: 'employeeName',
@@ -186,6 +187,7 @@ const Table = () => {
       enableEditing: false,
       grow: true,
       minSize: 250,
+      enableHiding: false,
     },
     {
       accessorKey: 'managerEvaluationComment',
@@ -242,6 +244,20 @@ const Table = () => {
       grow: true,
       size: 600,
     },
+    {
+      accessorKey: 'targetBonusBudget',
+      header: 'targetBonusBudget',
+      enableEditing: false,
+      Edit: () => null,
+      visibleInShowHideMenu: false,
+    },
+    {
+      accessorKey: 'targetBonusSum',
+      header: 'targetBonusSum',
+      enableEditing: false,
+      Edit: () => null,
+      visibleInShowHideMenu: false,
+    },
   ]
 
   //call READ hook
@@ -265,11 +281,19 @@ const Table = () => {
   const table = useMaterialReactTable({
     columns,
     data: employeesFromStore,
+
     createDisplayMode: 'modal', //default ('row', and 'custom' are also available)
     editDisplayMode: 'modal', //default ('row', 'cell', 'table', and 'custom' are also available)
+
     enableEditing: true,
     enableStickyHeader: true,
     enableColumnResizing: true,
+
+    displayColumnDefOptions: {
+      'mrt-row-actions': {
+        visibleInShowHideMenu: false, //hide the built-in row actions column from the show hide menu
+      },
+    },
 
     // muiTableBodyProps: {
     //   sx: {
@@ -279,6 +303,14 @@ const Table = () => {
     //     },
     //   },
     // },
+
+    initialState: {
+      columnVisibility: {
+        email: false,
+        targetBonusBudget: false,
+        targetBonusSum: false,
+      },
+    },
 
     muiTableBodyCellProps: {
       sx: {
