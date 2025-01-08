@@ -81,6 +81,7 @@ const mergeArrays = (arr1, arr2) => {
 
 const prepareDataForTable = (employees) => {
   const totalEmployees = employees.length
+  // TODO: refactor - DRY
   const bonusFundTotal = employees.reduce(
     (accumulator, employee) => accumulator + +employee.targetBonusBudget,
     0
@@ -122,10 +123,12 @@ const prepareDataForTable = (employees) => {
     if (filteredEmployeesBefore.length === 0) return
 
     let bonusFundBefore = 0
+    let bonusFundAtCurrentRate = 0
 
     arrayBefore.push(
       filteredEmployeesBefore.reduce((accumalator, employee) => {
         bonusFundBefore += +employee.targetBonusSum * key.multiplier
+        bonusFundAtCurrentRate += +employee.targetBonusBudget
 
         return {
           rate: key.rate,
@@ -139,6 +142,7 @@ const prepareDataForTable = (employees) => {
             ((bonusFundBefore / bonusFundTotal) * 100).toFixed(1) + '%',
           bonusFundTotal: bonusFundTotal,
           bonusFundBefore: bonusFundBefore,
+          bonusFundAtCurrentRate: bonusFundAtCurrentRate,
         }
       }, [])
     )
@@ -212,118 +216,50 @@ const Dashboard = () => {
   const dataForTable = prepareDataForTable(employees)
 
   // DATA FOR RADAR
-  const dataForRadarBefore = [
-    {
-      rate: 'Top',
-      target: 1,
-      actual: 1,
-    },
-    {
-      rate: 'Отлично',
-      target: 20,
-      actual: 25,
-    },
-    {
-      rate: 'Молодец',
-      target: 59,
-      actual: 54,
-    },
-    {
-      rate: 'Хорошо',
-      target: 12,
-      actual: 17,
-    },
-    {
-      rate: 'Можешь лучше',
-      target: 8,
-      actual: 3,
-    },
-  ]
+  const dataForRadarRates = dataForTable.reduce((accumulator, current) => {
+    const newObject = {
+      rate: current.rate,
+      target: +((employees.length * current.target.slice(0, -1)) / 100).toFixed(
+        0
+      ), // рассчитываем целевую численность по рейтингу
+      actual: current.afterHc,
+    }
 
-  const dataForRadarAfter = [
-    {
-      rate: 'Top',
-      target: 120,
-      actual: 110,
-    },
-    {
-      rate: 'Отлично',
-      target: 98,
-      actual: 130,
-    },
-    {
-      rate: 'Молодец',
-      target: 86,
-      actual: 130,
-    },
-    {
-      rate: 'Хорошо',
-      target: 99,
-      actual: 100,
-    },
-    {
-      rate: 'Можешь лучше',
-      target: 85,
-      actual: 90,
-    },
-  ]
+    accumulator.push(newObject)
+    return accumulator
+  }, [])
+
+  const dataForRadarBudget = dataForTable.reduce((accumulator, current) => {
+    const newObject = {
+      rate: current.rate,
+      target: current.bonusFundAtCurrentRate / 1000,
+      actual: current.bonusFundAfter / 1000,
+    }
+
+    accumulator.push(newObject)
+    return accumulator
+  }, [])
 
   // DATA FOR TREEMAP
-  const dataForTreemapBefore = [
-    {
-      name: 'Top',
-      value: 1,
-      color: '#e09d00',
-    },
-    {
-      name: 'Perfect',
-      value: 15,
-      color: '#83a6ed',
-    },
-    {
-      name: 'Good',
-      value: 54,
-      color: '#9ab972',
-    },
-    {
-      name: 'Can better',
-      value: 20,
-      color: '#a26969',
-    },
-    {
-      name: 'Bad',
-      value: 10,
-      color: '#146200',
-    },
-  ]
+  const dataForTreemapBefore = dataForTable.reduce((accumulator, current) => {
+    const newObject = {
+      name: current.rate,
+      value: current.beforeHc,
+    }
 
-  const dataForTreemapAfter = [
-    {
-      name: 'Top',
-      value: 1,
-      color: '#8884d8',
-    },
-    {
-      name: 'Perfect',
-      value: 21,
-      color: '#83a6ed',
-    },
-    {
-      name: 'Good',
-      value: 60,
-      color: '#83a6ed',
-    },
-    {
-      name: 'Can better',
-      value: 10,
-      color: '#83a6ed',
-    },
-    {
-      name: 'Bad',
-      value: 8,
-      color: '#83a6ed',
-    },
-  ]
+    accumulator.push(newObject)
+    return accumulator
+  }, [])
+
+  const dataForTreemapAfter = dataForTable.reduce((accumulator, current) => {
+    const newObject = {
+      name: current.rate,
+      value: current.afterHc,
+    }
+
+    accumulator.push(newObject)
+    return accumulator
+  }, [])
 
   return (
     <div className='mb-16'>
@@ -334,24 +270,27 @@ const Dashboard = () => {
           bonusBeforeCalibration={bonusBeforeCalibration}
           bonusAfterCalibration={bonusAfterCalibration}
         />
+
         <ChartTable
           title='Распределение до и после калибровки'
           data={dataForTable}
         />
+
         <div className='flex gap-2'>
           <ChartDomainRadar
             title='Распределение оценок'
             planLegend='Цель'
             actualLegend='Факт'
-            data={dataForRadarBefore}
+            data={dataForRadarRates}
           />
           <ChartDomainRadar
-            title='Распределение бюджета'
+            title='Распределение бюджета (тыс.руб.)'
             planLegend='Бюджет'
             actualLegend='Факт'
-            data={dataForRadarAfter}
+            data={dataForRadarBudget}
           />
         </div>
+
         <div className='flex gap-2'>
           <ChartTreeMap
             title='Распределение оценок (до)'

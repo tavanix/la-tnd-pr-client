@@ -14,6 +14,7 @@ export const loader = (store, queryClient) => async () => {
 }
 
 const Employees = () => {
+  const user = useSelector((state) => state.userState.user)
   const employees = useSelector((state) => state.employeesState.employees)
 
   return (
@@ -21,7 +22,10 @@ const Employees = () => {
       <SectionTitle text='Калибровка' />
       <Table />
       <div className='mt-4'>
-        <ExportToExcel data={employees} bookTitle={`PR_${Date.now()}`} />
+        <ExportToExcel
+          data={employees}
+          bookTitle={`Калибровка_${user.roles[0].slice(5)}_${Date.now()}`}
+        />
       </div>
     </>
   )

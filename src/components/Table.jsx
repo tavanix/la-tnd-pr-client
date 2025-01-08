@@ -295,6 +295,12 @@ const Table = () => {
       },
     },
 
+    // muiTablePaperProps: ({ table }) => ({
+    //   style: {
+    //     zIndex: table.getState().isFullScreen ? 1000 : 2222222,
+    //   },
+    // }),
+
     // muiTableBodyProps: {
     //   sx: {
     //     //stripe the rows, make odd rows a darker color

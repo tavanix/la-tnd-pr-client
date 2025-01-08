@@ -11,7 +11,7 @@ import {
 
 const ChartDomainRadar = ({ title, planLegend, actualLegend, data }) => {
   return (
-    <div className='bg-white rounded-[7px] h-[420px] w-1/2 p-2 flex flex-col items-center border rounded shadow-lg'>
+    <div className='rounded-[7px] h-[420px] w-1/2 p-2 flex flex-col items-center border shadow-lg'>
       <h1 className='font-bold text-xl'>{title}</h1>
       <ResponsiveContainer width='95%' height='95%'>
         <RadarChart cx='50%' cy='50%' outerRadius='75%' data={data}>

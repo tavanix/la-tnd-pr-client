@@ -34,7 +34,7 @@ const Navbar = () => {
           </div>
           <ul
             tabIndex={0}
-            className='menu menu-sm dropdown-content mt-3 z-[50] p-2 shadow bg-base-100 rounded-box w-64'
+            className='menu menu-sm dropdown-content mt-3 z-[50] p-2 shadow bg-base-100 rounded-box w-32'
           >
             <NavLinks />
           </ul>
@@ -45,11 +45,11 @@ const Navbar = () => {
         <h1 className='font-bold text-[1.3rem]'>H2 2024: Performance Review</h1>
       </div>
       <div className='navbar-end'>
-        {/* <label className='swap swap-rotate text-4xl btn btn-ghost btn-rounded'>
+        <label className='swap swap-rotate text-4xl btn btn-ghost btn-rounded'>
           <input type='checkbox' onChange={handleTheme} />
           <CiLight className='text-xl swap-on h-6 w-6 rounded-full' />
           <CiDark className='text-xl swap-off h-6 w-6 rounded-full' />
-        </label> */}
+        </label>
         <div className='dropdown dropdown-end'>
           <div
             tabIndex={0}
