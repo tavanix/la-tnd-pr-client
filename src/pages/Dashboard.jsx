@@ -72,9 +72,17 @@ function calculateTotalBonus(data, calcType) {
   }, 0)
 }
 
+const mergeArrays = (arr1, arr2) => {
+  return arr1.map((item) => ({
+    ...item,
+    ...arr2.find((obj) => obj.rate === item.rate && obj.target === item.target),
+  }))
+}
+
 const Dashboard = () => {
   const employees = useSelector((state) => state.employeesState.employees)
 
+  // DATA FOR KPI CARDS
   // total budget
   const bonusBudget = employees
     .map((employee) => {
@@ -88,73 +96,140 @@ const Dashboard = () => {
   // bonus sum after calibration
   const bonusAfterCalibration = calculateTotalBonus(employees, 'after')
 
-  const dataRates = [
+  // DATA FOR TABLE
+  const totalEmployees = employees.length
+
+  const iterationKeys = [
+    { rate: 'Топ', target: '1%', multiplier: 3 },
+    { rate: 'Отлично', target: '15%', multiplier: 1.5 },
+    { rate: 'Хорошо', target: '75%', multiplier: 1 },
+    { rate: 'Можешь лучше', target: '7%', multiplier: 0.5 },
+    { rate: 'Плохо', target: '2%', multiplier: 0 },
+  ]
+
+  let arrayBefore = []
+  let arrayAfter = []
+  let arrayResult = []
+
+  iterationKeys.map((key) => {
+    let bonusFundTotal = 0
+
+    // before
+    let bonusFundBefore = 0
+    const filteredEmployeesBefore = employees.filter(
+      (emp) => emp.managerEvaluation === key.rate
+    )
+
+    arrayBefore.push(
+      filteredEmployeesBefore.reduce((accumalator, employee) => {
+        bonusFundTotal += +employee.targetBonusBudget
+        bonusFundBefore += +employee.targetBonusSum * key.multiplier
+
+        return {
+          rate: key.rate,
+          target: key.target,
+          beforeHc: filteredEmployeesBefore.length,
+          beforePercent:
+            ((filteredEmployeesBefore.length / totalEmployees) * 100).toFixed(
+              0
+            ) + '%',
+          beforeFundPercent:
+            ((bonusFundBefore / bonusFundTotal) * 100).toFixed(1) + '%',
+          // bonusFundTotal: bonusFundTotal,
+          // bonusFundBefore: bonusFundBefore,
+        }
+      }, [])
+    )
+
+    // after
+    let bonusFundAfter = 0
+    const filteredEmployeesAfter = employees.filter(
+      (emp) => emp.calibration === key.rate
+    )
+
+    arrayAfter.push(
+      filteredEmployeesAfter.reduce((accumalator, employee) => {
+        bonusFundTotal += +employee.targetBonusBudget
+        bonusFundAfter += +employee.targetBonusSum * key.multiplier
+
+        return {
+          rate: key.rate,
+          target: key.target,
+          afterHc: filteredEmployeesAfter.length,
+          afterPercent:
+            ((filteredEmployeesAfter.length / totalEmployees) * 100).toFixed(
+              0
+            ) + '%',
+          afterFundPercent:
+            ((bonusFundAfter / bonusFundTotal) * 100).toFixed(1) + '%',
+          // bonusFundTotal: bonusFundTotal,
+          // bonusFundAfter: bonusFundAfter,
+        }
+      }, [])
+    )
+
+    arrayResult = mergeArrays(arrayBefore, arrayAfter)
+  })
+
+  // DATA FOR RADAR
+  const dataForRadarBefore = [
     {
-      subject: 'Top',
+      rate: 'Top',
       target: 1,
       actual: 1,
-      fullMark: 100,
     },
     {
-      subject: 'Отлично',
+      rate: 'Отлично',
       target: 20,
       actual: 25,
-      fullMark: 100,
     },
     {
-      subject: 'Молодец',
+      rate: 'Молодец',
       target: 59,
       actual: 54,
-      fullMark: 100,
     },
     {
-      subject: 'Хорошо',
+      rate: 'Хорошо',
       target: 12,
       actual: 17,
-      fullMark: 100,
     },
     {
-      subject: 'Можешь лучше',
+      rate: 'Можешь лучше',
       target: 8,
       actual: 3,
-      fullMark: 100,
     },
   ]
 
-  const dataBudget = [
+  const dataForRadarAfter = [
     {
-      subject: 'Top',
+      rate: 'Top',
       target: 120,
       actual: 110,
-      fullMark: 150,
     },
     {
-      subject: 'Отлично',
+      rate: 'Отлично',
       target: 98,
       actual: 130,
-      fullMark: 150,
     },
     {
-      subject: 'Молодец',
+      rate: 'Молодец',
       target: 86,
       actual: 130,
-      fullMark: 150,
     },
     {
-      subject: 'Хорошо',
+      rate: 'Хорошо',
       target: 99,
       actual: 100,
-      fullMark: 150,
     },
     {
-      subject: 'Можешь лучше',
+      rate: 'Можешь лучше',
       target: 85,
       actual: 90,
-      fullMark: 150,
     },
   ]
 
-  const dataBefore = [
+  // DATA FOR TREEMAP
+  const dataForTreemapBefore = [
     {
       name: 'Top',
       value: 1,
@@ -182,7 +257,7 @@ const Dashboard = () => {
     },
   ]
 
-  const dataAfter = [
+  const dataForTreemapAfter = [
     {
       name: 'Top',
       value: 1,
@@ -219,24 +294,33 @@ const Dashboard = () => {
           bonusBeforeCalibration={bonusBeforeCalibration}
           bonusAfterCalibration={bonusAfterCalibration}
         />
-        <ChartTable title='Распределение до и после калибровки' />
+        <ChartTable
+          title='Распределение до и после калибровки'
+          data={arrayResult}
+        />
         <div className='flex gap-2'>
           <ChartDomainRadar
             title='Распределение оценок'
             planLegend='Цель'
             actualLegend='Факт'
-            data={dataRates}
+            data={dataForRadarBefore}
           />
           <ChartDomainRadar
             title='Распределение бюджета'
             planLegend='Бюджет'
             actualLegend='Факт'
-            data={dataBudget}
+            data={dataForRadarAfter}
           />
         </div>
         <div className='flex gap-2'>
-          <ChartTreeMap title='Распределение оценок (до)' data={dataBefore} />
-          <ChartTreeMap title='Распределение оценок (после)' data={dataAfter} />
+          <ChartTreeMap
+            title='Распределение оценок (до)'
+            data={dataForTreemapBefore}
+          />
+          <ChartTreeMap
+            title='Распределение оценок (после)'
+            data={dataForTreemapAfter}
+          />
         </div>
       </div>
     </div>
@@ -244,3 +328,33 @@ const Dashboard = () => {
 }
 
 export default Dashboard
+
+// Функция для группировки элементов массива по значению поля rate
+// const groupByRate = (array) => {
+//   return array.reduce((acc, item) => {
+//     if (!acc[item.managerEvaluation]) {
+//       acc[item.managerEvaluation] = []
+//     }
+//     acc[item.managerEvaluation].push(item)
+//     return acc
+//   }, {})
+// }
+
+// Группируем элементы массива по полю rate
+// const groupedData = groupByRate(employees)
+
+// console.log('groupped: ', groupedData['Топ'])
+
+// giga chat
+// function groupByDate(array) {
+//   const temp = array.reduce((acc, item) => {
+//     if (!acc[item.managerEvaluation]) {
+//       acc[item.managerEvaluation] = []
+//     }
+//     acc[item.managerEvaluation].push(item)
+//     return acc
+//   }, {})
+
+//   return Object.getOwnPropertyNames(temp).map((elem) => temp[elem])
+// }
+// console.log('giga chat: ', groupByDate(employees))

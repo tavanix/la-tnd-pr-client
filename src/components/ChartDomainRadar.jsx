@@ -16,7 +16,7 @@ const ChartDomainRadar = ({ title, planLegend, actualLegend, data }) => {
       <ResponsiveContainer width='95%' height='95%'>
         <RadarChart cx='50%' cy='50%' outerRadius='75%' data={data}>
           <PolarGrid />
-          <PolarAngleAxis dataKey='subject' />
+          <PolarAngleAxis dataKey='rate' />
           <Radar
             name={planLegend}
             dataKey='target'
