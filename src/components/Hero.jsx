@@ -18,7 +18,7 @@ const Hero = () => {
           </div>
 
           <div className='mt-16'>
-            <span>Developed and designed by Maksim Aysin</span>
+            <span>developed by Maksim Aysin</span>
           </div>
         </div>
       </div>

@@ -1,6 +1,30 @@
 const ChartTable = ({ title, data }) => {
+  const beforeHcTotal = data.reduce(
+    (accumulator, item) => accumulator + item.beforeHc,
+    0
+  )
+  const beforePercentTotal = data.reduce(
+    (accumulator, item) => accumulator + +item.beforePercent.slice(0, -1),
+    0
+  )
+  const beforeFundPercentTotal = data.reduce(
+    (accumulator, item) => accumulator + +item.beforeFundPercent.slice(0, -1),
+    0
+  )
+  const afterHcTotal = data.reduce(
+    (accumulator, item) => accumulator + item.afterHc,
+    0
+  )
+  const afterPercentTotal = data.reduce(
+    (accumulator, item) => accumulator + +item.afterPercent.slice(0, -1),
+    0
+  )
+  const afterFundPercentTotal = data.reduce(
+    (accumulator, item) => accumulator + +item.afterFundPercent.slice(0, -1),
+    0
+  )
   return (
-    <div className='bg-white rounded-[7px] h-[560px] w-full flex flex-col items-center border shadow-lg p-4'>
+    <div className='bg-white rounded-[7px] h-[555px] w-full flex flex-col items-center border shadow-lg p-4'>
       <h1 className='font-bold text-xl mb-4'>{title}</h1>
       <table className='table table-lg w-full table-fixed'>
         <thead className='uppercase h-10 border-b-4'>
@@ -53,11 +77,11 @@ const ChartTable = ({ title, data }) => {
           {data.map((item) => {
             const changesHc = item.afterHc - item.beforeHc
 
-            const changesPercent =
-              item.afterPercent.slice(0, -1) - item.beforePercent.slice(0, -1)
+            const changesPercent = 0
+            item.afterPercent.slice(0, -1) - item.beforePercent.slice(0, -1)
 
-            const changesFundPercent =
-              item.afterFundPercent.slice(0, -1) -
+            const changesFundPercent = 0
+            item.afterFundPercent.slice(0, -1) -
               item.beforeFundPercent.slice(0, -1)
 
             return (
@@ -102,6 +126,30 @@ const ChartTable = ({ title, data }) => {
               </tr>
             )
           })}
+          <tr className='border-t-4 border-b-4'>
+            <td className='border text-[14px] font-bold'>Итого</td>
+            <td className='text-center border text-[14px] border-r-2 font-bold'>
+              100%
+            </td>
+            <td className='text-center border text-[14px] font-bold'>
+              {beforeHcTotal}
+            </td>
+            <td className='text-center border text-[14px] font-bold'>
+              {beforePercentTotal.toFixed(1)}%
+            </td>
+            <td className='text-center border text-[14px] border-r-2 font-bold'>
+              {beforeFundPercentTotal.toFixed(1)}%
+            </td>
+            <td className='text-center border text-[14px] font-bold'>
+              {afterHcTotal}
+            </td>
+            <td className='text-center border text-[14px] font-bold'>
+              {afterPercentTotal.toFixed(1)}%
+            </td>
+            <td className='text-center border text-[14px] border-r-2 font-bold'>
+              {afterFundPercentTotal.toFixed(1)}%
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

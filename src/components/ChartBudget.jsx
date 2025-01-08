@@ -64,7 +64,7 @@ const ChartBudget = ({
             ) : (
               <dd className='flex items-center space-x-1 text-sm font-medium text-green-500 dark:text-green-400'>
                 <span>
-                  {((bonusBeforeCalibration / budget) * 100 - 100).toFixed(1)}%
+                  {((bonusBeforeCalibration / budget) * 100 - 100).toFixed(2)}%
                   экономия к бюджету
                 </span>
 
@@ -111,7 +111,7 @@ const ChartBudget = ({
             {(bonusAfterCalibration / budget).toFixed(4) - 1 > 0 ? (
               <dd className='flex items-center space-x-1 text-sm font-medium text-red-500 dark:text-red-400'>
                 <span>
-                  {((bonusAfterCalibration / budget) * 100 - 100).toFixed(1)}%
+                  {((bonusAfterCalibration / budget) * 100 - 100).toFixed(2)}%
                   перерасход к бюджету
                 </span>
                 <svg
@@ -139,7 +139,7 @@ const ChartBudget = ({
             ) : (
               <dd className='flex items-center space-x-1 text-sm font-medium text-green-500 dark:text-green-400'>
                 <span>
-                  {((bonusAfterCalibration / budget) * 100 - 100).toFixed(1)}%
+                  {((bonusAfterCalibration / budget) * 100 - 100).toFixed(2)}%
                   экономия к бюджету
                 </span>
 

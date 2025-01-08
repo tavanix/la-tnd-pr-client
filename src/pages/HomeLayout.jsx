@@ -32,9 +32,7 @@ export const loader = (store, queryClient) => async () => {
 
     if (user.roles.includes('ROLE_HRBP_IT'))
       result = employees.data.filter(
-        // (item) => item.level1 === 'Дирекция информационных технологий'
-        (item) =>
-          item.level1 === 'Дирекция по стратегии и корпоративному развитию'
+        (item) => item.level1 === 'Дирекция информационных технологий'
       )
 
     if (user.roles.includes('ROLE_HRBP_HR'))

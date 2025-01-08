@@ -79,10 +79,122 @@ const mergeArrays = (arr1, arr2) => {
   }))
 }
 
+const prepareDataForTable = (employees) => {
+  const totalEmployees = employees.length
+  const bonusFundTotal = employees.reduce(
+    (accumulator, employee) => accumulator + +employee.targetBonusBudget,
+    0
+  )
+
+  const iterationKeys = [
+    { rate: 'Топ', target: '1%', multiplier: 3 },
+    { rate: 'Отлично', target: '15%', multiplier: 1.5 },
+    { rate: 'Хорошо', target: '75%', multiplier: 1 },
+    { rate: 'Можешь лучше', target: '7%', multiplier: 0.5 },
+    { rate: 'Плохо', target: '2%', multiplier: 0 },
+  ]
+
+  let arrayBefore = []
+  let arrayAfter = []
+
+  // PROCESSING BEFORE
+  iterationKeys.map((key) => {
+    // check for empty rates
+    if (
+      !employees
+        .map((employee) => employee.managerEvaluation)
+        .includes(key.rate)
+    ) {
+      arrayBefore.push({
+        rate: key.rate,
+        target: key.target,
+        beforeHc: 0,
+        beforePercent: '0%',
+        beforeFundPercent: '0%',
+      })
+    }
+
+    // logic
+    const filteredEmployeesBefore = employees.filter(
+      (employee) => employee.managerEvaluation === key.rate
+    )
+
+    if (filteredEmployeesBefore.length === 0) return
+
+    let bonusFundBefore = 0
+
+    arrayBefore.push(
+      filteredEmployeesBefore.reduce((accumalator, employee) => {
+        bonusFundBefore += +employee.targetBonusSum * key.multiplier
+
+        return {
+          rate: key.rate,
+          target: key.target,
+          beforeHc: filteredEmployeesBefore.length,
+          beforePercent:
+            ((filteredEmployeesBefore.length / totalEmployees) * 100).toFixed(
+              1
+            ) + '%',
+          beforeFundPercent:
+            ((bonusFundBefore / bonusFundTotal) * 100).toFixed(1) + '%',
+          bonusFundTotal: bonusFundTotal,
+          bonusFundBefore: bonusFundBefore,
+        }
+      }, [])
+    )
+  })
+
+  // PROCESSING AFTER
+  iterationKeys.map((key) => {
+    // check for empty rates
+    if (!employees.map((employee) => employee.calibration).includes(key.rate)) {
+      arrayAfter.push({
+        rate: key.rate,
+        target: key.target,
+        afterHc: 0,
+        afterPercent: '0%',
+        afterFundPercent: '0%',
+      })
+    }
+
+    // logic
+    let bonusFundAfter = 0
+
+    const filteredEmployeesAfter = employees.filter(
+      (employee) => employee.calibration === key.rate
+    )
+
+    if (filteredEmployeesAfter === null) return
+
+    arrayAfter.push(
+      filteredEmployeesAfter.reduce((accumalator, employee) => {
+        bonusFundAfter += +employee.targetBonusSum * key.multiplier
+
+        return {
+          rate: key.rate,
+          target: key.target,
+          afterHc: filteredEmployeesAfter.length,
+          afterPercent:
+            ((filteredEmployeesAfter.length / totalEmployees) * 100).toFixed(
+              1
+            ) + '%',
+          afterFundPercent:
+            ((bonusFundAfter / bonusFundTotal) * 100).toFixed(1) + '%',
+          bonusFundTotal: bonusFundTotal,
+          bonusFundAfter: bonusFundAfter,
+        }
+      }, [])
+    )
+  })
+
+  return mergeArrays(arrayBefore, arrayAfter)
+}
+
 const Dashboard = () => {
   const employees = useSelector((state) => state.employeesState.employees)
 
   // DATA FOR KPI CARDS
+
   // total budget
   const bonusBudget = employees
     .map((employee) => {
@@ -97,79 +209,7 @@ const Dashboard = () => {
   const bonusAfterCalibration = calculateTotalBonus(employees, 'after')
 
   // DATA FOR TABLE
-  const totalEmployees = employees.length
-
-  const iterationKeys = [
-    { rate: 'Топ', target: '1%', multiplier: 3 },
-    { rate: 'Отлично', target: '15%', multiplier: 1.5 },
-    { rate: 'Хорошо', target: '75%', multiplier: 1 },
-    { rate: 'Можешь лучше', target: '7%', multiplier: 0.5 },
-    { rate: 'Плохо', target: '2%', multiplier: 0 },
-  ]
-
-  let arrayBefore = []
-  let arrayAfter = []
-  let arrayResult = []
-
-  iterationKeys.map((key) => {
-    let bonusFundTotal = 0
-
-    // before
-    let bonusFundBefore = 0
-    const filteredEmployeesBefore = employees.filter(
-      (emp) => emp.managerEvaluation === key.rate
-    )
-
-    arrayBefore.push(
-      filteredEmployeesBefore.reduce((accumalator, employee) => {
-        bonusFundTotal += +employee.targetBonusBudget
-        bonusFundBefore += +employee.targetBonusSum * key.multiplier
-
-        return {
-          rate: key.rate,
-          target: key.target,
-          beforeHc: filteredEmployeesBefore.length,
-          beforePercent:
-            ((filteredEmployeesBefore.length / totalEmployees) * 100).toFixed(
-              0
-            ) + '%',
-          beforeFundPercent:
-            ((bonusFundBefore / bonusFundTotal) * 100).toFixed(1) + '%',
-          // bonusFundTotal: bonusFundTotal,
-          // bonusFundBefore: bonusFundBefore,
-        }
-      }, [])
-    )
-
-    // after
-    let bonusFundAfter = 0
-    const filteredEmployeesAfter = employees.filter(
-      (emp) => emp.calibration === key.rate
-    )
-
-    arrayAfter.push(
-      filteredEmployeesAfter.reduce((accumalator, employee) => {
-        bonusFundTotal += +employee.targetBonusBudget
-        bonusFundAfter += +employee.targetBonusSum * key.multiplier
-
-        return {
-          rate: key.rate,
-          target: key.target,
-          afterHc: filteredEmployeesAfter.length,
-          afterPercent:
-            ((filteredEmployeesAfter.length / totalEmployees) * 100).toFixed(
-              0
-            ) + '%',
-          afterFundPercent:
-            ((bonusFundAfter / bonusFundTotal) * 100).toFixed(1) + '%',
-          // bonusFundTotal: bonusFundTotal,
-          // bonusFundAfter: bonusFundAfter,
-        }
-      }, [])
-    )
-
-    arrayResult = mergeArrays(arrayBefore, arrayAfter)
-  })
+  const dataForTable = prepareDataForTable(employees)
 
   // DATA FOR RADAR
   const dataForRadarBefore = [
@@ -296,7 +336,7 @@ const Dashboard = () => {
         />
         <ChartTable
           title='Распределение до и после калибровки'
-          data={arrayResult}
+          data={dataForTable}
         />
         <div className='flex gap-2'>
           <ChartDomainRadar
