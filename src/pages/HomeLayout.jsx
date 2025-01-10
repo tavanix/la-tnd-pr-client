@@ -41,7 +41,6 @@ export const loader = (store, queryClient) => async () => {
           item.level1 ===
           'Дирекция по управлению персоналом и административной деятельности'
       )
-    //
 
     store.dispatch(setEmployees(result))
   } catch (error) {

@@ -4,7 +4,7 @@ const ChartBudget = ({
   bonusAfterCalibration,
 }) => {
   return (
-    <div className=' rounded-[7px] h-[244px] w-full flex flex-col items-center border shadow-lg p-6'>
+    <div className='rounded-[7px] h-[244px] w-full flex flex-col items-center border shadow-lg p-6'>
       <div className='h-screen w-full flex gap-6'>
         {/* Бюджет */}
         <div className='p-6 shadow rounded-2xl transform transition duration-500 hover:scale-105 w-1/3 flex items-center justify-center h-auto'>

@@ -1,4 +1,5 @@
 import {
+  ChartBarSimple,
   ChartBudget,
   ChartDomainRadar,
   ChartTable,
@@ -198,7 +199,6 @@ const Dashboard = () => {
   const employees = useSelector((state) => state.employeesState.employees)
 
   // DATA FOR KPI CARDS
-
   // total budget
   const bonusBudget = employees
     .map((employee) => {
@@ -271,8 +271,15 @@ const Dashboard = () => {
           bonusAfterCalibration={bonusAfterCalibration}
         />
 
+        <div className=''>
+          <ChartBarSimple
+            title='Распределение оценок (до/после калибровки)'
+            data={dataForTable}
+          />
+        </div>
+
         <ChartTable
-          title='Распределение до и после калибровки'
+          title='Распределение оценок и бюджета (до и после калибровки)'
           data={dataForTable}
         />
 

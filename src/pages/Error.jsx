@@ -13,14 +13,14 @@ const Error = () => {
           </div>
 
           <h1 className='mt-4 text-3xl font-bold tracking-tight sm:text-5xl'>
-            page not found
+            страница не найдена
           </h1>
           <p className='mt-6 text-lg leading-7'>
-            Sorry, we could not find the page you are looking for.
+            похоже, что такой страницы не существует
           </p>
           <div className='mt-10'>
             <Link to='/' className='btn btn-primary btn-outline'>
-              Go Home
+              Домой
             </Link>
           </div>
         </div>
