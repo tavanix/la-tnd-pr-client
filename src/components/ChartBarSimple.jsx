@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux'
+
 import {
   BarChart,
   Bar,
@@ -10,22 +12,30 @@ import {
 } from 'recharts'
 
 const ChartBarSimple = ({ title, data }) => {
-  console.log(data)
+  const employees = useSelector((state) => state.employeesState.employees)
+
+  const translitData = data.map((item) => {
+    return {
+      rate: item.rate,
+      до: item.beforeHc,
+      после: item.afterHc,
+    }
+  })
 
   return (
     <div className='rounded-[7px] h-[300px] w-full p-2 flex flex-col items-center border shadow-lg'>
       <h1 className='font-bold text-xl mb-4'>{title}</h1>
       <ResponsiveContainer width='100%' height='85%'>
-        <BarChart data={data}>
+        <BarChart data={translitData}>
           <XAxis dataKey='rate' tick={{ strokeWidth: 2 }} />
-          <YAxis domain={[0, 2000]} width={0} />
+          <YAxis domain={[0, employees.length + 200]} width={0} />
           <Tooltip />
           <Legend />
-          <Bar dataKey='beforeHc' fill='#858586'>
-            <LabelList dataKey='beforeHc' position='top' />
+          <Bar dataKey='до' fill='#b9b9ba'>
+            <LabelList dataKey='до' position='top' />
           </Bar>
-          <Bar dataKey='afterHc' fill='#82ca9d'>
-            <LabelList dataKey='afterHc' position='top' />
+          <Bar dataKey='после' fill='#47b872'>
+            <LabelList dataKey='после' position='top' />
           </Bar>
         </BarChart>
       </ResponsiveContainer>

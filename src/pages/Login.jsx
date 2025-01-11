@@ -38,10 +38,10 @@ const Login = () => {
     <section className='h-screen flex flex-col items-center justify-center m-auto gap-20'>
       <div className='flex flex-col justify-between items-center gap-8 mt-64'>
         <div className='flex flex-col items-center'>
-          <h2 className='text-4xl font-bold'>H2 2024</h2>
-          <h1 className='text-7xl font-bold'>Performance review</h1>
+          <h2 className='text-4xl font-bold'>H2 2024 Performance review</h2>
+          <h1 className='text-7xl font-bold'>Calibration Tool</h1>
         </div>
-        <Form method='POST' className='p-4 flex gap-x-2'>
+        <Form method='POST' className='p-4 flex gap-x-1'>
           <h4 className='text-xl font-bold'></h4>
           <label className='input input-bordered flex items-center gap-2'>
             <svg
