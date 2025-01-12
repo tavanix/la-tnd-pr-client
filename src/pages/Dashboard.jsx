@@ -30,54 +30,90 @@ export const loader = (store, queryClient) => async (request) => {
   return { params }
 }
 
-function calculateTotalBonus(data, calcType) {
-  return data.reduce((total, employee) => {
-    let multiplier = 0
+// function calculateTotalBonus(data, calcType) {
+//   return data.reduce((total, employee) => {
+//     let multiplier = 0
 
-    // Проверка типа расчета
-    if (calcType === 'before') {
-      // Если перед калибровкой, используем managerEvaluation
-      if (employee.managerEvaluation === 'Топ') {
-        multiplier = 3
-      } else if (employee.managerEvaluation === 'Отлично') {
-        multiplier = 1.5
-      } else if (employee.managerEvaluation === 'Хорошо') {
-        multiplier = 1
-      } else if (employee.managerEvaluation === 'Можешь лучше') {
-        multiplier = 0.5
-      } else if (employee.managerEvaluation === 'Плохо') {
-        multiplier = 0
-      }
-    } else if (calcType === 'after') {
-      // Если после калибровки, сначала проверяем calibration
-      if (employee.calibration && employee.calibration !== '') {
-        if (employee.calibration === 'Топ') {
-          multiplier = 3
-        } else if (employee.calibration === 'Отлично') {
-          multiplier = 1.5
-        } else if (employee.calibration === 'Хорошо') {
-          multiplier = 1
-        } else if (employee.calibration === 'Можешь лучше') {
-          multiplier = 0.5
-        } else if (employee.calibration === 'Плохо') {
-          multiplier = 0
-        }
-      } else {
-        // Если нет калибровки, используем managerEvaluation
-        if (employee.managerEvaluation === 'Топ') {
-          multiplier = 3
-        } else if (employee.managerEvaluation === 'Отлично') {
-          multiplier = 1.5
-        } else if (employee.managerEvaluation === 'Хорошо') {
-          multiplier = 1
-        } else if (employee.managerEvaluation === 'Можешь лучше') {
-          multiplier = 0.5
-        } else if (employee.managerEvaluation === 'Плохо') {
-          multiplier = 0
-        }
-      }
+//     // Проверка типа расчета
+//     if (calcType === 'before') {
+//       // Если перед калибровкой, используем managerEvaluation
+//       if (employee.managerEvaluation === 'Топ') {
+//         multiplier = 3
+//       } else if (employee.managerEvaluation === 'Отлично') {
+//         multiplier = 1.5
+//       } else if (employee.managerEvaluation === 'Хорошо') {
+//         multiplier = 1
+//       } else if (employee.managerEvaluation === 'Можешь лучше') {
+//         multiplier = 0.5
+//       } else if (employee.managerEvaluation === 'Плохо') {
+//         multiplier = 0
+//       }
+//     } else if (calcType === 'after') {
+//       // Если после калибровки, сначала проверяем calibration
+//       if (employee.calibration && employee.calibration !== '') {
+//         if (employee.calibration === 'Топ') {
+//           multiplier = 3
+//         } else if (employee.calibration === 'Отлично') {
+//           multiplier = 1.5
+//         } else if (employee.calibration === 'Хорошо') {
+//           multiplier = 1
+//         } else if (employee.calibration === 'Можешь лучше') {
+//           multiplier = 0.5
+//         } else if (employee.calibration === 'Плохо') {
+//           multiplier = 0
+//         }
+//       } else {
+//         // Если нет калибровки, используем managerEvaluation
+//         if (employee.managerEvaluation === 'Топ') {
+//           multiplier = 3
+//         } else if (employee.managerEvaluation === 'Отлично') {
+//           multiplier = 1.5
+//         } else if (employee.managerEvaluation === 'Хорошо') {
+//           multiplier = 1
+//         } else if (employee.managerEvaluation === 'Можешь лучше') {
+//           multiplier = 0.5
+//         } else if (employee.managerEvaluation === 'Плохо') {
+//           multiplier = 0
+//         }
+//       }
+//     }
+
+//     const bonus = +employee.targetBonusSum
+
+//     return total + bonus * multiplier
+//   }, 0)
+// }
+
+function calculateTotalBonus(data, calcType) {
+  const getMultiplier = (evaluation) => {
+    switch (evaluation) {
+      case 'Топ':
+        return 3
+      case 'Отлично':
+        return 1.5
+      case 'Хорошо':
+        return 1
+      case 'Можешь лучше':
+        return 0.5
+      case 'Плохо':
+        return 0
+      default:
+        return 0
+    }
+  }
+
+  return data.reduce((total, employee) => {
+    let evaluation = employee.managerEvaluation
+
+    if (
+      calcType === 'after' &&
+      employee.calibration &&
+      employee.calibration !== ''
+    ) {
+      evaluation = employee.calibration
     }
 
+    const multiplier = getMultiplier(evaluation)
     const bonus = +employee.targetBonusSum
 
     return total + bonus * multiplier
@@ -91,9 +127,9 @@ const mergeArrays = (arr1, arr2) => {
   }))
 }
 
+// v2
 const prepareDataForTable = (employees) => {
   const totalEmployees = employees.length
-  // TODO: refactor - DRY
   const bonusFundTotal = employees.reduce(
     (accumulator, employee) => accumulator + +employee.targetBonusBudget,
     0
@@ -107,101 +143,35 @@ const prepareDataForTable = (employees) => {
     { rate: 'Плохо', target: '2%', multiplier: 0 },
   ]
 
-  let arrayBefore = []
-  let arrayAfter = []
+  const processEmployees = (evaluationKey, evaluationField) => {
+    return iterationKeys.map((key) => {
+      const filteredEmployees = employees.filter(
+        (employee) => employee[evaluationField] === key.rate
+      )
 
-  // PROCESSING BEFORE
-  iterationKeys.map((key) => {
-    // check for empty rates
-    if (
-      !employees
-        .map((employee) => employee.managerEvaluation)
-        .includes(key.rate)
-    ) {
-      arrayBefore.push({
+      const headcount = filteredEmployees.length
+      const bonusFund = filteredEmployees.reduce(
+        (accumulator, employee) =>
+          accumulator + +employee.targetBonusSum * key.multiplier,
+        0
+      )
+
+      return {
         rate: key.rate,
         target: key.target,
-        beforeHc: 0,
-        beforePercent: '0%',
-        beforeFundPercent: '0%',
-      })
-    }
+        [`${evaluationKey}Hc`]: headcount,
+        [`${evaluationKey}Percent`]:
+          ((headcount / totalEmployees) * 100).toFixed(1) + '%',
+        [`${evaluationKey}FundPercent`]:
+          ((bonusFund / bonusFundTotal) * 100).toFixed(1) + '%',
+        bonusFundTotal: bonusFundTotal,
+        [`${evaluationKey}Fund`]: bonusFund,
+      }
+    })
+  }
 
-    // logic
-    const filteredEmployeesBefore = employees.filter(
-      (employee) => employee.managerEvaluation === key.rate
-    )
-
-    if (filteredEmployeesBefore.length === 0) return
-
-    let bonusFundBefore = 0
-    let bonusFundAtCurrentRate = 0
-
-    arrayBefore.push(
-      filteredEmployeesBefore.reduce((accumalator, employee) => {
-        bonusFundBefore += +employee.targetBonusSum * key.multiplier
-        bonusFundAtCurrentRate += +employee.targetBonusBudget
-
-        return {
-          rate: key.rate,
-          target: key.target,
-          beforeHc: filteredEmployeesBefore.length,
-          beforePercent:
-            ((filteredEmployeesBefore.length / totalEmployees) * 100).toFixed(
-              1
-            ) + '%',
-          beforeFundPercent:
-            ((bonusFundBefore / bonusFundTotal) * 100).toFixed(1) + '%',
-          bonusFundTotal: bonusFundTotal,
-          bonusFundBefore: bonusFundBefore,
-          bonusFundAtCurrentRate: bonusFundAtCurrentRate,
-        }
-      }, [])
-    )
-  })
-
-  // PROCESSING AFTER
-  iterationKeys.map((key) => {
-    // check for empty rates
-    if (!employees.map((employee) => employee.calibration).includes(key.rate)) {
-      arrayAfter.push({
-        rate: key.rate,
-        target: key.target,
-        afterHc: 0,
-        afterPercent: '0%',
-        afterFundPercent: '0%',
-      })
-    }
-
-    // logic
-    let bonusFundAfter = 0
-
-    const filteredEmployeesAfter = employees.filter(
-      (employee) => employee.calibration === key.rate
-    )
-
-    if (filteredEmployeesAfter === null) return
-
-    arrayAfter.push(
-      filteredEmployeesAfter.reduce((accumalator, employee) => {
-        bonusFundAfter += +employee.targetBonusSum * key.multiplier
-
-        return {
-          rate: key.rate,
-          target: key.target,
-          afterHc: filteredEmployeesAfter.length,
-          afterPercent:
-            ((filteredEmployeesAfter.length / totalEmployees) * 100).toFixed(
-              1
-            ) + '%',
-          afterFundPercent:
-            ((bonusFundAfter / bonusFundTotal) * 100).toFixed(1) + '%',
-          bonusFundTotal: bonusFundTotal,
-          bonusFundAfter: bonusFundAfter,
-        }
-      }, [])
-    )
-  })
+  const arrayBefore = processEmployees('before', 'managerEvaluation')
+  const arrayAfter = processEmployees('after', 'calibration')
 
   return mergeArrays(arrayBefore, arrayAfter)
 }
