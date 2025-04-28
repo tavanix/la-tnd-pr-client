@@ -167,7 +167,7 @@ const ChartBudget = ({
             )}
 
             <dd className='flex items-center space-x-1 text-sm font-medium text-gray-400'>
-              {bonusAfterCalibration - bonusBeforeCalibration > 0 ? '+' : '-'}
+              {bonusAfterCalibration - bonusBeforeCalibration > 0 ? '+' : ''}
               {(bonusAfterCalibration - bonusBeforeCalibration)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' '}

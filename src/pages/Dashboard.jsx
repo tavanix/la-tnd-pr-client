@@ -182,10 +182,12 @@ const Dashboard = () => {
     (state) => state.employeesState.employees
   )
 
-  let employees = employeesInitialState
-    .filter((employee) => employee.level1 === params.level1)
-    .filter((employee) => employee.level2 === params.level2)
-    .filter((employee) => employee.bonus === params.bonus)
+  let employees = employeesInitialState.filter(
+    (employee) => employee.level1 === params.level1
+  )
+  // .filter((employee) => employee.level2 === params.level2)
+  // .filter((employee) => employee.bonus === params.bonus)
+  // .filter((employee) => employee.positionTitle === params.positionTitle)
 
   if (params.level1 === undefined) {
     employees = employeesInitialState
@@ -265,9 +267,10 @@ const Dashboard = () => {
               <FormSelect
                 label='Level 1'
                 name='level1'
+                value={params.level1}
                 list={employeesInitialState.map((employee) => employee.level1)}
               />
-              <FormSelect
+              {/* <FormSelect
                 label='Level 2'
                 name='level2'
                 list={employeesInitialState.map((employee) => employee.level2)}
@@ -279,6 +282,13 @@ const Dashboard = () => {
                   (employee) => employee.hasBonus
                 )}
               />
+              <FormSelect
+                label='Должность'
+                name='positionTitle'
+                list={employeesInitialState.map(
+                  (employee) => employee.positionTitle
+                )}
+              /> */}
             </section>
             <div className='flex gap-2'>
               <SubmitBtn text='применить' block='false' btnType='secondary' />
@@ -286,7 +296,7 @@ const Dashboard = () => {
                 to='/dashboard'
                 className='btn btn-primary text-white w-36 uppercase '
               >
-                Reset
+                Сбросить
               </Link>
             </div>
           </Form>
@@ -294,14 +304,15 @@ const Dashboard = () => {
       />
 
       <div className='flex flex-col gap-2'>
-        {params.level1 && (
+        {/* {params.level1 && (
           <div className='rounded-[7px] w-full flex flex-col border shadow-lg p-6'>
             <h2 className='font-bold'>Примененные фильтры:</h2>
             <h3>Level 1 = {params.level1}</h3>
             <h3>Level 2 = {params.level2}</h3>
             <h3>Bonus = {params.hasBonus}</h3>
+            <h3>Должность = {params.positionTitle}</h3>
           </div>
-        )}
+        )} */}
 
         <ChartBudget
           budget={bonusBudget}
@@ -352,33 +363,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard
-
-// Функция для группировки элементов массива по значению поля rate
-// const groupByRate = (array) => {
-//   return array.reduce((acc, item) => {
-//     if (!acc[item.managerEvaluation]) {
-//       acc[item.managerEvaluation] = []
-//     }
-//     acc[item.managerEvaluation].push(item)
-//     return acc
-//   }, {})
-// }
-
-// Группируем элементы массива по полю rate
-// const groupedData = groupByRate(employees)
-
-// console.log('groupped: ', groupedData['Топ'])
-
-// giga chat
-// function groupByDate(array) {
-//   const temp = array.reduce((acc, item) => {
-//     if (!acc[item.managerEvaluation]) {
-//       acc[item.managerEvaluation] = []
-//     }
-//     acc[item.managerEvaluation].push(item)
-//     return acc
-//   }, {})
-
-//   return Object.getOwnPropertyNames(temp).map((elem) => temp[elem])
-// }
-// console.log('giga chat: ', groupByDate(employees))

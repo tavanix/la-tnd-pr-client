@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const url = 'http://localhost:1007/api/'
+// const url = 'http://localhost:1007/api/'
+const url = 'http://192.168.1.84:1007/api/'
 
 export const customFetch = axios.create({
   baseURL: url,

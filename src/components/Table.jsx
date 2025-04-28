@@ -282,8 +282,8 @@ const Table = () => {
     columns,
     data: employeesFromStore,
 
-    createDisplayMode: 'modal', //default ('row', and 'custom' are also available)
-    editDisplayMode: 'modal', //default ('row', 'cell', 'table', and 'custom' are also available)
+    // createDisplayMode: 'modal', //default ('row', and 'custom' are also available)
+    editDisplayMode: 'modal', //default modal ('row', 'cell', 'table', and 'custom' are also available)
 
     enableEditing: true,
     enableStickyHeader: true,
