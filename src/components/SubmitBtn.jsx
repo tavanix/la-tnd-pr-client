@@ -7,6 +7,7 @@ const SubmitBtn = ({
   btnOutline,
   textColor,
   onClick,
+  otherParams,
 }) => {
   const navigation = useNavigation()
   const isSubmitting = navigation.state === 'submitting...'
@@ -26,8 +27,9 @@ const SubmitBtn = ({
         (btnOutline ? 'btn-outline ' : '') +
         `btn text-${textColor} btn-` +
         (btnType ? btnType : `primary`) +
-        ` uppercase ` +
-        (block === 'true' ? 'btn-block' : 'w-36')
+        ` ` +
+        (block === 'true' ? 'btn-block' : 'w-36') +
+        otherParams
       }
       disabled={isSubmitting}
       onClick={onClick}

@@ -25,6 +25,9 @@ export default {
           error: '#FF4D3D',
 
           // colors
+          brown: '#A5825F',
+          green: '#A5D2A0',
+
           lightGray: '#EDEDED',
           lightGray1: '#FAFAFA',
           gray: '#C2C2C2',
@@ -37,31 +40,9 @@ export default {
           redActive2: '#FF8058',
           redHover: '#E43A04',
 
-          brown: '#A5825F',
-          green: '#A5D2A0',
-
-          blue: '#CDE6FF',
-          darkBlue: '#3C5064',
-
           '--rounded-btn': '8px',
           // '--rounded-box': '8px',
           // '--rounded-badge': '8px',
-        },
-      },
-      {
-        lamodaBlack: {
-          ...require('daisyui/src/theming/themes')['black'],
-          // primary: '#f93c00',
-          // secondary: '#fff',
-          'base-100': '#1c1917',
-          // info: '#0e7490',
-          // success: '#15803d',
-          // warning: '#b91c1c',
-          // error: '#ff0000',
-
-          '--rounded-btn': '8px',
-          // '--rounded-box': '8px',
-          // '--rounded-badge': '1rem',
         },
       },
     ],

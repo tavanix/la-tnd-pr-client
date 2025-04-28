@@ -4,17 +4,20 @@ import { customFetch } from '../utils'
 import { toast } from 'react-toastify'
 import { loginUser } from '../features/user/userSlice'
 
-import logoBlack from '../assets/logoBlack.png'
-import logoWhite from '../assets/logoWhite.png'
+import logo from '../assets/logo.png'
+import elem1 from '../assets/LAMODA_STRIPES_1.png'
+import elem2 from '../assets/LAMODA_STRIPES_2.png'
+import elem3 from '../assets/Rectangle.png'
 
 export const action =
   (store) =>
   async ({ request }) => {
-    const formData = await request.formData()
-    const data = Object.fromEntries(formData)
+    // const formData = await request.formData()
+    // const data = Object.fromEntries(formData)
 
     try {
-      const response = await customFetch.post('/auth/login', data)
+      // TODO: add SSO
+      const response = await customFetch.post('/auth/login')
 
       store.dispatch(loginUser(response.data))
 
@@ -30,18 +33,45 @@ export const action =
   }
 
 const Login = () => {
-  const theme = localStorage.getItem('theme')
-
-  const logo = theme === 'lamodaBlack' ? logoWhite : logoBlack
-
   return (
-    <section className='h-screen flex flex-col items-center justify-center m-auto gap-20'>
-      <div className='flex flex-col justify-between items-center gap-8 mt-64'>
-        <div className='flex flex-col items-center'>
-          <h2 className='text-4xl font-bold'>H2 2024 Performance review</h2>
-          <h1 className='text-7xl font-bold'>Calibration Tool</h1>
+    <section className='h-screen flex justify-center items-center m-auto'>
+      <img
+        src={elem2}
+        alt='elem2'
+        className='absolute -left-36 -top-36 z-47 h-124 /w-124'
+      />
+      <img
+        src={elem1}
+        alt='elem1'
+        className='absolute bottom-0 right-0 z-49 h-2/4'
+      />
+      <img
+        src={elem3}
+        alt='elem3'
+        className='absolute bottom-0 left-0 z-49 h-1/3'
+      />
+
+      <Form
+        method='GET'
+        className='w-[550px] h-[270px] rounded-[16px] bg-white p-[64px] flex justify-center items-center absolute z-50 shadow-2xl'
+      >
+        <div className='flex flex-col justify-between w-full h-full'>
+          <div className='h-64 flex justify-center items-center'>
+            <img src={logo} alt='logo' className='h-39 w-189 cover' />
+          </div>
+          <div className='text-xl font-bold m-4 flex justify-center items-center text-neutral'>
+            Калибровка Н1 2025
+          </div>
+          <SubmitBtn
+            text='Войти на портал'
+            block='false'
+            btnType='secondary'
+            otherParams='w-[422px] h-[48px] size-xl'
+            onClick={() => console.log('click')}
+          />
         </div>
-        <Form method='POST' className='p-4 flex gap-x-1'>
+      </Form>
+      {/* <Form method='POST' className='p-4 flex gap-x-1'>
           <h4 className='text-xl font-bold'></h4>
           <label className='input input-bordered flex items-center gap-2'>
             <svg
@@ -88,16 +118,7 @@ const Login = () => {
           <div className='w-48'>
             <SubmitBtn text='Login' block='true' btnType='secondary' />
           </div>
-        </Form>
-        <div className='h-64 flex justify-center items-center'>
-          <img src={logo} alt='logo' className='h-24 w-124 cover' />
-        </div>
-      </div>
-
-      <div className='w-full flex flex-col items-center justify-center'>
-        <p className='pb-2'>HR PMO & Analytics Team</p>
-        <span className='text-xs text-gray-500'>App v.1.0.0</span>
-      </div>
+        </Form> */}
     </section>
   )
 }
