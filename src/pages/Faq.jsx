@@ -4,7 +4,7 @@ import faq from '../utils/faqQuestions'
 const Faq = () => {
   return (
     <>
-      <SectionTitle text='Q&A' />
+      <SectionTitle text='F.A.Q.' />
       {faq.map((item) => {
         return (
           <CollapseWithArrow

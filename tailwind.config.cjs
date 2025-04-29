@@ -11,7 +11,7 @@ export default {
   daisyui: {
     themes: [
       {
-        lamodaLight: {
+        colors: {
           'base-100': '#FFFFFF',
           primary: '#F93C00',
           secondary: '#484848',

@@ -11,7 +11,6 @@ import {
   Profile,
   Faq,
   Employees,
-  Docs,
   AdminPanel,
   Dashboard,
 } from './pages'
@@ -63,7 +62,6 @@ const router = createBrowserRouter([
         element: <Dashboard />,
         loader: dashboardLoader(store, queryClient),
       },
-      { path: 'docs', element: <Docs /> },
       {
         path: 'faq',
         element: <Faq />,

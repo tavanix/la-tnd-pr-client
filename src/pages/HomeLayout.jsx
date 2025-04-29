@@ -58,16 +58,16 @@ const HomeLayout = () => {
   const isPageLoding = navigation.state === 'loading'
 
   return (
-    <>
+    <div className='h-screen grid grid-cols-[64px_1fr] '>
       <Navbar />
       {isPageLoding ? (
         <Loading />
       ) : (
-        <section className='align-element pt-8'>
+        <section className='align-element mt-10'>
           <Outlet />
         </section>
       )}
-    </>
+    </div>
   )
 }
 export default HomeLayout
