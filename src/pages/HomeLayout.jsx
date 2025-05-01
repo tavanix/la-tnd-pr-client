@@ -63,7 +63,7 @@ const HomeLayout = () => {
       {isPageLoding ? (
         <Loading />
       ) : (
-        <section className='align-element mt-10'>
+        <section className='align-element mt-7'>
           <Outlet />
         </section>
       )}

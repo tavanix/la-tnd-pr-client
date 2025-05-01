@@ -7,11 +7,12 @@ import { logoutUser } from '../features/user/userSlice'
 import { useQueryClient } from '@tanstack/react-query'
 
 import logo from '../assets/logoWhite.png'
-import arrowRight from '../assets/arrowRight.png'
-import editPen from '../assets/editPen.png'
-import faqLogo from '../assets/faqLogo.png'
-import exit from '../assets/exit.png'
-import target from '../assets/target.png'
+import { FaUserEdit } from 'react-icons/fa'
+import { FaChartSimple } from 'react-icons/fa6'
+import { FaQuestion } from 'react-icons/fa'
+import { MdVerifiedUser } from 'react-icons/md'
+import { RiArrowRightSLine } from 'react-icons/ri'
+import { FaWalking } from 'react-icons/fa'
 
 const Navbar = () => {
   const dispatch = useDispatch()
@@ -28,22 +29,26 @@ const Navbar = () => {
   }
 
   return (
-    <div className='group z-50 flex flex-col pl-2 pr-2 pt-4 w-24 bg-black transition-all duration-800 ease-in-out hover:w-64 hover:transition-all'>
+    <div className='group z-50 flex flex-col pr-2 pt-4 w-24 bg-black transition-all duration-500 ease-in-out hover:w-56 hover:transition-all'>
       {/* logo */}
       <div className='group w-18 h-12 flex items-center justify-center mb-12'>
-        <img src={arrowRight} alt='logo' className='group-hover:hidden' />
+        <RiArrowRightSLine className='w-10 h-10 text-white group-hover:hidden' />
         <img src={logo} alt='logo' className='h-8 hidden group-hover:flex' />
       </div>
 
+      {/* admin */}
       {isAdmin && (
         <Link
           to='/admin'
           className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
         >
-          <div className='rounded bg-[#ededed] h-6 w-6 ml-7'></div>
-          <span className='text-[#ededed] ml-4 hidden group-hover:flex'>
-            Админка
-          </span>
+          <div className='ml-8 flex gap-4'>
+            {/* <img src={faqLogo} alt='exit' className='h-6' /> */}
+            <MdVerifiedUser className='w-6 h-6 text-white' />
+            <span className='text-[#ededed] hidden group-hover:flex'>
+              Админ
+            </span>
+          </div>
         </Link>
       )}
 
@@ -53,10 +58,13 @@ const Navbar = () => {
           to='/employees'
           className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
         >
-          <img src={editPen} alt='exit' className='h-6 ml-7' />
-          <span className='text-[#ededed] ml-4 hidden group-hover:flex'>
-            Калибровка
-          </span>
+          <div className='ml-8 flex gap-4'>
+            {/* <img src={faqLogo} alt='exit' className='h-6' /> */}
+            <FaUserEdit className='w-6 h-6 text-white' />
+            <span className='text-[#ededed] hidden group-hover:flex'>
+              Калибровка
+            </span>
+          </div>
         </Link>
 
         {/* dasboard */}
@@ -64,10 +72,13 @@ const Navbar = () => {
           to='/dashboard'
           className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
         >
-          <img src={target} alt='exit' className='h-6 ml-7' />
-          <span className='text-[#ededed] ml-4 hidden group-hover:flex'>
-            Дешборд
-          </span>
+          <div className='ml-8 flex gap-4'>
+            {/* <img src={faqLogo} alt='exit' className='h-6' /> */}
+            <FaChartSimple className='w-6 h-6 text-white' />
+            <span className='text-[#ededed] hidden group-hover:flex'>
+              Дешборд
+            </span>
+          </div>
         </Link>
 
         {/* faq */}
@@ -75,24 +86,30 @@ const Navbar = () => {
           to='/faq'
           className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
         >
-          <img src={faqLogo} alt='exit' className='h-6 ml-7' />
-          <span className='text-[#ededed] ml-4 hidden group-hover:flex'>
-            F.A.Q.
-          </span>
+          <div className='ml-8 flex gap-4'>
+            {/* <img src={faqLogo} alt='exit' className='h-6' /> */}
+            <FaQuestion className='w-6 h-6 text-white' />
+            <span className='text-[#ededed] hidden group-hover:flex'>
+              F.A.Q.
+            </span>
+          </div>
+        </Link>
+
+        {/* logout */}
+        <Link
+          to='/login'
+          onClick={handleLogout}
+          className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
+        >
+          <div className='ml-8 flex gap-4'>
+            {/* <img src={faqLogo} alt='exit' className='h-6' /> */}
+            <FaWalking className='transform -scale-x-100 w-6 h-6 text-white' />
+            <span className='text-[#ededed] hidden group-hover:flex'>
+              Выйти
+            </span>
+          </div>
         </Link>
       </div>
-
-      {/* logout */}
-      <Link
-        to='/login'
-        onClick={handleLogout}
-        className='group h-12 flex justify-start items-center cursor-pointer absolute bottom-0 mb-8 rounded-[16px]  hover:bg-[#484848] hover:w-60'
-      >
-        <img src={exit} alt='exit' className='h-6 ml-6' />
-        <span className='text-[#ededed] ml-4 hidden group-hover:flex'>
-          Выйти
-        </span>
-      </Link>
     </div>
   )
 }

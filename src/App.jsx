@@ -47,6 +47,11 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
+        path: 'admin',
+        element: <AdminPanel />,
+        loader: adminLoader(store),
+      },
+      {
         path: 'profile',
         element: <Profile />,
         loader: profileLoader(store),
@@ -65,11 +70,6 @@ const router = createBrowserRouter([
       {
         path: 'faq',
         element: <Faq />,
-      },
-      {
-        path: 'admin',
-        element: <AdminPanel />,
-        loader: adminLoader(store),
       },
     ],
   },
