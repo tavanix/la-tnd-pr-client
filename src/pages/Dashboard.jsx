@@ -1,9 +1,7 @@
 import {
   ChartBarSimple,
   ChartBudget,
-  ChartDomainRadar,
   ChartTable,
-  ChartTreeMap,
   CollapseWithArrow,
   SectionTitle,
   FormSelect,
@@ -331,32 +329,6 @@ const Dashboard = () => {
           title='Распределение оценок и бюджета (до и после калибровки)'
           data={dataForTable}
         />
-
-        <div className='flex gap-2'>
-          <ChartDomainRadar
-            title='Распределение оценок'
-            planLegend='Цель'
-            actualLegend='Факт'
-            data={dataForRadarRates}
-          />
-          <ChartDomainRadar
-            title='Распределение бюджета (тыс.руб.)'
-            planLegend='Бюджет'
-            actualLegend='Факт'
-            data={dataForRadarBudget}
-          />
-        </div>
-
-        <div className='flex gap-2'>
-          <ChartTreeMap
-            title='Распределение оценок (до)'
-            data={dataForTreemapBefore}
-          />
-          <ChartTreeMap
-            title='Распределение оценок (после)'
-            data={dataForTreemapAfter}
-          />
-        </div>
       </div>
     </div>
   )

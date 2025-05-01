@@ -73,11 +73,11 @@ const AdminPanel = () => {
   }
 
   return (
-    <>
+    <div className='w-[1280px]'>
       <SectionTitle text='Панель администратора' />
 
       {/* change password */}
-      <div className='flex flex-col mb-4 p-6 w-full border rounded shadow-lg'>
+      {/* <div className='flex flex-col mb-4 p-6 w-full border rounded shadow-lg'>
         <h3 className='font-bold'>Скинуть пароль</h3>
         <p className='text-primary'>
           Введите имя пользователя, которому нужно изменить пароль
@@ -107,7 +107,7 @@ const AdminPanel = () => {
             Обновить
           </button>
         </form>
-      </div>
+      </div> */}
 
       {/* export data */}
       <div className='flex gap-8 mb-4 p-6 w-full border rounded shadow-lg'>
@@ -119,7 +119,7 @@ const AdminPanel = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
