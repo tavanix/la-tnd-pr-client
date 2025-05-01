@@ -28,60 +28,6 @@ export const loader = (store, queryClient) => async (request) => {
   return { params }
 }
 
-// function calculateTotalBonus(data, calcType) {
-//   return data.reduce((total, employee) => {
-//     let multiplier = 0
-
-//     // Проверка типа расчета
-//     if (calcType === 'before') {
-//       // Если перед калибровкой, используем managerEvaluation
-//       if (employee.managerEvaluation === 'Топ') {
-//         multiplier = 3
-//       } else if (employee.managerEvaluation === 'Отлично') {
-//         multiplier = 1.5
-//       } else if (employee.managerEvaluation === 'Хорошо') {
-//         multiplier = 1
-//       } else if (employee.managerEvaluation === 'Можешь лучше') {
-//         multiplier = 0.5
-//       } else if (employee.managerEvaluation === 'Плохо') {
-//         multiplier = 0
-//       }
-//     } else if (calcType === 'after') {
-//       // Если после калибровки, сначала проверяем calibration
-//       if (employee.calibration && employee.calibration !== '') {
-//         if (employee.calibration === 'Топ') {
-//           multiplier = 3
-//         } else if (employee.calibration === 'Отлично') {
-//           multiplier = 1.5
-//         } else if (employee.calibration === 'Хорошо') {
-//           multiplier = 1
-//         } else if (employee.calibration === 'Можешь лучше') {
-//           multiplier = 0.5
-//         } else if (employee.calibration === 'Плохо') {
-//           multiplier = 0
-//         }
-//       } else {
-//         // Если нет калибровки, используем managerEvaluation
-//         if (employee.managerEvaluation === 'Топ') {
-//           multiplier = 3
-//         } else if (employee.managerEvaluation === 'Отлично') {
-//           multiplier = 1.5
-//         } else if (employee.managerEvaluation === 'Хорошо') {
-//           multiplier = 1
-//         } else if (employee.managerEvaluation === 'Можешь лучше') {
-//           multiplier = 0.5
-//         } else if (employee.managerEvaluation === 'Плохо') {
-//           multiplier = 0
-//         }
-//       }
-//     }
-
-//     const bonus = +employee.targetBonusSum
-
-//     return total + bonus * multiplier
-//   }, 0)
-// }
-
 function calculateTotalBonus(data, calcType) {
   const getMultiplier = (evaluation) => {
     switch (evaluation) {
@@ -180,6 +126,8 @@ const Dashboard = () => {
     (state) => state.employeesState.employees
   )
 
+  console.log(employeesInitialState)
+
   let employees = employeesInitialState.filter(
     (employee) => employee.level1 === params.level1
   )
@@ -208,54 +156,8 @@ const Dashboard = () => {
   // DATA FOR TABLE
   const dataForTable = prepareDataForTable(employees)
 
-  // DATA FOR RADAR
-  const dataForRadarRates = dataForTable.reduce((accumulator, current) => {
-    const newObject = {
-      rate: current.rate,
-      target: +((employees.length * current.target.slice(0, -1)) / 100).toFixed(
-        0
-      ), // рассчитываем целевую численность по рейтингу
-      actual: current.afterHc,
-    }
-
-    accumulator.push(newObject)
-    return accumulator
-  }, [])
-
-  const dataForRadarBudget = dataForTable.reduce((accumulator, current) => {
-    const newObject = {
-      rate: current.rate,
-      target: current.bonusFundAtCurrentRate / 1000,
-      actual: current.bonusFundAfter / 1000,
-    }
-
-    accumulator.push(newObject)
-    return accumulator
-  }, [])
-
-  // DATA FOR TREEMAP
-  const dataForTreemapBefore = dataForTable.reduce((accumulator, current) => {
-    const newObject = {
-      name: current.rate,
-      value: current.beforeHc,
-    }
-
-    accumulator.push(newObject)
-    return accumulator
-  }, [])
-
-  const dataForTreemapAfter = dataForTable.reduce((accumulator, current) => {
-    const newObject = {
-      name: current.rate,
-      value: current.afterHc,
-    }
-
-    accumulator.push(newObject)
-    return accumulator
-  }, [])
-
   return (
-    <div className='mb-16'>
+    <div className='mb-4'>
       <SectionTitle text='Дешборд' />
       <CollapseWithArrow
         title='Фильтры'
@@ -289,10 +191,15 @@ const Dashboard = () => {
               /> */}
             </section>
             <div className='flex gap-2'>
-              <SubmitBtn text='применить' block='false' btnType='secondary' />
+              <SubmitBtn
+                text='Применить'
+                block='false'
+                btnOutline='btn-outline'
+                btnType='success'
+              />
               <Link
                 to='/dashboard'
-                className='btn btn-primary text-white w-36 uppercase '
+                className='btn btn-outline btn-primary text-white w-36 '
               >
                 Сбросить
               </Link>
@@ -301,7 +208,7 @@ const Dashboard = () => {
         }
       />
 
-      <div className='flex flex-col gap-2'>
+      <div className='flex flex-col gap-2 rounded'>
         {/* {params.level1 && (
           <div className='rounded-[7px] w-full flex flex-col border shadow-lg p-6'>
             <h2 className='font-bold'>Примененные фильтры:</h2>

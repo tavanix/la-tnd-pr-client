@@ -110,7 +110,7 @@ const AdminPanel = () => {
       </div> */}
 
       {/* export data */}
-      <div className='flex gap-8 mb-4 p-6 w-full border rounded shadow-lg'>
+      <div className='flex gap-8 mb-4 p-6 w-full border rounded-[16px] shadow-lg'>
         <div className=''>
           <h3 className='mb-4 font-bold'>Выгрузить список сотрудников:</h3>
           <div className='flex gap-4 justify-center'>

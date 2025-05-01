@@ -98,7 +98,7 @@ const Navbar = () => {
         <Link
           to='/login'
           onClick={handleLogout}
-          className='group bg-[#1a1a1a] h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
+          className='group bg-[#1a1a1a] h-12 mb-4 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
         >
           <div className='ml-7 flex gap-4'>
             {/* <img src={faqLogo} alt='exit' className='h-6' /> */}
