@@ -16,31 +16,31 @@ export const loader = (store) => () => {
   return null
 }
 
-export const action =
-  (store) =>
-  async ({ request }) => {
-    const formData = await request.formData()
-    const data = Object.fromEntries(formData)
-    try {
-      const response = await customFetch.post('/auth/updatePassword', data)
+// export const action =
+//   (store) =>
+//   async ({ request }) => {
+//     const formData = await request.formData()
+//     const data = Object.fromEntries(formData)
+//     try {
+//       const response = await customFetch.post('/auth/updatePassword', data)
 
-      store.dispatch(updatePassword(response.data))
+//       store.dispatch(updatePassword(response.data))
 
-      return null
-    } catch (error) {
-      const errorMesssage =
-        error?.response?.data?.error?.message ||
-        'Ошибка! Пожалуйста, проверьте корректность предоставленных данных...'
-      toast.error(errorMesssage)
-      return null
-    }
-  }
+//       return null
+//     } catch (error) {
+//       const errorMesssage =
+//         error?.response?.data?.error?.message ||
+//         'Ошибка! Пожалуйста, проверьте корректность предоставленных данных...'
+//       toast.error(errorMesssage)
+//       return null
+//     }
+//   }
 
 const Profile = () => {
   const user = useSelector((state) => state.userState.user)
 
   return (
-    <>
+    <div className='w-[1280px]'>
       <SectionTitle text='Информация о пользователе:' />
       <section className='flex flex-col mt-4 mb-8'>
         <div className='grid grid-cols-2 w-96 mb-2'>
@@ -62,7 +62,7 @@ const Profile = () => {
           </ul>
         </div>
       </section>
-      <SectionTitle text='Здесь можно изменить свой текущий пароль:' />
+      {/* <SectionTitle text='Здесь можно изменить свой текущий пароль:' />
       <Form
         method='POST'
         className='card mt-4 w-full bg-base-100 rounded-md flex flex-row gap-y-4 border-b border-base-300 pb-4'
@@ -90,8 +90,8 @@ const Profile = () => {
           btnType='primary'
           btnOutline='true'
         />
-      </Form>
-    </>
+      </Form> */}
+    </div>
   )
 }
 

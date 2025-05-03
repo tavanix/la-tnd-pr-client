@@ -7,7 +7,11 @@
     { "id": "ROLE_HRBP_IT", "name": "Дирекция информационных технологий" }
   ],
   "level2": [
-    { "id": 1, "level1Id": "ROLE_HRBP_HR", "name": "C&B" },
+    {
+      "id": "Отдел обучения и развития",
+      "level1Id": "ROLE_HRBP_HR",
+      "name": "Отдел обучения и развития"
+    },
     { "id": 2, "level1Id": "ROLE_HRBP_HR", "name": "Recruitment" },
     { "id": 3, "level1Id": "ROLE_HRBP_IT", "name": "Development" },
     { "id": 4, "level1Id": "ROLE_HRBP_IT", "name": "Scrum Team" }

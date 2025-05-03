@@ -10,7 +10,8 @@ import { FaQuestion } from 'react-icons/fa'
 import { MdVerifiedUser } from 'react-icons/md'
 import { RiArrowRightSLine } from 'react-icons/ri'
 import { FaWalking } from 'react-icons/fa'
-
+import { FaPersonWalking } from 'react-icons/fa6'
+import { FaUserCircle } from 'react-icons/fa'
 const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -42,7 +43,6 @@ const Navbar = () => {
               className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
             >
               <div className='ml-7 flex gap-4'>
-                {/* <img src={faqLogo} alt='exit' className='h-6' /> */}
                 <MdVerifiedUser className='w-6 h-6 text-white' />
                 <span className='text-[#ededed] hidden group-hover:flex'>
                   Админ
@@ -57,7 +57,6 @@ const Navbar = () => {
             className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
           >
             <div className='ml-7 flex gap-4'>
-              {/* <img src={faqLogo} alt='exit' className='h-6' /> */}
               <FaUserEdit className='w-6 h-6 text-white' />
               <span className='text-[#ededed] hidden group-hover:flex'>
                 Калибровка
@@ -71,7 +70,6 @@ const Navbar = () => {
             className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
           >
             <div className='ml-7 flex gap-4'>
-              {/* <img src={faqLogo} alt='exit' className='h-6' /> */}
               <FaChartSimple className='w-6 h-6 text-white' />
               <span className='text-[#ededed] hidden group-hover:flex'>
                 Дешборд
@@ -85,7 +83,6 @@ const Navbar = () => {
             className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
           >
             <div className='ml-7 flex gap-4'>
-              {/* <img src={faqLogo} alt='exit' className='h-6' /> */}
               <FaQuestion className='w-6 h-6 text-white' />
               <span className='text-[#ededed] hidden group-hover:flex'>
                 F.A.Q.
@@ -94,20 +91,33 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* logout */}
-        <Link
-          to='/login'
-          onClick={handleLogout}
-          className='group bg-[#1a1a1a] h-12 mb-4 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
-        >
-          <div className='ml-7 flex gap-4'>
-            {/* <img src={faqLogo} alt='exit' className='h-6' /> */}
-            <FaWalking className='transform -scale-x-100 w-6 h-6 text-white' />
-            <span className='text-[#ededed] hidden group-hover:flex'>
-              Выйти
-            </span>
-          </div>
-        </Link>
+        <div className=''>
+          {/* logout */}
+          <Link
+            to='/profile'
+            className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
+          >
+            <div className='ml-7 flex gap-4'>
+              <FaUserCircle className='transform -scale-x-100 w-6 h-6 text-white' />
+              <span className='text-[#ededed] hidden group-hover:flex'>
+                Профиль
+              </span>
+            </div>
+          </Link>
+          {/* logout */}
+          <Link
+            to='/login'
+            onClick={handleLogout}
+            className='group bg-[#1a1a1a] h-12 mb-4 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
+          >
+            <div className='ml-7 flex gap-4'>
+              <FaPersonWalking className='transform -scale-x-100 w-6 h-6 text-white' />
+              <span className='text-[#ededed] hidden group-hover:flex'>
+                Выйти
+              </span>
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   )

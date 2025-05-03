@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { redirect, Form, useLoaderData, Link } from 'react-router-dom'
 
@@ -123,11 +123,35 @@ const prepareDataForTable = (employees) => {
 const Dashboard = () => {
   let { user, params } = useLoaderData()
 
-  const [employees, setEmployees] = useState(
-    useSelector((state) => state.employeesState.employees)
-  )
+  // const [employees, setEmployees] = useState(
+  //   useSelector((state) => state.employeesState.employees)
+  // )
 
   // FILTER BY PARAMS
+  console.log(params)
+  let employees = useSelector((state) => state.employeesState.employees)
+
+  if (params.level1 === 'ROLE_HRBP_HR' && params.level2 === '') {
+    console.log('yes')
+
+    employees = employees.filter(
+      (employee) =>
+        employee.level1 ===
+        'Дирекция по управлению персоналом и административной деятельности'
+    )
+  }
+
+  if (
+    params.level2 !== undefined &&
+    params.level2 !== null &&
+    params.level2 !== ''
+  ) {
+    employees = employees.filter(
+      (employee) => employee.level2 === params.level2
+    )
+  }
+
+  console.log(employees)
 
   // DATA FOR KPI CARDS
   // total budget
