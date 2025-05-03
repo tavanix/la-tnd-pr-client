@@ -1,0 +1,26 @@
+{
+  "level1": [
+    {
+      "id": "ROLE_HRBP_HR",
+      "name": "Дирекция по управлению персоналом и административной деятельности"
+    },
+    { "id": "ROLE_HRBP_IT", "name": "Дирекция информационных технологий" }
+  ],
+  "level2": [
+    { "id": 1, "level1Id": "ROLE_HRBP_HR", "name": "C&B" },
+    { "id": 2, "level1Id": "ROLE_HRBP_HR", "name": "Recruitment" },
+    { "id": 3, "level1Id": "ROLE_HRBP_IT", "name": "Development" },
+    { "id": 4, "level1Id": "ROLE_HRBP_IT", "name": "Scrum Team" }
+  ],
+  "level3": [
+    { "id": 1, "level2Id": 1, "name": "OPS C&B" },
+    { "id": 2, "level2Id": 1, "name": "Overhead C&B" },
+    { "id": 3, "level2Id": 2, "name": "OPS Frontline" },
+    { "id": 4, "level2Id": 2, "name": "OPS Management" },
+    { "id": 5, "level2Id": 2, "name": "OPS Fleet" },
+    { "id": 6, "level2Id": 3, "name": "PHP" },
+    { "id": 7, "level2Id": 3, "name": "Go" },
+    { "id": 8, "level2Id": 4, "name": "Agile Deparment" }
+  ],
+  "level4": [{ "id": 1, "level3Id": 1, "name": "C&B BP OPS" }]
+}

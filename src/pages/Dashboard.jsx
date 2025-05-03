@@ -1,16 +1,16 @@
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { redirect, Form, useLoaderData, Link } from 'react-router-dom'
+
 import {
   ChartBarSimple,
   ChartBudget,
   ChartTable,
   CollapseWithArrow,
   SectionTitle,
-  FormSelect,
   SubmitBtn,
+  LevelSelector,
 } from '../components'
-import { useSelector } from 'react-redux'
-import { redirect, Form, useLoaderData, Link } from 'react-router-dom'
-
-import { customFetch } from '../utils'
 
 export const loader = (store, queryClient) => async (request) => {
   // ROLES CHECK
@@ -25,7 +25,7 @@ export const loader = (store, queryClient) => async (request) => {
     ...new URL(request.request.url).searchParams.entries(),
   ])
 
-  return { params }
+  return { user, params }
 }
 
 function calculateTotalBonus(data, calcType) {
@@ -121,23 +121,13 @@ const prepareDataForTable = (employees) => {
 }
 
 const Dashboard = () => {
-  let { params } = useLoaderData()
-  const employeesInitialState = useSelector(
-    (state) => state.employeesState.employees
+  let { user, params } = useLoaderData()
+
+  const [employees, setEmployees] = useState(
+    useSelector((state) => state.employeesState.employees)
   )
 
-  console.log(employeesInitialState)
-
-  let employees = employeesInitialState.filter(
-    (employee) => employee.level1 === params.level1
-  )
-  // .filter((employee) => employee.level2 === params.level2)
-  // .filter((employee) => employee.bonus === params.bonus)
-  // .filter((employee) => employee.positionTitle === params.positionTitle)
-
-  if (params.level1 === undefined) {
-    employees = employeesInitialState
-  }
+  // FILTER BY PARAMS
 
   // DATA FOR KPI CARDS
   // total budget
@@ -163,32 +153,8 @@ const Dashboard = () => {
         title='Фильтры'
         content={
           <Form method='GET' className='bg-base-100 flex flex-col gap-y-2 mt-4'>
-            <section className='grid grid-cols-3 gap-2 mb-8'>
-              <FormSelect
-                label='Level 1'
-                name='level1'
-                value={params.level1}
-                list={employeesInitialState.map((employee) => employee.level1)}
-              />
-              {/* <FormSelect
-                label='Level 2'
-                name='level2'
-                list={employeesInitialState.map((employee) => employee.level2)}
-              />
-              <FormSelect
-                label='Bonus'
-                name='hasBonus'
-                list={employeesInitialState.map(
-                  (employee) => employee.hasBonus
-                )}
-              />
-              <FormSelect
-                label='Должность'
-                name='positionTitle'
-                list={employeesInitialState.map(
-                  (employee) => employee.positionTitle
-                )}
-              /> */}
+            <section className='grid mb-4'>
+              <LevelSelector user={user} />
             </section>
             <div className='flex gap-2'>
               <SubmitBtn
@@ -208,7 +174,7 @@ const Dashboard = () => {
         }
       />
 
-      <div className='flex flex-col gap-2 rounded'>
+      <div className='flex flex-col gap-4 rounded-[16px]'>
         {/* {params.level1 && (
           <div className='rounded-[7px] w-full flex flex-col border shadow-lg p-6'>
             <h2 className='font-bold'>Примененные фильтры:</h2>
@@ -225,12 +191,10 @@ const Dashboard = () => {
           bonusAfterCalibration={bonusAfterCalibration}
         />
 
-        <div className=''>
-          <ChartBarSimple
-            title='Распределение оценок (до/после калибровки)'
-            data={dataForTable}
-          />
-        </div>
+        <ChartBarSimple
+          title='Распределение оценок (до/после калибровки)'
+          data={dataForTable}
+        />
 
         <ChartTable
           title='Распределение оценок и бюджета (до и после калибровки)'
