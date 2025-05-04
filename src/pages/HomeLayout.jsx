@@ -58,7 +58,7 @@ const HomeLayout = () => {
   const isPageLoding = navigation.state === 'loading'
 
   return (
-    <div className='h-screen grid grid-cols-[64px_1fr] '>
+    <div className='h-screen grid grid-cols-[64px_1fr] bg-[#fff]'>
       <Navbar />
       {isPageLoding ? (
         <Loading />

@@ -46,7 +46,9 @@ const LevelSelector = ({ user }) => {
           }}
           className='select select-bordered w-full'
         >
-          <option value=''>Выберите</option>
+          <option disabled={true} value=''>
+            Выберите
+          </option>
           {loadingLevel1 ? (
             <option disabled>Загрузка...</option>
           ) : userRole === 'ROLE_ADMIN' ? (
@@ -82,7 +84,9 @@ const LevelSelector = ({ user }) => {
           className='select select-bordered w-full'
           disabled={!selectedLevel1}
         >
-          <option value=''>Выберите</option>
+          <option disabled={true} value=''>
+            Выберите
+          </option>
           {loadingLevel2 ? (
             <option disabled>Загрузка...</option>
           ) : (
@@ -107,7 +111,9 @@ const LevelSelector = ({ user }) => {
           className='select select-bordered w-full'
           disabled={!selectedLevel2}
         >
-          <option value=''>Выберите</option>
+          <option disabled={true} value=''>
+            Выберите
+          </option>
           {loadingLevel3 ? (
             <option disabled>Загрузка...</option>
           ) : (
@@ -132,7 +138,9 @@ const LevelSelector = ({ user }) => {
           className='select select-bordered w-full'
           disabled={!selectedLevel3}
         >
-          <option value=''>Выберите</option>
+          <option disabled={true} value=''>
+            Выберите
+          </option>
           {loadingLevel4 ? (
             <option disabled>Загрузка...</option>
           ) : (

@@ -1,20 +1,20 @@
 {
   "level1": [
     {
-      "id": "ROLE_HRBP_HR",
+      "id": "1",
       "name": "Дирекция по управлению персоналом и административной деятельности"
     },
-    { "id": "ROLE_HRBP_IT", "name": "Дирекция информационных технологий" }
+    { "id": "2", "name": "Дирекция информационных технологий" }
   ],
   "level2": [
     {
       "id": "Отдел обучения и развития",
-      "level1Id": "ROLE_HRBP_HR",
+      "level1Id": "1",
       "name": "Отдел обучения и развития"
     },
-    { "id": 2, "level1Id": "ROLE_HRBP_HR", "name": "Recruitment" },
-    { "id": 3, "level1Id": "ROLE_HRBP_IT", "name": "Development" },
-    { "id": 4, "level1Id": "ROLE_HRBP_IT", "name": "Scrum Team" }
+    { "id": 2, "level1Id": "1", "name": "Recruitment" },
+    { "id": 3, "level1Id": "2", "name": "Development" },
+    { "id": 4, "level1Id": "2", "name": "Scrum Team" }
   ],
   "level3": [
     { "id": 1, "level2Id": 1, "name": "OPS C&B" },
