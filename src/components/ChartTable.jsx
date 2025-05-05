@@ -25,7 +25,7 @@ const ChartTable = ({ title, data }) => {
   )
 
   return (
-    <div className='rounded-[16px] h-[560px] w-full flex flex-col items-start border shadow-lg p-4'>
+    <div className='rounded-[16px] h-[560px] w-full flex flex-col items-start border shadow-lg p-4 mt-4'>
       <h1 className='font-bold text-xl mb-4'>{title}</h1>
       <table className='table table-lg w-full table-fixed'>
         <thead className='uppercase h-10 border-b-4'>

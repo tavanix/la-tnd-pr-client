@@ -15,8 +15,6 @@ import {
   ChartTable,
   CollapseWithArrow,
   SectionTitle,
-  SubmitBtn,
-  LevelSelector,
 } from '../components'
 
 export const loader = (store, queryClient) => async (request) => {
@@ -26,13 +24,7 @@ export const loader = (store, queryClient) => async (request) => {
     toast.warn('Сперва залогиньтесь, пожалуйста!')
     return redirect('/login')
   }
-
-  // PARAMS QUERY
-  let params = Object.fromEntries([
-    ...new URL(request.request.url).searchParams.entries(),
-  ])
-
-  return { user, params }
+  return { user }
 }
 
 function calculateTotalBonus(data, calcType) {
@@ -128,15 +120,36 @@ const prepareDataForTable = (employees) => {
 }
 
 const Dashboard = () => {
-  let { user, params } = useLoaderData()
+  const { user } = useLoaderData()
+  const userRole = user.roles[0]
+
+  const [selectedLevel1, setSelectedLevel1] = useState(null)
+  const [selectedLevel2, setSelectedLevel2] = useState(null)
+  const [selectedLevel3, setSelectedLevel3] = useState(null)
+  const [selectedLevel4, setSelectedLevel4] = useState(null)
+
+  const { data: level1, isLoading: loadingLevel1 } = useLevel1()
+  const { data: level2, isLoading: loadingLevel2 } = useLevel2(selectedLevel1)
+  const { data: level3, isLoading: loadingLevel3 } = useLevel3(selectedLevel2)
+  const { data: level4, isLoading: loadingLevel4 } = useLevel4(selectedLevel3)
 
   // FILTER BY PARAMS
-  console.log(params)
-
+  const initEmployees = useSelector((state) => state.employeesState.employees)
   let employees = useSelector((state) => state.employeesState.employees)
 
-  //
-  if (user.roles[0] === 'ROLE_HRBP_HR') {
+  const resetBelow = (level) => {
+    if (level === 'level1') {
+      setSelectedLevel2(null)
+      setSelectedLevel3(null)
+    } else if (level === 'level2') {
+      setSelectedLevel3(null)
+    } else if (level === 'level3') {
+      setSelectedLevel4(null)
+    }
+  }
+
+  // restrict data by user role
+  if (userRole === 'ROLE_HRBP_HR') {
     employees = employees.filter(
       (employee) =>
         employee.level1 ===
@@ -144,21 +157,38 @@ const Dashboard = () => {
     )
   }
 
-  if (user.roles[0] === 'ROLE_HRBP_IT') {
+  // filtering
+  if (selectedLevel1 && selectedLevel1 !== null) {
     employees = employees.filter(
-      (employee) => employee.level1 === 'Дирекция информационных технологий'
+      (employee) => employee.level1 === selectedLevel1
     )
   }
-  //
+
+  if (selectedLevel2 && selectedLevel2 !== 'Все') {
+    employees = employees.filter(
+      (employee) => employee.level2 === selectedLevel2
+    )
+  }
+
+  if (selectedLevel3 && selectedLevel3 !== 'Все') {
+    employees = employees.filter(
+      (employee) => employee.level3 === selectedLevel3
+    )
+  }
+
+  if (selectedLevel4 && selectedLevel4 !== 'Все') {
+    employees = employees.filter(
+      (employee) => employee.level4 === selectedLevel4
+    )
+  }
 
   if (
-    params.level2 !== undefined &&
-    params.level2 !== null &&
-    params.level2 !== ''
+    selectedLevel1 === 'Все' ||
+    selectedLevel1 === null ||
+    selectedLevel1 === '' ||
+    selectedLevel1 === undefined
   ) {
-    employees = employees.filter(
-      (employee) => employee.level2 === params.level2
-    )
+    employees = initEmployees
   }
 
   // DATA FOR KPI CARDS
@@ -178,45 +208,130 @@ const Dashboard = () => {
   // DATA FOR TABLE
   const dataForTable = prepareDataForTable(employees)
 
+  //
+
   return (
     <div className='mb-4'>
       <SectionTitle text='Дешборд' />
       <CollapseWithArrow
         title='Фильтры'
         content={
-          <Form method='GET' className='bg-base-100 flex flex-col gap-y-2 mt-4'>
-            {/* filters */}
-            <section className='grid mb-4'>
-              <LevelSelector user={user} />
-            </section>
-            {/* btn */}
-            <div className='flex gap-2'>
-              <SubmitBtn
-                text='Применить'
-                block='false'
-                btnOutline='btn-outline'
-                btnType='success'
-              />
-              <Link
-                to='/dashboard'
-                className='btn btn-outline btn-primary text-white w-36 '
+          <div className='grid grid-cols-4 gap-4'>
+            {/* level1 */}
+            <div className='form-control'>
+              <label className='label label-text capitalize text-neutral-500'>
+                Уровень 1:
+              </label>
+              <select
+                name='level1'
+                value={selectedLevel1 || ''}
+                onChange={(e) => {
+                  setSelectedLevel1(e.target.value)
+                  resetBelow('level1')
+                }}
+                className='select select-bordered w-full'
               >
-                Сбросить
-              </Link>
+                <option value='Все'>Все</option>
+                {loadingLevel1 ? (
+                  <option disabled>Загрузка...</option>
+                ) : (
+                  level1?.map((value) => (
+                    <option key={value.id} value={value.id}>
+                      {value.name}
+                    </option>
+                  ))
+                )}
+              </select>
             </div>
-          </Form>
+
+            {/* level2 */}
+            <div className='form-control'>
+              <label className='label label-text capitalize text-neutral-500'>
+                Уровень 2:
+              </label>
+              <select
+                name='level2'
+                value={selectedLevel2 || ''}
+                onChange={(e) => {
+                  setSelectedLevel2(e.target.value)
+                  resetBelow('level2')
+                }}
+                className='select select-bordered w-full'
+                disabled={!selectedLevel1 || selectedLevel1 === 'Все'}
+              >
+                <option value='Все'>Все</option>
+                {loadingLevel2 ? (
+                  <option disabled>Загрузка...</option>
+                ) : (
+                  level2?.map((value) => (
+                    <option key={value.id} value={value.id}>
+                      {value.name}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
+
+            {/* level3*/}
+            <div className='form-control'>
+              <label className='label label-text capitalize text-neutral-500'>
+                Уровень 3:
+              </label>
+              <select
+                name='level3'
+                value={selectedLevel3 || ''}
+                onChange={(e) => {
+                  setSelectedLevel3(e.target.value)
+                  resetBelow('level3')
+                }}
+                className='select select-bordered w-full'
+                disabled={!selectedLevel2 || selectedLevel2 === 'Все'}
+              >
+                <option value='Все'>Все</option>
+                {loadingLevel3 ? (
+                  <option disabled>Загрузка...</option>
+                ) : (
+                  level3?.map((value) => (
+                    <option key={value.id} value={value.id}>
+                      {value.name}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
+
+            {/* level3*/}
+            <div className='form-control'>
+              <label className='label label-text capitalize text-neutral-500'>
+                Уровень 3:
+              </label>
+              <select
+                name='level4'
+                value={selectedLevel4 || ''}
+                onChange={(e) => {
+                  setSelectedLevel4(e.target.value)
+                  resetBelow('level4')
+                }}
+                className='select select-bordered w-full'
+                disabled={!selectedLevel3 || selectedLevel3 === 'Все'}
+              >
+                <option value='Все'>Все</option>
+                {loadingLevel4 ? (
+                  <option disabled>Загрузка...</option>
+                ) : (
+                  level4?.map((value) => (
+                    <option key={value.id} value={value.id}>
+                      {value.name}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
+          </div>
         }
       />
 
-      <div className='flex flex-col gap-4 rounded-[16px]'>
-        {/* applied filters */}
-        {params.level1 && (
-          <div className='rounded-[16px] w-full flex flex-col border shadow-lg p-6'>
-            <h2 className='font-bold'>Примененные фильтры:</h2>
-            {params.level2 && <h3>Level 2 = {params.level2}</h3>}
-          </div>
-        )}
-
+      <div className='flex flex-col gap-4 rounded-[16px] '>
         <ChartBudget
           budget={bonusBudget}
           bonusBeforeCalibration={bonusBeforeCalibration}
