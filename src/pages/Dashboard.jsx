@@ -127,6 +127,7 @@ const Dashboard = () => {
   const [selectedLevel2, setSelectedLevel2] = useState(null)
   const [selectedLevel3, setSelectedLevel3] = useState(null)
   const [selectedLevel4, setSelectedLevel4] = useState(null)
+  const [selectedPosition, setSelectedPosition] = useState(null)
 
   const { data: level1, isLoading: loadingLevel1 } = useLevel1()
   const { data: level2, isLoading: loadingLevel2 } = useLevel2(selectedLevel1)
@@ -191,6 +192,24 @@ const Dashboard = () => {
     employees = initEmployees
   }
 
+  const positions = [
+    ...new Set(employees.map((employee) => employee.positionTitle).sort()),
+  ]
+
+  const level_1 = [
+    ...new Set(employees.map((employee) => employee.level1).sort()),
+  ]
+
+  // if (selectedPosition === 'Все') {
+  //   employees = employees
+  // }
+
+  if (selectedPosition && selectedPosition !== 'Все') {
+    employees = employees.filter(
+      (employee) => employee.positionTitle === selectedPosition
+    )
+  }
+
   // DATA FOR KPI CARDS
   // total budget
   const bonusBudget = employees
@@ -207,8 +226,6 @@ const Dashboard = () => {
 
   // DATA FOR TABLE
   const dataForTable = prepareDataForTable(employees)
-
-  //
 
   return (
     <div className='mb-4'>
@@ -235,11 +252,16 @@ const Dashboard = () => {
                 {loadingLevel1 ? (
                   <option disabled>Загрузка...</option>
                 ) : (
-                  level1?.map((value) => (
-                    <option key={value.id} value={value.id}>
-                      {value.name}
+                  level_1?.map((value) => (
+                    <option key={value} value={value}>
+                      {value}
                     </option>
                   ))
+                  // level1?.map((value) => (
+                  //   <option key={value.id} value={value.id}>
+                  //     {value.name}
+                  //   </option>
+                  // ))
                 )}
               </select>
             </div>
@@ -303,7 +325,7 @@ const Dashboard = () => {
             {/* level3*/}
             <div className='form-control'>
               <label className='label label-text capitalize text-neutral-500'>
-                Уровень 3:
+                Уровень 4:
               </label>
               <select
                 name='level4'
@@ -325,6 +347,28 @@ const Dashboard = () => {
                     </option>
                   ))
                 )}
+              </select>
+            </div>
+
+            {/* positions */}
+            <div className='form-control'>
+              <label className='label label-text capitalize text-neutral-500'>
+                Должность:
+              </label>
+              <select
+                name='positionTitle'
+                onChange={(e) => {
+                  setSelectedPosition(e.target.value)
+                }}
+                className='select select-bordered w-full'
+                disabled={!selectedLevel1 || selectedLevel1 === 'Все'}
+              >
+                <option value='Все'>Все</option>
+                {positions?.map((value, index) => (
+                  <option key={index} value={value}>
+                    {value}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

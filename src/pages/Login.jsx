@@ -50,8 +50,8 @@ const Login = () => {
         alt='elem3'
         className='absolute bottom-0 left-0 z-49 h-1/3'
       />
-      {/* 
-      <Form
+      {/* sso */}
+      {/* <Form
         method='GET'
         className='w-[550px] h-[270px] rounded-[16px] bg-white p-[64px] flex justify-center items-center absolute z-50 shadow-2xl'
       >
@@ -72,6 +72,7 @@ const Login = () => {
         </div>
       </Form> */}
 
+      {/* login password */}
       <Form method='POST' className='p-4 flex gap-x-1'>
         <h4 className='text-xl font-bold'></h4>
         <label className='input input-bordered flex items-center gap-2'>
