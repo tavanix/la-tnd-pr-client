@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 const API = axios.create({ baseURL: 'http://localhost:4000' })
 
 export const useLevel1 = () => {
   return useQuery({
-    queryKey: ['level1'],
+    queryKey: ['level1FromDB'],
     queryFn: () => API.get('/level1').then((res) => res.data),
   })
 }

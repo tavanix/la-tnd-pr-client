@@ -41,27 +41,41 @@ const Profile = () => {
 
   return (
     <div className='w-[1280px]'>
-      <SectionTitle text='Информация о пользователе:' />
-      <section className='flex flex-col mt-4 mb-8'>
-        <div className='grid grid-cols-2 w-96 mb-2'>
-          <span className=''>Username:</span>
-          <span className='text-primary font-light'>{user.username}</span>
-        </div>
-        <div className='grid grid-cols-2 w-96 mb-2'>
-          <span className=''>E-mail:</span>
-          <span className='text-primary font-light'>{user.email}</span>
-        </div>
-        <div className='grid grid-cols-2 w-96'>
-          <span className='text-md'>Assigned roles:</span>
-          <ul className='container'>
-            {user.roles.map((role) => (
-              <li key={role} className='text-primary text-md font-light'>
-                {role}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <SectionTitle text='Профиль пользователя' />
+
+      <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
+        <h1 className='font-bold text-xl'>Выбор популяции для калибровки</h1>
+        <section className='flex flex-col'>
+          <div className='grid grid-cols-2 w-96 mb-2'>
+            <span className=''>TODO: Report filters</span>
+          </div>
+        </section>
+      </div>
+
+      <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
+        <h1 className='font-bold text-xl'>Данные для входа</h1>
+        <section className='flex flex-col'>
+          <div className='grid grid-cols-2 w-96 mb-2'>
+            <span className=''>Username:</span>
+            <span className='text-primary font-light'>{user.username}</span>
+          </div>
+          <div className='grid grid-cols-2 w-96 mb-2'>
+            <span className=''>E-mail:</span>
+            <span className='text-primary font-light'>{user.email}</span>
+          </div>
+          <div className='grid grid-cols-2 w-96'>
+            <span className='text-md'>Assigned roles:</span>
+            <ul className='container'>
+              {user.roles.map((role) => (
+                <li key={role} className='text-primary text-md font-light'>
+                  {role}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      </div>
+
       {/* <SectionTitle text='Здесь можно изменить свой текущий пароль:' />
       <Form
         method='POST'

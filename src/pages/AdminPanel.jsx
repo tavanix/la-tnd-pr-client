@@ -110,10 +110,10 @@ const AdminPanel = () => {
       </div> */}
 
       {/* export data */}
-      <div className='flex gap-8 mb-4 p-6 w-full border rounded-[16px] shadow-lg'>
+      <div className='flex gap-8 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
         <div className=''>
           <h3 className='mb-4 font-bold'>Выгрузить список сотрудников:</h3>
-          <div className='flex gap-4 justify-center'>
+          <div className='flex gap-4 justify-start'>
             <ExportToExcel data={employees} bookTitle={`PR_${Date.now()}`} />
             <ExportToCsv data={employees} bookTitle={`PR_${Date.now()}`} />
           </div>
