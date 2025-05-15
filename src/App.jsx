@@ -12,6 +12,7 @@ import {
   Faq,
   Employees,
   AdminPanel,
+  Budget,
   Dashboard,
 } from './pages'
 
@@ -20,6 +21,7 @@ import { loader as adminLoader } from './pages/AdminPanel'
 import { loader as profileLoader } from './pages/Profile'
 import { loader as homeLoader } from './pages/HomeLayout'
 import { loader as employeesLoader } from './pages/Employees'
+import { loader as budgetLoader } from './pages/Budget'
 import { loader as dashboardLoader } from './pages/Dashboard'
 
 // actions
@@ -66,6 +68,11 @@ const router = createBrowserRouter([
         path: 'dashboard',
         element: <Dashboard />,
         loader: dashboardLoader(store, queryClient),
+      },
+      {
+        path: 'budget',
+        element: <Budget />,
+        loader: budgetLoader(store, queryClient),
       },
       {
         path: 'faq',

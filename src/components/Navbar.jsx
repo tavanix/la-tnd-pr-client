@@ -9,9 +9,10 @@ import { FaChartSimple } from 'react-icons/fa6'
 import { FaQuestion } from 'react-icons/fa'
 import { MdVerifiedUser } from 'react-icons/md'
 import { RiArrowRightSLine } from 'react-icons/ri'
-import { FaWalking } from 'react-icons/fa'
 import { FaPersonWalking } from 'react-icons/fa6'
 import { FaUserCircle } from 'react-icons/fa'
+import { GiReceiveMoney } from 'react-icons/gi'
+
 const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -60,6 +61,19 @@ const Navbar = () => {
               <FaUserEdit className='w-6 h-6 text-white' />
               <span className='text-[#ededed] hidden group-hover:flex'>
                 Калибровка
+              </span>
+            </div>
+          </Link>
+
+          {/* budget */}
+          <Link
+            to='/budget'
+            className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
+          >
+            <div className='ml-7 flex gap-4'>
+              <GiReceiveMoney className='w-6 h-6 text-white' />
+              <span className='text-[#ededed] hidden group-hover:flex'>
+                Бюджет
               </span>
             </div>
           </Link>
