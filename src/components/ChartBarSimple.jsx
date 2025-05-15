@@ -23,7 +23,7 @@ const ChartBarSimple = ({ title, data }) => {
   })
 
   return (
-    <div className='rounded-[16px] h-[300px] w-full p-2 flex flex-col items-start border shadow-lg p-4 mt-4'>
+    <div className='rounded-[16px] h-[300px] w-full flex flex-col items-start border shadow-lg p-4 mb-4'>
       <h1 className='font-bold text-xl mb-4'>{title}</h1>
       <ResponsiveContainer width='100%' height='85%'>
         <BarChart data={translitData}>

@@ -4,10 +4,10 @@ const ChartBudget = ({
   bonusAfterCalibration,
 }) => {
   return (
-    <div className='rounded-[16px] h-[244px] w-full flex flex-col items-center'>
+    <div className='rounded-[16px] h-[244px] w-full flex flex-col items-center mb-4'>
       <div className='h-screen w-full flex gap-6 mt-4'>
         {/* Бюджет */}
-        <div className='p-6 shadow rounded-2xl transform transition duration-500 hover:scale-105 w-1/3 flex items-center justify-center h-auto '>
+        <div className='p-6 shadow-lg rounded-[16px] transform transition duration-500 hover:scale-105 w-1/3 flex items-center justify-center h-auto '>
           <dl className='space-y-2'>
             <dt className='text-sm font-medium text-gray-500 '>Бюджет</dt>
             <dd className='text-5xl font-light md:text-5xl '>
@@ -19,7 +19,7 @@ const ChartBudget = ({
           </dl>
         </div>
         {/* до */}
-        <div className='p-6 shadow rounded-2xl transform transition duration-500 hover:scale-105 w-1/3 flex items-center justify-center'>
+        <div className='p-6 shadow-lg rounded-[16px] transform transition duration-500 hover:scale-105 w-1/3 flex items-center justify-center'>
           <dl className='space-y-2'>
             <dt className='text-sm font-medium text-gray-500 '>
               Факт до изменения оценок
@@ -94,7 +94,7 @@ const ChartBudget = ({
         </div>
 
         {/* после */}
-        <div className='p-4 shadow rounded-2xl transform transition duration-500 hover:scale-105 w-1/3 flex items-center justify-center'>
+        <div className='p-4 shadow-lg rounded-[16px] transform transition duration-500 hover:scale-105 w-1/3 flex items-center justify-center'>
           <dl className='space-y-2  mt-6'>
             <dt className='text-sm font-medium text-gray-500 '>
               Факт после изменения оценок
