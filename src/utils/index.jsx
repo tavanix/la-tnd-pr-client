@@ -114,21 +114,3 @@ export const mergeArrays = (arr1, arr2) => {
     ...arr2.find((obj) => obj.rate === item.rate && obj.target === item.target),
   }))
 }
-
-// mass signup
-import users from './massSignupList'
-
-const signupUsers = async (array) => {
-  await array.map((item) => {
-    try {
-      const response = customFetch.post('/auth/signup', item)
-    } catch (error) {
-      const errorMesssage =
-        error?.response?.data?.error?.message ||
-        'Please double check your credentials'
-      return null
-    }
-  })
-}
-
-// signupUsers(users)

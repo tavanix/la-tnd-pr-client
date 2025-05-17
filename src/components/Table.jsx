@@ -61,13 +61,13 @@ function useUpdateUser() {
   })
 }
 
-const Table = () => {
+const Table = ({ employeesFromStore }) => {
   const dispatch = useDispatch()
   const [validationErrors, setValidationErrors] = useState({})
 
-  const employeesFromStore = useSelector(
-    (state) => state.employeesState.employees
-  )
+  // const employeesFromStore = useSelector(
+  //   (state) => state.employeesState.employees
+  // )
 
   const columns = [
     {

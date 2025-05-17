@@ -1,6 +1,7 @@
-import { toast } from 'react-toastify'
-import { SectionTitle, Table, ExportToExcel } from '../components'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { SectionTitle, Table, ExportToExcel } from '../components'
+import { toast } from 'react-toastify'
 
 export const loader = (store, queryClient) => async () => {
   // ROLES CHECK
@@ -15,12 +16,15 @@ export const loader = (store, queryClient) => async () => {
 
 const Employees = () => {
   const user = useSelector((state) => state.userState.user)
-  const employees = useSelector((state) => state.employeesState.employees)
+
+  const [employees, setEmployees] = useState(
+    useSelector((state) => state.employeesState.employees)
+  )
 
   return (
     <>
       <SectionTitle text='Калибровка' />
-      <Table />
+      <Table employeesFromStore={employees} />
       <div className='mt-4'>
         <ExportToExcel
           data={employees}
