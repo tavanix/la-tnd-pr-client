@@ -27,7 +27,7 @@ const Dashboard = () => {
   return (
     <div className='mb-4'>
       <SectionTitle text='Дешборд' />
-      <div>your role is {userRole}</div>
+      <div className=''>your role is {userRole}</div>
     </div>
   )
 }

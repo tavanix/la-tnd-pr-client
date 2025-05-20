@@ -1,6 +1,13 @@
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { SectionTitle, Table, ExportToExcel } from '../components'
+import { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+
+import {
+  SectionTitle,
+  Table,
+  ExportToExcel,
+  FilteringOptions,
+} from '../components'
+
 import { toast } from 'react-toastify'
 
 export const loader = (store, queryClient) => async () => {
@@ -17,21 +24,25 @@ export const loader = (store, queryClient) => async () => {
 const Employees = () => {
   const user = useSelector((state) => state.userState.user)
 
-  const [employees, setEmployees] = useState(
-    useSelector((state) => state.employeesState.employees)
+  const employees = useSelector((state) => state.employeesState.employees)
+  const filteredEmployees = useSelector(
+    (state) => state.employeesState.filteredEmployees
   )
 
+  const data = filteredEmployees.length > 0 ? filteredEmployees : employees
+
   return (
-    <>
+    <div className='flex flex-col'>
       <SectionTitle text='Калибровка' />
-      <Table employeesFromStore={employees} />
+      <FilteringOptions />
+      <Table employeesFromStore={data} />
       <div className='mt-4'>
         <ExportToExcel
-          data={employees}
+          data={data}
           bookTitle={`Калибровка_${user.roles[0].slice(5)}_${Date.now()}`}
         />
       </div>
-    </>
+    </div>
   )
 }
 

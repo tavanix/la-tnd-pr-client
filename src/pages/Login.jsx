@@ -73,7 +73,10 @@ const Login = () => {
       </Form> */}
 
       {/* login password */}
-      <Form method='POST' className='p-4 flex gap-x-1'>
+      <Form
+        method='POST'
+        className='p-4 flex flex-col gap-4 w-[350px] bg-black absolute rounded-[16px] shadow-lg'
+      >
         <h4 className='text-xl font-bold'></h4>
         <label className='input input-bordered flex items-center gap-2'>
           <svg
