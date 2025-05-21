@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { redirect, Form } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { SectionTitle, SubmitBtn } from '../components'
+import { useSelector, useDispatch } from 'react-redux'
+import { SectionTitle, MultiSelect } from '../components'
 import { customFetch } from '../utils'
 import { updatePassword } from '../features/user/userSlice'
 
@@ -39,6 +39,23 @@ export const loader = (store) => () => {
 const Profile = () => {
   const user = useSelector((state) => state.userState.user)
 
+  const dispatch = useDispatch()
+
+  const optionsLevel1 = useSelector(
+    (state) => state.employeesState.optionsLevel1
+  )
+
+  const selectedLevel1FromStore = useSelector(
+    (state) => state.employeesState.filters.selectedLevel1
+  )
+
+  const setOptionsLevel1 = (options) => {
+    dispatch({
+      type: 'employees/setOptionsLevel1',
+      payload: options,
+    })
+  }
+
   return (
     <div className='w-[1280px]'>
       <SectionTitle text='Профиль пользователя' />
@@ -46,9 +63,12 @@ const Profile = () => {
       <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
         <h1 className='font-bold text-xl'>Выбор популяции для калибровки</h1>
         <section className='flex flex-col'>
-          <div className='grid grid-cols-2 w-96 mb-2'>
-            <span className=''>TODO: Report filters</span>
-          </div>
+          <MultiSelect
+            options={optionsLevel1}
+            selected={selectedLevel1FromStore}
+            setSelected={setOptionsLevel1}
+            label='Выберите Level 1'
+          />
         </section>
       </div>
 

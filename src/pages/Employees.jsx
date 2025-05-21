@@ -28,13 +28,23 @@ const Employees = () => {
   const filteredEmployees = useSelector(
     (state) => state.employeesState.filteredEmployees
   )
-
   const data = filteredEmployees.length > 0 ? filteredEmployees : employees
+
+  // console.log(
+  //   'selectedLevel1: ',
+  //   useSelector((state) => state.employeesState.filters.selectedLevel1)
+  // )
+
+  console.log('filteredEmployees: ', filteredEmployees)
+  console.log(
+    'selected Level1: ',
+    useSelector((state) => state.employeesState.filters.selectedLevel1)
+  )
 
   return (
     <div className='flex flex-col'>
       <SectionTitle text='Калибровка' />
-      <FilteringOptions />
+      {/* <FilteringOptions /> */}
       <Table employeesFromStore={data} />
       <div className='mt-4'>
         <ExportToExcel

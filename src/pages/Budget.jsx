@@ -31,7 +31,6 @@ const Budget = () => {
   const filteredEmployees = useSelector(
     (state) => state.employeesState.filteredEmployees
   )
-
   const data = filteredEmployees.length > 0 ? filteredEmployees : employees
 
   // DATA FOR KPI CARDS
@@ -48,7 +47,7 @@ const Budget = () => {
     <div className='mb-4'>
       <SectionTitle text='Бюджет' />
 
-      <FilteringOptions />
+      {/* <FilteringOptions /> */}
 
       <div className='flex flex-col gap-4 rounded-[16px] '>
         <ChartBudget

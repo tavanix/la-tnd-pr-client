@@ -13,6 +13,11 @@ import {
 
 const ChartBarSimple = ({ title, data }) => {
   const employees = useSelector((state) => state.employeesState.employees)
+  const employeesShort = useSelector(
+    (state) => state.employeesState.filteredEmployees
+  )
+
+  console.log(employees.length)
 
   const translitData = data.map((item) => {
     return {
@@ -25,10 +30,16 @@ const ChartBarSimple = ({ title, data }) => {
   return (
     <div className='rounded-[16px] h-[300px] w-full flex flex-col items-start border shadow-lg p-4 mb-4'>
       <h1 className='font-bold text-xl mb-4'>{title}</h1>
-      <ResponsiveContainer width='100%' height='85%'>
-        <BarChart data={translitData}>
+      <ResponsiveContainer width='100%' height='100%'>
+        <BarChart
+          data={translitData}
+          margin={{
+            top: 20,
+          }}
+        >
           <XAxis dataKey='rate' tick={{ strokeWidth: 2 }} />
-          <YAxis domain={[0, employees.length + 200]} width={0} />
+          {/* <YAxis domain={[0, employees.length]} width={0} /> */}
+          <YAxis width={0} />
           <Tooltip />
           <Legend />
           <Bar dataKey='до' fill='#b9b9ba'>

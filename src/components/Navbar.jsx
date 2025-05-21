@@ -65,19 +65,6 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* budget */}
-          <Link
-            to='/budget'
-            className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
-          >
-            <div className='ml-7 flex gap-4'>
-              <GiReceiveMoney className='w-6 h-6 text-white' />
-              <span className='text-[#ededed] hidden group-hover:flex'>
-                Бюджет
-              </span>
-            </div>
-          </Link>
-
           {/* dashboard */}
           <Link
             to='/dashboard'
@@ -100,6 +87,19 @@ const Navbar = () => {
               <FaQuestion className='w-6 h-6 text-white' />
               <span className='text-[#ededed] hidden group-hover:flex'>
                 F.A.Q.
+              </span>
+            </div>
+          </Link>
+
+          {/* budget */}
+          <Link
+            to='/budget'
+            className='mt-6 bg-[#484848] group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#F93C00]'
+          >
+            <div className='ml-7 flex gap-4'>
+              <GiReceiveMoney className='w-6 h-6 text-white' />
+              <span className='text-[#ededed] hidden group-hover:flex'>
+                Бюджет
               </span>
             </div>
           </Link>

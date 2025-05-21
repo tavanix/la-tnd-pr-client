@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 
 const themes = {
@@ -36,14 +37,18 @@ const userSlice = createSlice({
       state.user = user
       localStorage.setItem('user', JSON.stringify(user))
     },
+
     logoutUser: (state) => {
       state.user = null
       localStorage.removeItem('user')
+      useDispatch().dispatch({ type: 'employees/resetState' })
       toast.success('Logged out successfully!')
     },
+
     updatePassword: () => {
       toast.success('You have successfully changed your password!')
     },
+
     toggleTheme: (state) => {
       const { white, black } = themes
       state.theme = state.theme === white ? black : white
