@@ -35,12 +35,6 @@ const Employees = () => {
   //   useSelector((state) => state.employeesState.filters.selectedLevel1)
   // )
 
-  console.log('filteredEmployees: ', filteredEmployees)
-  console.log(
-    'selected Level1: ',
-    useSelector((state) => state.employeesState.filters.selectedLevel1)
-  )
-
   return (
     <div className='flex flex-col'>
       <SectionTitle text='Калибровка' />

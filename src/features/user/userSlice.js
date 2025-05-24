@@ -40,7 +40,10 @@ const userSlice = createSlice({
 
     logoutUser: (state) => {
       state.user = null
+      state.employees = undefined
       localStorage.removeItem('user')
+      localStorage.removeItem('persist:root')
+      localStorage.removeItem('roles')
       useDispatch().dispatch({ type: 'employees/resetState' })
       toast.success('Logged out successfully!')
     },

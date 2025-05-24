@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logoutUser } from '../features/user/userSlice'
 import { useQueryClient } from '@tanstack/react-query'
+import { persistor } from '../store'
 
 import logo from '../assets/logoWhite.png'
 import { FaUserEdit } from 'react-icons/fa'
@@ -23,6 +24,8 @@ const Navbar = () => {
 
   const handleLogout = () => {
     navigate('/login')
+    persistor.purge()
+    localStorage.removeItem('persist:root')
     dispatch(logoutUser())
     queryClient.removeQueries()
   }

@@ -17,8 +17,6 @@ const ChartBarSimple = ({ title, data }) => {
     (state) => state.employeesState.filteredEmployees
   )
 
-  console.log(employees.length)
-
   const translitData = data.map((item) => {
     return {
       rate: item.rate,

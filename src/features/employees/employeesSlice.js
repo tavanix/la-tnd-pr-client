@@ -62,13 +62,8 @@ const employeesSlice = createSlice({
         (employee) => employee.email === updatedEmployee.email
       )
 
-      console.log('updatedEmployee: ', updatedEmployee)
-      console.log('emp index: ', employeeIndex)
-
       if (employeeIndex !== -1) {
         state.employees[employeeIndex] = updatedEmployee
-        // вот тут поправить, когда без фильтра в левел1 сразу редактируем сотрудника
-        // то весь стейт фильтредЕмплоиз присваивается 1 значению из апдейтедЕмплои
         state.filteredEmployees[employeeIndex] = updatedEmployee
 
         toast.success('Изменения успешно сохранены!')
@@ -80,7 +75,7 @@ const employeesSlice = createSlice({
       state.filteredEmployees = []
       state.optionsLevel1 = {}
       state.filters = {
-        selectedLevel1: [],
+        selectedLevel1: undefined,
       }
     },
   },
