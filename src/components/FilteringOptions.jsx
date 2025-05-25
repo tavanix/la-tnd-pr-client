@@ -1,34 +1,26 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { MultiSelect } from '../components'
+import { setOptionsLevel2 } from '../features/employees/employeesSlice'
 
 const FilteringOptions = () => {
   const dispatch = useDispatch()
 
-  const optionsLevel1 = useSelector(
-    (state) => state.employeesState.optionsLevel1
+  // level 2
+  const optionsForLevel2 = useSelector((s) => s.employeesState.optionsLevel2)
+  const selectedLevel2FromStore = useSelector(
+    (s) => s.employeesState.filters.selectedLevel2
   )
-
-  const selectedLevel1FromStore = useSelector(
-    (state) => state.employeesState.filters.selectedLevel1
-  )
-
-  const setOptionsLevel1 = (options) => {
-    dispatch({
-      type: 'employees/setOptionsLevel1',
-      payload: options,
-    })
-  }
 
   return (
-    <div className='flex flex-col gap-2 w-full mb-6'>
-      <div className='grid grid-cols-4 gap-2'>
-        <MultiSelect
-          options={optionsLevel1}
-          selected={selectedLevel1FromStore}
-          setSelected={setOptionsLevel1}
-          label='Выберите Level 1'
-        />
-      </div>
+    <div className='grid grid-cols-4 gap-2 mb-4'>
+      <MultiSelect
+        options={optionsForLevel2}
+        selected={selectedLevel2FromStore}
+        setSelected={(optionsForLevel2) =>
+          dispatch(setOptionsLevel2(optionsForLevel2))
+        }
+        label='Выберите Level 2'
+      />
     </div>
   )
 }

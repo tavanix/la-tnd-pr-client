@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 
-const MultiSelect = ({ options, selected, setSelected, label }) => {
+const MultiSelect = ({ options = [], selected = [], setSelected, label }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const dropdownRef = useRef(null)
@@ -63,15 +63,14 @@ const MultiSelect = ({ options, selected, setSelected, label }) => {
         >
           {selected.length === 0 ? (
             <span className='text-gray-400'>Выберите...</span>
+          ) : selected.length === 1 ? (
+            <span className='p-4 badge badge-sm bg-gray-100 text-gray-800 h-8'>
+              {selected}
+            </span>
           ) : (
-            selected.map((val) => (
-              <span
-                key={val}
-                className='p-4 badge badge-sm bg-gray-100 text-gray-800 h-8'
-              >
-                {options.find((o) => o.value === val)?.label}
-              </span>
-            ))
+            <span className='p-4 badge badge-sm bg-gray-100 text-gray-800 h-8'>
+              {selected.length} выбрано
+            </span>
           )}
         </div>
 

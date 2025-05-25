@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 const initialState = {
   employees: [],
   filteredEmployees: [],
-  optionsLevel1: {},
+  optionsLevel1: [],
   filters: {
     selectedLevel1: [],
   },
@@ -21,40 +21,62 @@ const employeesSlice = createSlice({
       // сразу же подготавливаем выпадающий список для Уровень1
       state.optionsLevel1 = [
         ...new Set(state.employees.map((e) => e.level1)),
-      ].map((item) => {
-        return {
-          label: item,
-          value: item,
-        }
-      })
+      ].map((item) => ({ label: item, value: item }))
 
       // если зашел партнер, у которого 1 функция только, то сразу выбираем эту функцию для Уровень1
       if (state.optionsLevel1.length === 1) {
-        state.filters.selectedLevel1 = state.optionsLevel1
-        state.filteredEmployees = state.filters.selectedLevel1
-          .map((filter) =>
-            state.employees.filter(
-              (employee) => employee.level1 === filter.value
-            )
-          )
-          .flat()
+        state.filters.selectedLevel1 = [state.optionsLevel1[0].value]
+
+        state.filteredEmployees = state.employees.filter(
+          (e) => e.level1 === state.optionsLevel1[0].value
+        )
+
+        // строим опции Level2 из уже отфильтрованных
+        state.optionsLevel2 = [
+          ...new Set(state.filteredEmployees.map((e) => e.level2)),
+        ].map((item) => ({ label: item, value: item }))
       }
     },
 
     setOptionsLevel1: (state, action) => {
-      state.filters.selectedLevel1 = action.payload
+      // action.payload — массив выбранных Level1.value
+      state.filters.selectedLevel1 = [...action.payload]
 
-      // если выбран Уровень1, то фильтруем состояние отфильтрованных
-      state.filteredEmployees = state.filters.selectedLevel1
-        .map((filter) =>
-          state.employees.filter((employee) => employee.level1 === filter)
-        )
-        .flat()
+      // сброс всех Level2-фильтров
+      state.filters.selectedLevel2 = []
+
+      // пересчитаем optionsLevel2
+      const byLevel1 = state.employees.filter((e) =>
+        state.filters.selectedLevel1.includes(e.level1)
+      )
+      state.optionsLevel2 = Array.from(
+        new Set(byLevel1.map((e) => e.level2))
+      ).map((val) => ({ label: val, value: val }))
+
+      // если сразу нужно фильтровать таблицу только по Level1:
+      state.filteredEmployees = byLevel1
     },
 
-    // setOptionsLevel2: (state, action) => {
-    //   console.log('here: ', action.payload)
-    // },
+    setOptionsLevel2: (state, action) => {
+      // 1) Сохраняем выбранные значения Level 2
+      state.filters.selectedLevel2 = action.payload
+
+      // 2) Определяем базовый массив, откуда будем фильтровать:
+      //    если Level 1 выбран — используем уже отфильтрованные по нему,
+      //    иначе — весь список сотрудников
+      const base =
+        state.filters.selectedLevel1.length > 0
+          ? state.employees.filter((e) =>
+              state.filters.selectedLevel1.includes(e.level1)
+            )
+          : state.employees
+
+      // 3) Теперь ужесточаем фильтрацию по Level 2
+      state.filteredEmployees =
+        action.payload.length > 0
+          ? base.filter((e) => action.payload.includes(e.level2))
+          : base
+    },
 
     editEmployee: (state, action) => {
       const updatedEmployee = action.payload
@@ -73,14 +95,20 @@ const employeesSlice = createSlice({
     resetState(state) {
       state.employees = []
       state.filteredEmployees = []
-      state.optionsLevel1 = {}
+      state.optionsLevel1 = []
       state.filters = {
-        selectedLevel1: undefined,
+        selectedLevel1: [],
       }
     },
   },
 })
 
-export const { setEmployees, editEmployee, resetState } = employeesSlice.actions
+export const {
+  setEmployees,
+  setOptionsLevel1,
+  setOptionsLevel2,
+  editEmployee,
+  resetState,
+} = employeesSlice.actions
 
 export default employeesSlice.reducer

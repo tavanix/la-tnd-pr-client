@@ -40,12 +40,12 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <HomeLayout />,
-    loader: homeLoader(store, queryClient),
     errorElement: <Error />,
     children: [
       {
         index: true,
         element: <Profile />,
+        loader: homeLoader(store, queryClient),
         errorElement: <ErrorElement />,
       },
       {

@@ -24,9 +24,6 @@ export const loader = (store, queryClient) => async (request) => {
 }
 
 const Budget = () => {
-  const dispatch = useDispatch()
-  const user = useSelector((state) => state.userState.user)
-
   const employees = useSelector((state) => state.employeesState.employees)
   const filteredEmployees = useSelector(
     (state) => state.employeesState.filteredEmployees
@@ -47,7 +44,7 @@ const Budget = () => {
     <div className='mb-4'>
       <SectionTitle text='Бюджет' />
 
-      {/* <FilteringOptions /> */}
+      <FilteringOptions />
 
       <div className='flex flex-col gap-4 rounded-[16px] '>
         <ChartBudget

@@ -5,6 +5,8 @@ import { SectionTitle, MultiSelect } from '../components'
 import { customFetch } from '../utils'
 import { updatePassword } from '../features/user/userSlice'
 
+import { setOptionsLevel1 } from '../features/employees/employeesSlice'
+
 export const loader = (store) => () => {
   const user = store.getState().userState.user
 
@@ -37,9 +39,8 @@ export const loader = (store) => () => {
 //   }
 
 const Profile = () => {
-  const user = useSelector((state) => state.userState.user)
-
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.userState.user)
 
   const optionsLevel1 = useSelector(
     (state) => state.employeesState.optionsLevel1
@@ -49,13 +50,10 @@ const Profile = () => {
     (state) => state.employeesState.filters.selectedLevel1
   )
 
-  const setOptionsLevel1 = (options) => {
-    dispatch({
-      type: 'employees/setOptionsLevel1',
-      payload: options,
-    })
+  const onChange = (newVals) => {
+    // newVals — массив значений .value
+    dispatch(setOptionsLevel1(newVals))
   }
-  console.log(optionsLevel1)
 
   return (
     <div className='w-[1280px]'>
@@ -71,12 +69,8 @@ const Profile = () => {
           <h1 className='font-bold text-xl'>Выбор популяции для калибровки</h1>
           <MultiSelect
             options={optionsLevel1}
-            selected={
-              optionsLevel1.length === 1
-                ? optionsLevel1
-                : selectedLevel1FromStore
-            }
-            setSelected={setOptionsLevel1}
+            selected={selectedLevel1FromStore}
+            setSelected={onChange}
             label='Для начала выберите Level 1, которое будем калибровать'
           />
         </div>
