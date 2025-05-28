@@ -23,18 +23,19 @@ export const loader = (store, queryClient) => async () => {
 
     // user roles and access management
     let result = []
-    if (
-      user.roles.includes('ROLE_ADMIN') ||
-      user.roles.includes('ROLE_CNB') ||
-      user.roles.includes('ROLE_TND')
-    )
+    if (user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_CNB'))
       result = employees.data
+
+    if (user.roles.includes('ROLE_TND'))
+      result = employees.data.filter(
+        (item) =>
+          item.level1 ===
+          'Департамент по внутреннему контролю, аудиту и управлению рисками'
+      )
 
     if (user.roles.includes('ROLE_HRBP_IT'))
       result = employees.data.filter(
-        (item) =>
-          item.level1 === 'Дирекция информационных технологий' ||
-          item.level1 === 'Дирекция развития продукта'
+        (item) => item.level1 === 'Дирекция информационных технологий'
       )
 
     if (user.roles.includes('ROLE_HRBP_HR'))

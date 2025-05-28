@@ -26,7 +26,7 @@ import { loader as dashboardLoader } from './pages/Dashboard'
 
 // actions
 import { action as loginAction } from './pages/Login'
-// import { action as updatePasswordAction } from './pages/Profile'
+import { action as updatePasswordAction } from './pages/Profile'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Profile />,
+        element: <Landing />,
         loader: homeLoader(store, queryClient),
         errorElement: <ErrorElement />,
       },
@@ -57,7 +57,7 @@ const router = createBrowserRouter([
         path: 'profile',
         element: <Profile />,
         loader: profileLoader(store),
-        // action: updatePasswordAction(store),
+        action: updatePasswordAction(store),
       },
       {
         path: 'employees',
