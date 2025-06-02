@@ -6,6 +6,9 @@ import {
   setOptionsLevel4,
   setOptionsPositionTitles,
   setOptionsEmployeeName,
+  setOptionsHasBonus,
+  setOptionsLevelFromCeo,
+  setOptionsScoreCalibrated,
 } from '../features/employees/employeesSlice'
 
 const FilteringOptions = () => {
@@ -45,6 +48,30 @@ const FilteringOptions = () => {
   )
   const selectedEmployeeNameFromStore = useSelector(
     (s) => s.employeesState.filters.selectedEmployeeName
+  )
+
+  // has bonus
+  const optionsForHasBonus = useSelector(
+    (s) => s.employeesState.optionsHasBonus
+  )
+  const selectedHasBonusFromStore = useSelector(
+    (s) => s.employeesState.filters.selectedHasBonus
+  )
+
+  // level from ceo
+  const optionsForLevelFromCeo = useSelector(
+    (s) => s.employeesState.optionsLevelFromCeo
+  )
+  const selectedLevelFromCeoFromStore = useSelector(
+    (s) => s.employeesState.filters.selectedLevelFromCeo
+  )
+
+  // calibrated score
+  const optionsForScoreCalibrated = useSelector(
+    (s) => s.employeesState.optionsScoreCalibrated
+  )
+  const selectedScoreCalibratedFromStore = useSelector(
+    (s) => s.employeesState.filters.selectedScoreCalibrated
   )
 
   return (
@@ -88,6 +115,30 @@ const FilteringOptions = () => {
           dispatch(setOptionsEmployeeName([...optionsForEmployeeName]))
         }
         label='ФИО Сотрудника'
+      />
+      <MultiSelect
+        options={optionsForHasBonus}
+        selected={selectedHasBonusFromStore}
+        setSelected={(optionsForHasBonus) =>
+          dispatch(setOptionsHasBonus([...optionsForHasBonus]))
+        }
+        label='Has Bonus'
+      />
+      <MultiSelect
+        options={optionsForLevelFromCeo}
+        selected={selectedLevelFromCeoFromStore}
+        setSelected={(optionsForLevelFromCeo) =>
+          dispatch(setOptionsLevelFromCeo([...optionsForLevelFromCeo]))
+        }
+        label='Уровень от CEO'
+      />
+      <MultiSelect
+        options={optionsForScoreCalibrated}
+        selected={selectedScoreCalibratedFromStore}
+        setSelected={(optionsForScoreCalibrated) =>
+          dispatch(setOptionsScoreCalibrated([...optionsForScoreCalibrated]))
+        }
+        label='Оценка после калибровки'
       />
 
       {/* bonus - no bonus

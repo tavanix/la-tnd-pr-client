@@ -1,25 +1,31 @@
+// src/features/employees/employeesSlice.js
+
 import { createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-toastify'
 
 const initialState = {
-  employees: [], // полный список сотрудников
-  filteredEmployees: [], // итог после применения всех фильтров
+  employees: [],
+  filteredEmployees: [],
 
-  // Опции для каждого уровня
+  optionsLevel1: [],
+  optionsLevel2: [],
+  optionsLevel3: [],
+  optionsLevel4: [],
+  optionsPositionTitles: [],
   optionsEmployeeName: [],
-  optionsPositionTitles: [], // из сотрудников, отфильтрованных по Level1–Level4
-  optionsLevel1: [], // из сотрудников, отфильтрованных по PositionTitle
-  optionsLevel2: [], // из сотрудников, отфильтрованных по PositionTitle+Level1
-  optionsLevel3: [], // из сотрудников, отфильтрованных по PositionTitle+Level1+Level2
-  optionsLevel4: [], // из сотрудников, отфильтрованных по PositionTitle+Level1+Level2+Level3
+  optionsHasBonus: [],
+  optionsLevelFromCeo: [],
+  optionsScoreCalibrated: [],
 
   filters: {
+    selectedLevel1: [],
+    selectedLevel2: [],
+    selectedLevel3: [],
+    selectedLevel4: [],
+    selectedPositionTitles: [],
     selectedEmployeeName: [],
-    selectedPositionTitles: [], // выбранные должности
-    selectedLevel1: [], // выбранные Level1
-    selectedLevel2: [], // выбранные Level2
-    selectedLevel3: [], // выбранные Level3
-    selectedLevel4: [], // выбранные Level4
+    selectedHasBonus: [],
+    selectedLevelFromCeo: [],
+    selectedScoreCalibrated: [],
   },
 }
 
@@ -27,12 +33,12 @@ const employeesSlice = createSlice({
   name: 'employees',
   initialState,
   reducers: {
-    // 1) Загрузка полного списка сотрудников
+    // 1) Инициализация полного списка сотрудников
     setEmployees(state, action) {
       state.employees = action.payload
       state.filteredEmployees = [...action.payload]
 
-      // При инициализации выводим все варианты:
+      // Заполняем все опции из полного массива сотрудников
       state.optionsEmployeeName = [
         ...new Set(state.employees.map((e) => e.employeeName)),
       ].map((val) => ({ label: val, value: val }))
@@ -56,152 +62,204 @@ const employeesSlice = createSlice({
       state.optionsLevel4 = [
         ...new Set(state.employees.map((e) => e.level4)),
       ].map((val) => ({ label: val, value: val }))
+
+      state.optionsHasBonus = [
+        ...new Set(state.employees.map((e) => e.hasBonus)),
+      ].map((val) => ({ label: String(val), value: val }))
+
+      state.optionsLevelFromCeo = [
+        ...new Set(state.employees.map((e) => e.levelFromCeo)),
+      ].map((val) => ({ label: val, value: val }))
+
+      state.optionsScoreCalibrated = [
+        ...new Set(state.employees.map((e) => e.calibration)),
+      ].map((val) => ({ label: String(val), value: val }))
     },
 
-    // 2) Приватная функция: пересчитать filteredEmployees и ВСЕ опции
+    // 2) Приватная функция: пересчитывает filteredEmployees и ВСЕ опции
     _recomputeFilters(state) {
-      // 2.1. Начинаем с полного списка
+      // 2.1. Берём полный список
       let base = [...state.employees]
 
-      // 2.2. Если выбраны PositionTitles, сразу отфильтруем их, иначе base остаётся весь
-      const positionSelectedValue = state.filters.selectedPositionTitles
-      let basePos = base
-      if (positionSelectedValue.length > 0) {
-        basePos = base.filter((e) =>
-          positionSelectedValue.includes(e.positionTitle)
-        )
+      // 2.2. Фильтруем по выбранным именам (если есть)
+      const nameSel = state.filters.selectedEmployeeName
+      let baseAfterName = base
+      if (nameSel.length > 0) {
+        baseAfterName = base.filter((e) => nameSel.includes(e.employeeName))
       }
 
-      // 2.2.1 Если выбраны EmployeeName, сразу отфильтруем их, иначе base остаётся весь
-      const employeeNameSelectedValue = state.filters.selectedEmployeeName
-      if (employeeNameSelectedValue.length > 0) {
-        basePos = basePos.filter((e) =>
-          employeeNameSelectedValue.includes(e.employeeName)
-        )
-      }
-
-      // 2.3. На основе basePos строим optionsLevel1
-      state.optionsLevel1 = [...new Set(basePos.map((e) => e.level1))].map(
-        (val) => ({ label: val, value: val })
-      )
-
-      // 2.4. Фильтруем basePos по Level1
-      const lvl1Sel = state.filters.selectedLevel1
-      let baseLvl1 = basePos
-      if (lvl1Sel.length > 0) {
-        baseLvl1 = basePos.filter((e) => lvl1Sel.includes(e.level1))
-      }
-
-      // 2.5. На основе baseLvl1 строим optionsLevel2
-      state.optionsLevel2 = [...new Set(baseLvl1.map((e) => e.level2))].map(
-        (val) => ({ label: val, value: val })
-      )
-
-      // 2.6. Фильтруем baseLvl1 по Level2
-      const lvl2Sel = state.filters.selectedLevel2
-      let baseLvl2 = baseLvl1
-      if (lvl2Sel.length > 0) {
-        baseLvl2 = baseLvl1.filter((e) => lvl2Sel.includes(e.level2))
-      }
-
-      // 2.7. На основе baseLvl2 строим optionsLevel3
-      state.optionsLevel3 = [...new Set(baseLvl2.map((e) => e.level3))].map(
-        (val) => ({ label: val, value: val })
-      )
-
-      // 2.8. Фильтруем baseLvl2 по Level3
-      const lvl3Sel = state.filters.selectedLevel3
-      let baseLvl3 = baseLvl2
-      if (lvl3Sel.length > 0) {
-        baseLvl3 = baseLvl2.filter((e) => lvl3Sel.includes(e.level3))
-      }
-
-      // 2.9. На основе baseLvl3 строим optionsLevel4
-      state.optionsLevel4 = [...new Set(baseLvl3.map((e) => e.level4))].map(
-        (val) => ({ label: val, value: val })
-      )
-
-      // 2.10. Фильтруем baseLvl3 по Level4
-      const lvl4Sel = state.filters.selectedLevel4
-      let baseLvl4 = baseLvl3
-      if (lvl4Sel.length > 0) {
-        baseLvl4 = baseLvl3.filter((e) => lvl4Sel.includes(e.level4))
-      }
-
-      // 3) Теперь построим optionsPositionTitles на основе baseLvl4 (с учётом Level1–4)
+      // 2.3. Собираем опции для должностей (до применения собственного фильтра по должности)
       state.optionsPositionTitles = [
-        ...new Set(baseLvl4.map((e) => e.positionTitle)),
+        ...new Set(baseAfterName.map((e) => e.positionTitle)),
       ].map((val) => ({ label: val, value: val }))
 
-      // 3.1) Теперь построим optionsEmployeeName на основе baseLvl4 (с учётом Level1–4)
-      state.optionsEmployeeName = [
-        ...new Set(baseLvl4.map((e) => e.employeeName)),
-      ].map((val) => ({ label: val, value: val }))
-
-      //
-      if (positionSelectedValue.length > 0 || employeeNameSelectedValue > 0) {
-        // positionSelectedValue применили на этапе basePos → baseLvl4 уже учитывает и позиции, и уровни
-        state.filteredEmployees = baseLvl4 // включая только те с выбранными должностями
-      } else {
-        // если позиции не выбраны, то filteredEmployees = baseLvl4 (фильтры по уровням)
-        state.filteredEmployees = baseLvl4
+      // 2.4. Применяем фильтр по должности
+      const posSel = state.filters.selectedPositionTitles
+      let baseAfterPositions = baseAfterName
+      if (posSel.length > 0) {
+        baseAfterPositions = baseAfterName.filter((e) =>
+          posSel.includes(e.positionTitle)
+        )
       }
+
+      // 2.5. Собираем опции Level1 из baseAfterPositions (до применения Level1)
+      state.optionsLevel1 = [
+        ...new Set(baseAfterPositions.map((e) => e.level1)),
+      ].map((val) => ({ label: val, value: val }))
+
+      // 2.6. Фильтруем по Level1
+      const lvl1Sel = state.filters.selectedLevel1
+      let baseAfterLevel1 = baseAfterPositions
+      if (lvl1Sel.length > 0) {
+        baseAfterLevel1 = baseAfterPositions.filter((e) =>
+          lvl1Sel.includes(e.level1)
+        )
+      }
+
+      // 2.7. Собираем опции Level2 из baseAfterLevel1 (до применения Level2)
+      state.optionsLevel2 = [
+        ...new Set(baseAfterLevel1.map((e) => e.level2)),
+      ].map((val) => ({ label: val, value: val }))
+
+      // 2.8. Фильтруем по Level2
+      const lvl2Sel = state.filters.selectedLevel2
+      let baseAfterLevel2 = baseAfterLevel1
+      if (lvl2Sel.length > 0) {
+        baseAfterLevel2 = baseAfterLevel1.filter((e) =>
+          lvl2Sel.includes(e.level2)
+        )
+      }
+
+      // 2.9. Собираем опции Level3 из baseAfterLevel2 (до применения Level3)
+      state.optionsLevel3 = [
+        ...new Set(baseAfterLevel2.map((e) => e.level3)),
+      ].map((val) => ({ label: val, value: val }))
+
+      // 2.10. Фильтруем по Level3
+      const lvl3Sel = state.filters.selectedLevel3
+      let baseAfterLevel3 = baseAfterLevel2
+      if (lvl3Sel.length > 0) {
+        baseAfterLevel3 = baseAfterLevel2.filter((e) =>
+          lvl3Sel.includes(e.level3)
+        )
+      }
+
+      // 2.11. Собираем опции Level4 из baseAfterLevel3 (до применения Level4)
+      state.optionsLevel4 = [
+        ...new Set(baseAfterLevel3.map((e) => e.level4)),
+      ].map((val) => ({ label: val, value: val }))
+
+      // 2.12. Фильтруем по Level4
+      const lvl4Sel = state.filters.selectedLevel4
+      let baseAfterLevel4 = baseAfterLevel3
+      if (lvl4Sel.length > 0) {
+        baseAfterLevel4 = baseAfterLevel3.filter((e) =>
+          lvl4Sel.includes(e.level4)
+        )
+      }
+
+      // 2.13. Собираем опции HasBonus из baseAfterLevel4 (до применения HasBonus)
+      state.optionsHasBonus = [
+        ...new Set(baseAfterLevel4.map((e) => e.hasBonus)),
+      ].map((val) => ({ label: String(val), value: val }))
+
+      // 2.14. Фильтруем по HasBonus
+      const bonusSel = state.filters.selectedHasBonus
+      let baseAfterBonus = baseAfterLevel4
+      if (bonusSel.length > 0) {
+        baseAfterBonus = baseAfterLevel4.filter((e) =>
+          bonusSel.includes(e.hasBonus)
+        )
+      }
+
+      // 2.15. Собираем опции LevelFromCeo из baseAfterBonus (до применения LevelFromCeo)
+      state.optionsLevelFromCeo = [
+        ...new Set(baseAfterBonus.map((e) => e.levelFromCeo)),
+      ].map((val) => ({ label: val, value: val }))
+
+      // 2.16. Фильтруем по LevelFromCeo
+      const lvlCeoSel = state.filters.selectedLevelFromCeo
+      let baseAfterLevelFromCeo = baseAfterBonus
+      if (lvlCeoSel.length > 0) {
+        baseAfterLevelFromCeo = baseAfterBonus.filter((e) =>
+          lvlCeoSel.includes(e.levelFromCeo)
+        )
+      }
+
+      // 2.17. Собираем опции ScoreCalibrated из baseAfterLevelFromCeo (до применения ScoreCalibrated)
+      state.optionsScoreCalibrated = [
+        ...new Set(baseAfterLevelFromCeo.map((e) => e.calibration)),
+      ].map((val) => ({ label: String(val), value: val }))
+
+      // 2.18. Фильтруем по ScoreCalibrated
+      const scoreSel = state.filters.selectedScoreCalibrated
+      let baseAfterScore = baseAfterLevelFromCeo
+      if (scoreSel.length > 0) {
+        baseAfterScore = baseAfterLevelFromCeo.filter((e) =>
+          scoreSel.includes(e.calibration)
+        )
+      }
+
+      // 3) Сохраняем отфильтрованный результат
+      state.filteredEmployees = baseAfterScore
     },
 
-    // 5) Действие: сменили выбор EmployeeName
+    // 3) Действия установки фильтров:
     setOptionsEmployeeName(state, action) {
       state.filters.selectedEmployeeName = [...action.payload]
-      // При смене должности мы НЕ сбрасываем выбор по уровням.
       employeesSlice.caseReducers._recomputeFilters(state)
     },
-
-    // 5) Действие: сменили выбор PositionTitles
     setOptionsPositionTitles(state, action) {
       state.filters.selectedPositionTitles = [...action.payload]
-      // При смене должности мы НЕ сбрасываем выбор по уровням.
       employeesSlice.caseReducers._recomputeFilters(state)
     },
-
-    // 6) Действие: сменили Level1
     setOptionsLevel1(state, action) {
       state.filters.selectedLevel1 = [...action.payload]
-      // Сбрасываем дочерние уровни (Level2–Level4)
+      // сбрасываем дочерние уровни
       state.filters.selectedLevel2 = []
       state.filters.selectedLevel3 = []
       state.filters.selectedLevel4 = []
       employeesSlice.caseReducers._recomputeFilters(state)
     },
-
-    // 7) Смена Level2
     setOptionsLevel2(state, action) {
       state.filters.selectedLevel2 = [...action.payload]
-      // Сбрасываем дочерние уровни (Level3–Level4)
       state.filters.selectedLevel3 = []
       state.filters.selectedLevel4 = []
       employeesSlice.caseReducers._recomputeFilters(state)
     },
-
-    // 8) Смена Level3
     setOptionsLevel3(state, action) {
       state.filters.selectedLevel3 = [...action.payload]
-      // Сбрасываем дочерний уровень (Level4)
       state.filters.selectedLevel4 = []
       employeesSlice.caseReducers._recomputeFilters(state)
     },
-
-    // 9) Смена Level4
     setOptionsLevel4(state, action) {
       state.filters.selectedLevel4 = [...action.payload]
       employeesSlice.caseReducers._recomputeFilters(state)
     },
+    setOptionsHasBonus(state, action) {
+      state.filters.selectedHasBonus = [...action.payload]
+      employeesSlice.caseReducers._recomputeFilters(state)
+    },
+    setOptionsLevelFromCeo(state, action) {
+      state.filters.selectedLevelFromCeo = [...action.payload]
+      employeesSlice.caseReducers._recomputeFilters(state)
+    },
+    setOptionsScoreCalibrated(state, action) {
+      state.filters.selectedScoreCalibrated = [...action.payload]
+      employeesSlice.caseReducers._recomputeFilters(state)
+    },
 
-    // 10) Сброс всех фильтров
+    // 4) Сброс всех фильтров
     resetAllFilters(state) {
+      state.filters.selectedEmployeeName = []
       state.filters.selectedPositionTitles = []
       state.filters.selectedLevel1 = []
       state.filters.selectedLevel2 = []
       state.filters.selectedLevel3 = []
       state.filters.selectedLevel4 = []
+      state.filters.selectedHasBonus = []
+      state.filters.selectedLevelFromCeo = []
+      state.filters.selectedScoreCalibrated = []
       employeesSlice.caseReducers._recomputeFilters(state)
     },
 
@@ -232,6 +290,9 @@ export const {
   setOptionsLevel2,
   setOptionsLevel3,
   setOptionsLevel4,
+  setOptionsHasBonus,
+  setOptionsLevelFromCeo,
+  setOptionsScoreCalibrated,
   resetAllFilters,
   editEmployee,
 } = employeesSlice.actions
