@@ -52,32 +52,23 @@ const Profile = () => {
   return (
     <div className='w-[1280px]'>
       <SectionTitle text='Профиль пользователя' />
-
-      {optionsLevel1.length === 1 ? (
-        <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
-          <h2 className='font-bold text-xl'>Ваша популяции для калибровки</h2>
-          <p>{optionsLevel1[0].label}</p>
-        </div>
-      ) : (
-        <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
-          <h2 className='font-bold text-xl'>Выбор популяции для калибровки</h2>
-          <MultiSelect
-            options={optionsLevel1}
-            selected={selectedLevel1FromStore}
-            setSelected={(optionsLevel1) =>
-              dispatch(setOptionsLevel1([...optionsLevel1]))
-            }
-            label='Для начала выберите Level 1, которое будем калибровать'
-          />
-        </div>
-      )}
+      <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
+        <h2 className='font-bold text-xl'>Выбор популяции для калибровки</h2>
+        <MultiSelect
+          options={optionsLevel1}
+          selected={selectedLevel1FromStore}
+          setSelected={(optionsLevel1) =>
+            dispatch(setOptionsLevel1([...optionsLevel1]))
+          }
+          label='Для начала выберите Level 1, которое будем калибровать'
+        />
+      </div>
 
       <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
         <h2 className='font-bold text-xl'>Закрыть калибровку</h2>
         <p>здесь будет выпадающий список с Уровень 1</p>
         <p>а здесь будет кнопка Submit</p>
       </div>
-
       <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
         <h2 className='font-bold text-xl'>Данные пользователя</h2>
         <section className='flex flex-col gap-2'>
@@ -101,7 +92,6 @@ const Profile = () => {
           </div>
         </section>
       </div>
-
       <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
         <h2 className='font-bold text-xl'>Сменить пароль</h2>
 

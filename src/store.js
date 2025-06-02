@@ -4,6 +4,8 @@ import userReducer from './features/user/userSlice'
 import employeesReducer from './features/employees/employeesSlice'
 
 import storage from 'redux-persist/lib/storage'
+import storageSession from 'redux-persist/lib/storage/session'
+
 import {
   persistReducer,
   persistStore,
@@ -19,6 +21,7 @@ import { combineReducers } from 'redux'
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['employeesState'],
 }
 
 const rootReducer = combineReducers({

@@ -4,6 +4,7 @@ import {
   setOptionsLevel2,
   setOptionsLevel3,
   setOptionsLevel4,
+  setOptionsPositionTitles,
 } from '../features/employees/employeesSlice'
 
 const FilteringOptions = () => {
@@ -29,8 +30,16 @@ const FilteringOptions = () => {
     (s) => s.employeesState.filters.selectedLevel4
   )
 
+  // position titles
+  const optionsForPositionTitles = useSelector(
+    (s) => s.employeesState.optionsPositionTitles
+  )
+  const selectedPositionTitlesFromStore = useSelector(
+    (s) => s.employeesState.filters.selectedPositionTitles
+  )
+
   return (
-    <div className='grid grid-cols-4 gap-2 mb-4'>
+    <div className='grid grid-cols-3 gap-2 mb-4'>
       <MultiSelect
         options={optionsForLevel2}
         selected={selectedLevel2FromStore}
@@ -55,6 +64,19 @@ const FilteringOptions = () => {
         }
         label='Level 4'
       />
+      <MultiSelect
+        options={optionsForPositionTitles}
+        selected={selectedPositionTitlesFromStore}
+        setSelected={(optionsForPositionTitles) =>
+          dispatch(setOptionsPositionTitles([...optionsForPositionTitles]))
+        }
+        label='Должность'
+      />
+
+      {/* bonus - no bonus
+        Сотрудник
+        N-
+        Oценка после калибровки */}
     </div>
   )
 }

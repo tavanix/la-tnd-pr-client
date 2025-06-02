@@ -2,19 +2,22 @@ import { createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 
 const initialState = {
-  employees: [],
-  filteredEmployees: [],
-  optionsLevel1: [],
-  optionsLevel2: [],
-  optionsLevel3: [],
-  optionsLevel4: [],
-  optionsPositionTitles: [],
+  employees: [], // полный список сотрудников
+  filteredEmployees: [], // итог после применения всех фильтров
+
+  // Опции для каждого уровня
+  optionsPositionTitles: [], // из сотрудников, отфильтрованных по Level1–Level4 (без учёта selectedPositionTitles)
+  optionsLevel1: [], // из сотрудников, отфильтрованных по PositionTitle
+  optionsLevel2: [], // из сотрудников, отфильтрованных по PositionTitle+Level1
+  optionsLevel3: [], // из сотрудников, отфильтрованных по PositionTitle+Level1+Level2
+  optionsLevel4: [], // из сотрудников, отфильтрованных по PositionTitle+Level1+Level2+Level3
+
   filters: {
-    selectedLevel1: [],
-    selectedLevel2: [],
-    selectedLevel3: [],
-    selectedLevel4: [],
-    selectedPositionTitles: [],
+    selectedPositionTitles: [], // выбранные должности
+    selectedLevel1: [], // выбранные Level1
+    selectedLevel2: [], // выбранные Level2
+    selectedLevel3: [], // выбранные Level3
+    selectedLevel4: [], // выбранные Level4
   },
 }
 
@@ -22,163 +25,172 @@ const employeesSlice = createSlice({
   name: 'employees',
   initialState,
   reducers: {
-    // инициализация в при первом входе HomeLayout
-    setEmployees: (state, action) => {
+    // 1) Загрузка полного списка сотрудников
+    setEmployees(state, action) {
       state.employees = action.payload
+      state.filteredEmployees = [...action.payload]
 
-      // сразу же подготавливаем выпадающий список для Уровень1
+      // При инициализации выводим все варианты:
+      state.optionsPositionTitles = [
+        ...new Set(state.employees.map((e) => e.positionTitle)),
+      ].map((val) => ({ label: val, value: val }))
+
       state.optionsLevel1 = [
         ...new Set(state.employees.map((e) => e.level1)),
-      ].map((item) => ({ label: item, value: item }))
+      ].map((val) => ({ label: val, value: val }))
 
-      // если зашел партнер, у которого 1 функция только, то сразу выбираем эту функцию для Уровень1
-      if (state.optionsLevel1.length === 1) {
-        state.filters.selectedLevel1 = [state.optionsLevel1[0].value]
-        const filteredData = state.employees.filter(
-          (e) => e.level1 === state.optionsLevel1[0].value
-        )
-        state.filteredEmployees = filteredData
+      state.optionsLevel2 = [
+        ...new Set(state.employees.map((e) => e.level2)),
+      ].map((val) => ({ label: val, value: val }))
 
-        // строим опции Level2 из уже отфильтрованных
-        if (action.payload.length > 0) {
-          state.optionsLevel2 = [
-            ...new Set(state.filteredEmployees.map((e) => e.level2)),
-          ].map((item) => ({ label: item, value: item }))
-        } else {
-          state.optionsLevel2 = []
-        }
+      state.optionsLevel3 = [
+        ...new Set(state.employees.map((e) => e.level3)),
+      ].map((val) => ({ label: val, value: val }))
+
+      state.optionsLevel4 = [
+        ...new Set(state.employees.map((e) => e.level4)),
+      ].map((val) => ({ label: val, value: val }))
+    },
+
+    // 2) Приватная функция: пересчитать filteredEmployees и ВСЕ опции
+    _recomputeFilters(state) {
+      // 2.1. Начинаем с полного списка
+      let base = [...state.employees]
+
+      // 2.2. Если выбраны PositionTitles, сразу отфильтруем их, иначе base остаётся весь
+      const posSel = state.filters.selectedPositionTitles
+      let basePos = base
+      if (posSel.length > 0) {
+        basePos = base.filter((e) => posSel.includes(e.positionTitle))
+      }
+
+      // 2.3. На основе basePos строим optionsLevel1
+      state.optionsLevel1 = [...new Set(basePos.map((e) => e.level1))].map(
+        (val) => ({ label: val, value: val })
+      )
+
+      // 2.4. Фильтруем basePos по Level1
+      const lvl1Sel = state.filters.selectedLevel1
+      let baseLvl1 = basePos
+      if (lvl1Sel.length > 0) {
+        baseLvl1 = basePos.filter((e) => lvl1Sel.includes(e.level1))
+      }
+
+      // 2.5. На основе baseLvl1 строим optionsLevel2
+      state.optionsLevel2 = [...new Set(baseLvl1.map((e) => e.level2))].map(
+        (val) => ({ label: val, value: val })
+      )
+
+      // 2.6. Фильтруем baseLvl1 по Level2
+      const lvl2Sel = state.filters.selectedLevel2
+      let baseLvl2 = baseLvl1
+      if (lvl2Sel.length > 0) {
+        baseLvl2 = baseLvl1.filter((e) => lvl2Sel.includes(e.level2))
+      }
+
+      // 2.7. На основе baseLvl2 строим optionsLevel3
+      state.optionsLevel3 = [...new Set(baseLvl2.map((e) => e.level3))].map(
+        (val) => ({ label: val, value: val })
+      )
+
+      // 2.8. Фильтруем baseLvl2 по Level3
+      const lvl3Sel = state.filters.selectedLevel3
+      let baseLvl3 = baseLvl2
+      if (lvl3Sel.length > 0) {
+        baseLvl3 = baseLvl2.filter((e) => lvl3Sel.includes(e.level3))
+      }
+
+      // 2.9. На основе baseLvl3 строим optionsLevel4
+      state.optionsLevel4 = [...new Set(baseLvl3.map((e) => e.level4))].map(
+        (val) => ({ label: val, value: val })
+      )
+
+      // 2.10. Фильтруем baseLvl3 по Level4
+      const lvl4Sel = state.filters.selectedLevel4
+      let baseLvl4 = baseLvl3
+      if (lvl4Sel.length > 0) {
+        baseLvl4 = baseLvl3.filter((e) => lvl4Sel.includes(e.level4))
+      }
+
+      // 3) Теперь построим optionsPositionTitles на основе baseLvl4 (с учётом Level1–4)
+      state.optionsPositionTitles = [
+        ...new Set(baseLvl4.map((e) => e.positionTitle)),
+      ].map((val) => ({ label: val, value: val }))
+
+      // 4) Наконец, если из этого набора baseLvl4 пользователь выбрал ещё какие-то PositionTitles,
+      //    отфильтруем baseLvl4 по этим выбранным должностям:
+      if (lvl4Sel.length > 0) {
+        // уже учтено выше в baseLvl4
+      }
+
+      if (posSel.length > 0) {
+        // posSel применили на этапе basePos → baseLvl4 уже учитывает и позиции, и уровни
+        state.filteredEmployees = baseLvl4 // включая только те с выбранными должностями
+      } else {
+        // если позиции не выбраны, то filteredEmployees = baseLvl4 (фильтры по уровням)
+        state.filteredEmployees = baseLvl4
       }
     },
 
-    setOptionsLevel1: (state, action) => {
+    // 5) Действие: сменили выбор PositionTitles
+    setOptionsPositionTitles(state, action) {
+      state.filters.selectedPositionTitles = [...action.payload]
+      // При смене должности мы НЕ сбрасываем выбор по уровням.
+      employeesSlice.caseReducers._recomputeFilters(state)
+    },
+
+    // 6) Действие: сменили Level1
+    setOptionsLevel1(state, action) {
       state.filters.selectedLevel1 = [...action.payload]
-
-      // сброс всех фильтров
-      state.optionsLevel2 = []
-      state.optionsLevel3 = []
-      state.optionsLevel4 = []
-      state.optionsPositionTitles = []
-
+      // Сбрасываем дочерние уровни (Level2–Level4)
       state.filters.selectedLevel2 = []
       state.filters.selectedLevel3 = []
       state.filters.selectedLevel4 = []
-      state.filters.selectedPositionTitles = []
-
-      // если сразу нужно фильтровать таблицу только по Level1:
-      const filteredByLevel1 = state.employees.filter((e) =>
-        state.filters.selectedLevel1.includes(e.level1)
-      )
-      state.filteredEmployees = filteredByLevel1
-
-      // пересчитаем optionsLevel2
-      state.optionsLevel2 = [
-        ...new Set(state.filteredEmployees.map((e) => e.level2)),
-      ].map((item) => ({ label: item, value: item }))
+      employeesSlice.caseReducers._recomputeFilters(state)
     },
 
-    setOptionsLevel2: (state, action) => {
-      // 1) Сохраняем выбранные значения Level 2
-      state.filters.selectedLevel2 = action.payload
-
-      // сброс всех фильтров
-      state.optionsLevel3 = []
-      state.optionsLevel4 = []
-      state.optionsPositionTitles = []
-
+    // 7) Смена Level2
+    setOptionsLevel2(state, action) {
+      state.filters.selectedLevel2 = [...action.payload]
+      // Сбрасываем дочерние уровни (Level3–Level4)
       state.filters.selectedLevel3 = []
       state.filters.selectedLevel4 = []
-      state.filters.selectedPositionTitles = []
-
-      // 2) Определяем базовый массив, откуда будем фильтровать:
-      //    если Level 1 выбран — используем уже отфильтрованные по нему,
-      //    иначе — весь список сотрудников
-      const base =
-        state.filters.selectedLevel1.length > 0
-          ? state.employees.filter((e) =>
-              state.filters.selectedLevel1.includes(e.level1)
-            )
-          : state.employees
-
-      // 3) Теперь ужесточаем фильтрацию по Level 2
-      state.filteredEmployees =
-        action.payload.length > 0
-          ? base.filter((e) => action.payload.includes(e.level2))
-          : base
-
-      // 4) Определяем опции для Level3
-      if (action.payload.length > 0) {
-        state.optionsLevel3 = [
-          ...new Set(state.filteredEmployees.map((e) => e.level3)),
-        ].map((item) => ({ label: item, value: item }))
-      } else {
-        state.optionsLevel3 = []
-      }
+      employeesSlice.caseReducers._recomputeFilters(state)
     },
 
-    // один редьюсер, который в переменную будет обрабатывать все фильтры и в стейт возвращать
-
-    setOptionsLevel3: (state, action) => {
-      state.filters.selectedLevel3 = action.payload
-
+    // 8) Смена Level3
+    setOptionsLevel3(state, action) {
+      state.filters.selectedLevel3 = [...action.payload]
+      // Сбрасываем дочерний уровень (Level4)
       state.filters.selectedLevel4 = []
-      state.filters.selectedPositionTitles = []
-      state.optionsLevel4 = []
-      state.optionsPositionTitles = []
-
-      const base =
-        state.filters.selectedLevel2.length > 0
-          ? state.employees.filter((e) =>
-              state.filters.selectedLevel2.includes(e.level2)
-            )
-          : state.employees
-
-      state.filteredEmployees =
-        action.payload.length > 0
-          ? base.filter((e) => action.payload.includes(e.level3))
-          : base
-
-      if (action.payload.length > 0) {
-        state.optionsLevel4 = [
-          ...new Set(state.filteredEmployees.map((e) => e.level4)),
-        ].map((item) => ({ label: item, value: item }))
-      } else {
-        state.optionsLevel4 = []
-      }
+      employeesSlice.caseReducers._recomputeFilters(state)
     },
 
-    setOptionsLevel4: (state, action) => {
-      state.filters.selectedLevel4 = action.payload
-
-      state.filters.selectedPositionTitles = []
-      state.optionsPositionTitles = []
-
-      const base =
-        state.filters.selectedLevel3.length > 0
-          ? state.employees.filter((e) =>
-              state.filters.selectedLevel3.includes(e.level3)
-            )
-          : state.employees
-
-      state.filteredEmployees =
-        action.payload.length > 0
-          ? base.filter((e) => action.payload.includes(e.level4))
-          : base
-
-      if (action.payload.length > 0) {
-        state.optionsPositionTitles = [
-          ...new Set(state.filteredEmployees.map((e) => e.positionTitle)),
-        ].map((item) => ({ label: item, value: item }))
-      } else {
-        state.optionsPositionTitles = []
-      }
+    // 9) Смена Level4
+    setOptionsLevel4(state, action) {
+      state.filters.selectedLevel4 = [...action.payload]
+      employeesSlice.caseReducers._recomputeFilters(state)
     },
 
+    // 10) Сброс всех фильтров
+    resetAllFilters(state) {
+      state.filters.selectedPositionTitles = []
+      state.filters.selectedLevel1 = []
+      state.filters.selectedLevel2 = []
+      state.filters.selectedLevel3 = []
+      state.filters.selectedLevel4 = []
+      employeesSlice.caseReducers._recomputeFilters(state)
+    },
+
+    // TODO!!!
     editEmployee: (state, action) => {
       const updatedEmployee = action.payload
       const employeeIndex = state.employees.findIndex(
         (employee) => employee.email === updatedEmployee.email
       )
 
+      // fix the bug with index in filtered
+      // it can not change correctly by index because employees are full data
       if (employeeIndex !== -1) {
         state.employees[employeeIndex] = updatedEmployee
         state.filteredEmployees[employeeIndex] = updatedEmployee
@@ -186,34 +198,18 @@ const employeesSlice = createSlice({
         toast.success('Изменения успешно сохранены!')
       }
     },
-
-    resetState(state) {
-      state.employees = []
-      state.filteredEmployees = []
-      state.optionsLevel1 = []
-      state.optionsLevel2 = []
-      state.optionsLevel3 = []
-      state.optionsLevel4 = []
-      state.optionsPositionTitles = []
-      state.filters = {
-        selectedLevel1: [],
-        selectedLevel2: [],
-        selectedLevel3: [],
-        selectedLevel4: [],
-        selectedPositionTitles: [],
-      }
-    },
   },
 })
 
 export const {
   setEmployees,
+  setOptionsPositionTitles,
   setOptionsLevel1,
   setOptionsLevel2,
   setOptionsLevel3,
   setOptionsLevel4,
+  resetAllFilters,
   editEmployee,
-  resetState,
 } = employeesSlice.actions
 
 export default employeesSlice.reducer
