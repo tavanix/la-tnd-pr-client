@@ -5,6 +5,7 @@ import {
   setOptionsLevel3,
   setOptionsLevel4,
   setOptionsPositionTitles,
+  setOptionsEmployeeName,
 } from '../features/employees/employeesSlice'
 
 const FilteringOptions = () => {
@@ -36,6 +37,14 @@ const FilteringOptions = () => {
   )
   const selectedPositionTitlesFromStore = useSelector(
     (s) => s.employeesState.filters.selectedPositionTitles
+  )
+
+  // employee names
+  const optionsForEmployeeName = useSelector(
+    (s) => s.employeesState.optionsEmployeeName
+  )
+  const selectedEmployeeNameFromStore = useSelector(
+    (s) => s.employeesState.filters.selectedEmployeeName
   )
 
   return (
@@ -71,6 +80,14 @@ const FilteringOptions = () => {
           dispatch(setOptionsPositionTitles([...optionsForPositionTitles]))
         }
         label='Должность'
+      />
+      <MultiSelect
+        options={optionsForEmployeeName}
+        selected={selectedEmployeeNameFromStore}
+        setSelected={(optionsForEmployeeName) =>
+          dispatch(setOptionsEmployeeName([...optionsForEmployeeName]))
+        }
+        label='ФИО Сотрудника'
       />
 
       {/* bonus - no bonus

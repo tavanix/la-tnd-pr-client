@@ -6,13 +6,15 @@ const initialState = {
   filteredEmployees: [], // итог после применения всех фильтров
 
   // Опции для каждого уровня
-  optionsPositionTitles: [], // из сотрудников, отфильтрованных по Level1–Level4 (без учёта selectedPositionTitles)
+  optionsEmployeeName: [],
+  optionsPositionTitles: [], // из сотрудников, отфильтрованных по Level1–Level4
   optionsLevel1: [], // из сотрудников, отфильтрованных по PositionTitle
   optionsLevel2: [], // из сотрудников, отфильтрованных по PositionTitle+Level1
   optionsLevel3: [], // из сотрудников, отфильтрованных по PositionTitle+Level1+Level2
   optionsLevel4: [], // из сотрудников, отфильтрованных по PositionTitle+Level1+Level2+Level3
 
   filters: {
+    selectedEmployeeName: [],
     selectedPositionTitles: [], // выбранные должности
     selectedLevel1: [], // выбранные Level1
     selectedLevel2: [], // выбранные Level2
@@ -31,6 +33,10 @@ const employeesSlice = createSlice({
       state.filteredEmployees = [...action.payload]
 
       // При инициализации выводим все варианты:
+      state.optionsEmployeeName = [
+        ...new Set(state.employees.map((e) => e.employeeName)),
+      ].map((val) => ({ label: val, value: val }))
+
       state.optionsPositionTitles = [
         ...new Set(state.employees.map((e) => e.positionTitle)),
       ].map((val) => ({ label: val, value: val }))
@@ -58,10 +64,20 @@ const employeesSlice = createSlice({
       let base = [...state.employees]
 
       // 2.2. Если выбраны PositionTitles, сразу отфильтруем их, иначе base остаётся весь
-      const posSel = state.filters.selectedPositionTitles
+      const positionSelectedValue = state.filters.selectedPositionTitles
       let basePos = base
-      if (posSel.length > 0) {
-        basePos = base.filter((e) => posSel.includes(e.positionTitle))
+      if (positionSelectedValue.length > 0) {
+        basePos = base.filter((e) =>
+          positionSelectedValue.includes(e.positionTitle)
+        )
+      }
+
+      // 2.2.1 Если выбраны EmployeeName, сразу отфильтруем их, иначе base остаётся весь
+      const employeeNameSelectedValue = state.filters.selectedEmployeeName
+      if (employeeNameSelectedValue.length > 0) {
+        basePos = basePos.filter((e) =>
+          employeeNameSelectedValue.includes(e.employeeName)
+        )
       }
 
       // 2.3. На основе basePos строим optionsLevel1
@@ -117,19 +133,26 @@ const employeesSlice = createSlice({
         ...new Set(baseLvl4.map((e) => e.positionTitle)),
       ].map((val) => ({ label: val, value: val }))
 
-      // 4) Наконец, если из этого набора baseLvl4 пользователь выбрал ещё какие-то PositionTitles,
-      //    отфильтруем baseLvl4 по этим выбранным должностям:
-      if (lvl4Sel.length > 0) {
-        // уже учтено выше в baseLvl4
-      }
+      // 3.1) Теперь построим optionsEmployeeName на основе baseLvl4 (с учётом Level1–4)
+      state.optionsEmployeeName = [
+        ...new Set(baseLvl4.map((e) => e.employeeName)),
+      ].map((val) => ({ label: val, value: val }))
 
-      if (posSel.length > 0) {
-        // posSel применили на этапе basePos → baseLvl4 уже учитывает и позиции, и уровни
+      //
+      if (positionSelectedValue.length > 0 || employeeNameSelectedValue > 0) {
+        // positionSelectedValue применили на этапе basePos → baseLvl4 уже учитывает и позиции, и уровни
         state.filteredEmployees = baseLvl4 // включая только те с выбранными должностями
       } else {
         // если позиции не выбраны, то filteredEmployees = baseLvl4 (фильтры по уровням)
         state.filteredEmployees = baseLvl4
       }
+    },
+
+    // 5) Действие: сменили выбор EmployeeName
+    setOptionsEmployeeName(state, action) {
+      state.filters.selectedEmployeeName = [...action.payload]
+      // При смене должности мы НЕ сбрасываем выбор по уровням.
+      employeesSlice.caseReducers._recomputeFilters(state)
     },
 
     // 5) Действие: сменили выбор PositionTitles
@@ -203,6 +226,7 @@ const employeesSlice = createSlice({
 
 export const {
   setEmployees,
+  setOptionsEmployeeName,
   setOptionsPositionTitles,
   setOptionsLevel1,
   setOptionsLevel2,
