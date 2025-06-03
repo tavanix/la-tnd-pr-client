@@ -1,15 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { MultiSelect } from '../components'
-import {
-  setOptionsLevel2,
-  setOptionsLevel3,
-  setOptionsLevel4,
-  setOptionsPositionTitles,
-  setOptionsEmployeeName,
-  setOptionsHasBonus,
-  setOptionsLevelFromCeo,
-  setOptionsScoreCalibrated,
-} from '../features/employees/employeesSlice'
+import { setFilter } from '../features/employees/employeesSlice'
 
 const FilteringOptions = () => {
   const dispatch = useDispatch()
@@ -67,11 +58,11 @@ const FilteringOptions = () => {
   )
 
   // calibrated score
-  const optionsForScoreCalibrated = useSelector(
-    (s) => s.employeesState.optionsScoreCalibrated
+  const optionsForCalibration = useSelector(
+    (s) => s.employeesState.optionsCalibration
   )
-  const selectedScoreCalibratedFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedScoreCalibrated
+  const selectedCalibrationFromStore = useSelector(
+    (s) => s.employeesState.filters.selectedCalibration
   )
 
   return (
@@ -80,7 +71,12 @@ const FilteringOptions = () => {
         options={optionsForLevel2}
         selected={selectedLevel2FromStore}
         setSelected={(optionsForLevel2) =>
-          dispatch(setOptionsLevel2([...optionsForLevel2]))
+          dispatch(
+            setFilter({
+              field: 'selectedLevel2',
+              values: [...optionsForLevel2],
+            })
+          )
         }
         label='Level 2'
       />
@@ -88,7 +84,12 @@ const FilteringOptions = () => {
         options={optionsForLevel3}
         selected={selectedLevel3FromStore}
         setSelected={(optionsForLevel3) =>
-          dispatch(setOptionsLevel3([...optionsForLevel3]))
+          dispatch(
+            setFilter({
+              field: 'selectedLevel3',
+              values: [...optionsForLevel3],
+            })
+          )
         }
         label='Level 3'
       />
@@ -96,7 +97,12 @@ const FilteringOptions = () => {
         options={optionsForLevel4}
         selected={selectedLevel4FromStore}
         setSelected={(optionsForLevel4) =>
-          dispatch(setOptionsLevel4([...optionsForLevel4]))
+          dispatch(
+            setFilter({
+              field: 'selectedLevel4',
+              values: [...optionsForLevel4],
+            })
+          )
         }
         label='Level 4'
       />
@@ -104,7 +110,12 @@ const FilteringOptions = () => {
         options={optionsForPositionTitles}
         selected={selectedPositionTitlesFromStore}
         setSelected={(optionsForPositionTitles) =>
-          dispatch(setOptionsPositionTitles([...optionsForPositionTitles]))
+          dispatch(
+            setFilter({
+              field: 'selectedPositionTitles',
+              values: [...optionsForPositionTitles],
+            })
+          )
         }
         label='Должность'
       />
@@ -112,7 +123,12 @@ const FilteringOptions = () => {
         options={optionsForEmployeeName}
         selected={selectedEmployeeNameFromStore}
         setSelected={(optionsForEmployeeName) =>
-          dispatch(setOptionsEmployeeName([...optionsForEmployeeName]))
+          dispatch(
+            setFilter({
+              field: 'selectedEmployeeName',
+              values: [...optionsForEmployeeName],
+            })
+          )
         }
         label='ФИО Сотрудника'
       />
@@ -120,7 +136,12 @@ const FilteringOptions = () => {
         options={optionsForHasBonus}
         selected={selectedHasBonusFromStore}
         setSelected={(optionsForHasBonus) =>
-          dispatch(setOptionsHasBonus([...optionsForHasBonus]))
+          dispatch(
+            setFilter({
+              field: 'selectedHasBonus',
+              values: [...optionsForHasBonus],
+            })
+          )
         }
         label='Has Bonus'
       />
@@ -128,23 +149,28 @@ const FilteringOptions = () => {
         options={optionsForLevelFromCeo}
         selected={selectedLevelFromCeoFromStore}
         setSelected={(optionsForLevelFromCeo) =>
-          dispatch(setOptionsLevelFromCeo([...optionsForLevelFromCeo]))
+          dispatch(
+            setFilter({
+              field: 'selectedLevelFromCeo',
+              values: [...optionsForLevelFromCeo],
+            })
+          )
         }
         label='Уровень от CEO'
       />
       <MultiSelect
-        options={optionsForScoreCalibrated}
-        selected={selectedScoreCalibratedFromStore}
-        setSelected={(optionsForScoreCalibrated) =>
-          dispatch(setOptionsScoreCalibrated([...optionsForScoreCalibrated]))
+        options={optionsForCalibration}
+        selected={selectedCalibrationFromStore}
+        setSelected={(optionsForCalibration) =>
+          dispatch(
+            setFilter({
+              field: 'selectedCalibration',
+              values: [...optionsForCalibration],
+            })
+          )
         }
         label='Оценка после калибровки'
       />
-
-      {/* bonus - no bonus
-        Сотрудник
-        N-
-        Oценка после калибровки */}
     </div>
   )
 }

@@ -1,3 +1,5 @@
+// src/features/employees/employeesSlice.js
+
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -12,7 +14,7 @@ const initialState = {
   optionsEmployeeName: [],
   optionsHasBonus: [],
   optionsLevelFromCeo: [],
-  optionsCalibration: [],
+  optionsScoreCalibrated: [],
 
   filters: {
     selectedLevel1: [],
@@ -23,61 +25,59 @@ const initialState = {
     selectedEmployeeName: [],
     selectedHasBonus: [],
     selectedLevelFromCeo: [],
-    selectedCalibration: [],
+    selectedScoreCalibrated: [],
   },
 }
 
 const applyAllFilters = (state) => {
-  const { filters } = state
-  const { employees } = state
+  const {
+    selectedLevel1,
+    selectedLevel2,
+    selectedLevel3,
+    selectedLevel4,
+    selectedPositionTitles,
+    selectedEmployeeName,
+    selectedHasBonus,
+    selectedLevelFromCeo,
+    selectedScoreCalibrated,
+  } = state.filters
 
-  // Шаг 1. Получаем filteredEmployees на основе всех фильтров
-  let filtered = employees.filter((employee) => {
-    return Object.entries(filters).every(([key, selected]) => {
-      if (!selected || selected.length === 0) return true
-      const fieldKey =
-        key
-          .replace(/^selected/, '')
-          .charAt(0)
-          .toLowerCase() + key.replace(/^selected/, '').slice(1)
-      return selected.includes(employee[fieldKey])
-    })
+  const filtered = state.employees.filter((e) => {
+    return (
+      (selectedLevel1.length === 0 || selectedLevel1.includes(e.level1)) &&
+      (selectedLevel2.length === 0 || selectedLevel2.includes(e.level2)) &&
+      (selectedLevel3.length === 0 || selectedLevel3.includes(e.level3)) &&
+      (selectedLevel4.length === 0 || selectedLevel4.includes(e.level4)) &&
+      (selectedPositionTitles.length === 0 ||
+        selectedPositionTitles.includes(e.positionTitle)) &&
+      (selectedEmployeeName.length === 0 ||
+        selectedEmployeeName.includes(e.employeeName)) &&
+      (selectedHasBonus.length === 0 ||
+        selectedHasBonus.includes(e.hasBonus)) &&
+      (selectedLevelFromCeo.length === 0 ||
+        selectedLevelFromCeo.includes(e.levelFromCeo)) &&
+      (selectedScoreCalibrated.length === 0 ||
+        selectedScoreCalibrated.includes(e.calibration))
+    )
   })
 
   state.filteredEmployees = filtered
 
-  // Шаг 2. Обновляем options* для всех фильтров, с исключением самого себя
+  // Обновим выпадающие списки на основе уже отфильтрованных данных
+  const getOptions = (key) =>
+    [...new Set(filtered.map((e) => e[key]))]
+      .filter(Boolean)
+      .map((item) => ({ label: item, value: item }))
 
-  const getOptions = (excludeKey) => {
-    const base = employees.filter((employee) =>
-      Object.entries(filters).every(([key, selected]) => {
-        if (key === excludeKey || selected.length === 0) return true
-        const fieldKey =
-          key
-            .replace(/^selected/, '')
-            .charAt(0)
-            .toLowerCase() + key.replace(/^selected/, '').slice(1)
-        return selected.includes(employee[fieldKey])
-      })
-    )
-
-    return (key) =>
-      [...new Set(base.map((e) => e[key]))]
-        .filter(Boolean)
-        .map((value) => ({ label: value, value }))
-  }
-
-  const get = getOptions // удобный alias
-
-  state.optionsLevel1 = get('selectedLevel1')('level1')
-  state.optionsLevel2 = get('selectedLevel2')('level2')
-  state.optionsLevel3 = get('selectedLevel3')('level3')
-  state.optionsLevel4 = get('selectedLevel4')('level4')
-  state.optionsPositionTitles = get('selectedPositionTitles')('positionTitle')
-  state.optionsEmployeeName = get('selectedEmployeeName')('employeeName')
-  state.optionsHasBonus = get('selectedHasBonus')('hasBonus')
-  state.optionsLevelFromCeo = get('selectedLevelFromCeo')('levelFromCeo')
-  state.optionsCalibration = get('selectedCalibration')('calibration')
+  state.optionsLevel1 = getOptions('level1')
+  state.optionsLevel2 = getOptions('level2')
+  state.optionsLevel3 = getOptions('level3')
+  state.optionsLevel4 = getOptions('level4')
+  state.optionsPositionTitles = getOptions('positionTitle')
+  state.optionsEmployeeName = getOptions('employeeName')
+  state.optionsHasBonus = getOptions('hasBonus')
+  state.optionsLevelFromCeo = getOptions('levelFromCeo')
+  state.optionsScoreCalibrated = getOptions('calibration')
 }
 
 const employeesSlice = createSlice({
@@ -105,7 +105,7 @@ const employeesSlice = createSlice({
         selectedEmployeeName: [],
         selectedHasBonus: [],
         selectedLevelFromCeo: [],
-        selectedCalibration: [],
+        selectedScoreCalibrated: [],
       }
       applyAllFilters(state)
     },

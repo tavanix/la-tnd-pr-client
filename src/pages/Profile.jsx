@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { SectionTitle, MultiSelect, SubmitBtn } from '../components'
 import { customFetch } from '../utils'
 import { updatePassword } from '../features/user/userSlice'
-import { setOptionsLevel1 } from '../features/employees/employeesSlice'
+import { setFilter } from '../features/employees/employeesSlice'
 
 export const loader = (store) => () => {
   const user = store.getState().userState.user
@@ -58,7 +58,9 @@ const Profile = () => {
           options={optionsLevel1}
           selected={selectedLevel1FromStore}
           setSelected={(optionsLevel1) =>
-            dispatch(setOptionsLevel1([...optionsLevel1]))
+            dispatch(
+              setFilter({ field: 'selectedLevel1', values: [...optionsLevel1] })
+            )
           }
           label='Для начала выберите Level 1, которое будем калибровать'
         />
