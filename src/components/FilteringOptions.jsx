@@ -26,11 +26,11 @@ const FilteringOptions = () => {
   )
 
   // position titles
-  const optionsForPositionTitles = useSelector(
-    (s) => s.employeesState.optionsPositionTitles
+  const optionsForPositionTitle = useSelector(
+    (s) => s.employeesState.optionsPositionTitle
   )
-  const selectedPositionTitlesFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedPositionTitles
+  const selectedPositionTitleFromStore = useSelector(
+    (s) => s.employeesState.filters.selectedPositionTitle
   )
 
   // employee names
@@ -107,13 +107,13 @@ const FilteringOptions = () => {
         label='Level 4'
       />
       <MultiSelect
-        options={optionsForPositionTitles}
-        selected={selectedPositionTitlesFromStore}
-        setSelected={(optionsForPositionTitles) =>
+        options={optionsForPositionTitle}
+        selected={selectedPositionTitleFromStore}
+        setSelected={(optionsForPositionTitle) =>
           dispatch(
             setFilter({
-              field: 'selectedPositionTitles',
-              values: [...optionsForPositionTitles],
+              field: 'selectedPositionTitle',
+              values: [...optionsForPositionTitle],
             })
           )
         }

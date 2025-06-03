@@ -8,7 +8,7 @@ const initialState = {
   optionsLevel2: [],
   optionsLevel3: [],
   optionsLevel4: [],
-  optionsPositionTitles: [],
+  optionsPositionTitle: [],
   optionsEmployeeName: [],
   optionsHasBonus: [],
   optionsLevelFromCeo: [],
@@ -19,7 +19,7 @@ const initialState = {
     selectedLevel2: [],
     selectedLevel3: [],
     selectedLevel4: [],
-    selectedPositionTitles: [],
+    selectedPositionTitle: [],
     selectedEmployeeName: [],
     selectedHasBonus: [],
     selectedLevelFromCeo: [],
@@ -63,7 +63,7 @@ const applyAllFilters = (state) => {
 
     return (key) =>
       [...new Set(base.map((e) => e[key]))]
-        .filter(Boolean)
+        // .filter(Boolean)
         .map((value) => ({ label: value, value }))
   }
 
@@ -73,7 +73,7 @@ const applyAllFilters = (state) => {
   state.optionsLevel2 = get('selectedLevel2')('level2')
   state.optionsLevel3 = get('selectedLevel3')('level3')
   state.optionsLevel4 = get('selectedLevel4')('level4')
-  state.optionsPositionTitles = get('selectedPositionTitles')('positionTitle')
+  state.optionsPositionTitle = get('selectedPositionTitle')('positionTitle')
   state.optionsEmployeeName = get('selectedEmployeeName')('employeeName')
   state.optionsHasBonus = get('selectedHasBonus')('hasBonus')
   state.optionsLevelFromCeo = get('selectedLevelFromCeo')('levelFromCeo')
@@ -101,7 +101,7 @@ const employeesSlice = createSlice({
         selectedLevel2: [],
         selectedLevel3: [],
         selectedLevel4: [],
-        selectedPositionTitles: [],
+        selectedPositionTitle: [],
         selectedEmployeeName: [],
         selectedHasBonus: [],
         selectedLevelFromCeo: [],
