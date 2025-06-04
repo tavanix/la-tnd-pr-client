@@ -297,14 +297,14 @@ const Table = ({ employeesFromStore }) => {
     //   },
     // }),
 
-    // muiTableBodyProps: {
-    //   sx: {
-    //     //stripe the rows, make odd rows a darker color
-    //     '& tr:nth-of-type(odd) > td': {
-    //       backgroundColor: '#f5f5f5',
-    //     },
-    //   },
-    // },
+    muiTableBodyProps: {
+      sx: {
+        //stripe the rows, make odd rows a darker color
+        '& tr:nth-of-type(odd) > td': {
+          backgroundColor: '#f5f5f5',
+        },
+      },
+    },
 
     initialState: {
       columnVisibility: {
@@ -312,6 +312,7 @@ const Table = ({ employeesFromStore }) => {
         targetBonusBudget: false,
         targetBonusSum: false,
       },
+      density: 'compact',
     },
 
     muiTableBodyCellProps: {
