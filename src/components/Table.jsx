@@ -330,6 +330,7 @@ const Table = ({ employeesFromStore }) => {
       : undefined,
     muiTableContainerProps: {
       sx: {
+        minHeight: '400px',
         maxHeight: '500px',
       },
     },

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 const initialState = {
   employees: [],
@@ -113,18 +114,28 @@ const employeesSlice = createSlice({
     // TODO!!!
     editEmployee: (state, action) => {
       const updatedEmployee = action.payload
-      const employeeIndex = state.employees.findIndex(
-        (employee) => employee.email === updatedEmployee.email
+      const { email: updatedEmail } = updatedEmployee
+
+      // 1) Найти и заменить запись в полном списке state.employees
+      const indexInAll = state.employees.findIndex(
+        (emp) => emp.email === updatedEmail
       )
-
-      // fix the bug with index in filtered
-      // it can not change correctly by index because employees are full data
-      if (employeeIndex !== -1) {
-        state.employees[employeeIndex] = updatedEmployee
-        state.filteredEmployees[employeeIndex] = updatedEmployee
-
-        toast.success('Изменения успешно сохранены!')
+      if (indexInAll !== -1) {
+        state.employees[indexInAll] = updatedEmployee
       }
+
+      // 2) Найти и заменить запись в state.filteredEmployees
+      const indexInFiltered = state.filteredEmployees.findIndex(
+        (emp) => emp.email === updatedEmail
+      )
+      if (indexInFiltered !== -1) {
+        state.filteredEmployees[indexInFiltered] = updatedEmployee
+      }
+
+      // 3) Повторить фильтрацию
+      applyAllFilters(state)
+
+      toast.success('Изменения успешно сохранены!')
     },
   },
 })
@@ -133,3 +144,19 @@ export const { setEmployees, setFilter, resetFilters, editEmployee } =
   employeesSlice.actions
 
 export default employeesSlice.reducer
+
+// editEmployee: (state, action) => {
+//       const updatedEmployee = action.payload
+//       const employeeIndex = state.employees.findIndex(
+//         (employee) => employee.email === updatedEmployee.email
+//       )
+
+//       // fix the bug with index in filtered
+//       // it can not change correctly by index because employees are full data
+//       if (employeeIndex !== -1) {
+//         state.employees[employeeIndex] = updatedEmployee
+//         state.filteredEmployees[employeeIndex] = updatedEmployee
+
+//         toast.success('Изменения успешно сохранены!')
+//       }
+//     },

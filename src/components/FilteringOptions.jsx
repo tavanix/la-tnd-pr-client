@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { MultiSelect } from '../components'
-import { setFilter } from '../features/employees/employeesSlice'
+import { resetFilters, setFilter } from '../features/employees/employeesSlice'
 
 const FilteringOptions = () => {
   const dispatch = useDispatch()
@@ -65,8 +65,13 @@ const FilteringOptions = () => {
     (s) => s.employeesState.filters.selectedCalibration
   )
 
+  // reset filters
+  const resetFiltersHandler = () => {
+    dispatch(resetFilters())
+  }
+
   return (
-    <div className='grid grid-cols-3 gap-2 mb-4'>
+    <div className='grid grid-cols-4 gap-2 mb-8'>
       <MultiSelect
         options={optionsForLevel2}
         selected={selectedLevel2FromStore}
@@ -107,6 +112,19 @@ const FilteringOptions = () => {
         label='Level 4'
       />
       <MultiSelect
+        options={optionsForHasBonus}
+        selected={selectedHasBonusFromStore}
+        setSelected={(optionsForHasBonus) =>
+          dispatch(
+            setFilter({
+              field: 'selectedHasBonus',
+              values: [...optionsForHasBonus],
+            })
+          )
+        }
+        label='Has Bonus'
+      />
+      <MultiSelect
         options={optionsForPositionTitle}
         selected={selectedPositionTitleFromStore}
         setSelected={(optionsForPositionTitle) =>
@@ -131,19 +149,6 @@ const FilteringOptions = () => {
           )
         }
         label='ФИО Сотрудника'
-      />
-      <MultiSelect
-        options={optionsForHasBonus}
-        selected={selectedHasBonusFromStore}
-        setSelected={(optionsForHasBonus) =>
-          dispatch(
-            setFilter({
-              field: 'selectedHasBonus',
-              values: [...optionsForHasBonus],
-            })
-          )
-        }
-        label='Has Bonus'
       />
       <MultiSelect
         options={optionsForLevelFromCeo}
@@ -171,6 +176,12 @@ const FilteringOptions = () => {
         }
         label='Оценка после калибровки'
       />
+      <button
+        className='btn btn-outline btn-warning mt-4'
+        onClick={resetFiltersHandler}
+      >
+        Сбросить все фильтры
+      </button>
     </div>
   )
 }

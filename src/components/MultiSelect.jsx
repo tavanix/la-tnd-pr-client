@@ -44,7 +44,7 @@ const MultiSelect = ({ options = [], selected = [], setSelected, label }) => {
   return (
     <div className='form-control w-full relative' ref={dropdownRef}>
       <label className='label justify-between'>
-        <span className='label-text'>{label}</span>
+        <span className='label-text text-sm'>{label}</span>
         {selected.length > 0 && (
           <button
             className='text-xs text-primary hover:underline'
