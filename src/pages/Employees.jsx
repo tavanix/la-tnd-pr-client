@@ -34,7 +34,7 @@ const Employees = () => {
       <SectionTitle text='Калибровка' />
       <FilteringOptions />
       <Table employeesFromStore={data} />
-      <div className='mt-4'>
+      <div className='mt-4 mb-4'>
         <ExportToExcel
           data={data}
           bookTitle={`Калибровка_${user.roles[0].slice(5)}_${Date.now()}`}

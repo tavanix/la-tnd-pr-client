@@ -177,7 +177,7 @@ const FilteringOptions = () => {
         label='Оценка после калибровки'
       />
       <button
-        className='btn btn-outline btn-warning mt-4'
+        className='btn btn-outline btn-secondary mt-4'
         onClick={resetFiltersHandler}
       >
         Сбросить все фильтры

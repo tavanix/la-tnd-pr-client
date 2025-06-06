@@ -4,6 +4,7 @@ import {
   FormInput,
   ExportToExcel,
   ExportToCsv,
+  UploadData,
 } from '../components'
 import { toast } from 'react-toastify'
 import { customFetch } from '../utils'
@@ -109,13 +110,17 @@ const AdminPanel = () => {
         </form>
       </div> */}
 
-      {/* export data */}
       <div className='flex gap-8 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
+        {/* import data */}
         <div className=''>
-          <h3 className='mb-4 font-bold'>Выгрузить список сотрудников:</h3>
+          <h3 className='mb-4 font-bold'>Загрузить:</h3>
+          <UploadData />
+        </div>
+        {/* export data */}
+        <div className=''>
+          <h3 className='mb-4 font-bold'>Выгрузить:</h3>
           <div className='flex gap-4 justify-start'>
             <ExportToExcel data={employees} bookTitle={`PR_${Date.now()}`} />
-            <ExportToCsv data={employees} bookTitle={`PR_${Date.now()}`} />
           </div>
         </div>
       </div>
