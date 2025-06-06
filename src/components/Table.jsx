@@ -121,16 +121,6 @@ const Table = ({ employeesFromStore }) => {
       size: 300,
     },
     {
-      accessorKey: 'startDate',
-      header: 'Дата приема',
-      enableEditing: false,
-    },
-    {
-      accessorKey: 'positionEntryDate',
-      header: 'В должности с',
-      enableEditing: false,
-    },
-    {
       accessorKey: 'positionTitle',
       header: 'Должность',
       enableEditing: false,
@@ -145,8 +135,13 @@ const Table = ({ employeesFromStore }) => {
       minSize: 200,
     },
     {
-      accessorKey: 'levelFromCeo',
-      header: 'N- уровень',
+      accessorKey: 'startDate',
+      header: 'Дата приема',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'positionEntryDate',
+      header: 'В должности с',
       enableEditing: false,
     },
     {
@@ -158,6 +153,11 @@ const Table = ({ employeesFromStore }) => {
       Edit: () => null,
     },
     {
+      accessorKey: 'levelFromCeo',
+      header: 'N- уровень',
+      enableEditing: false,
+    },
+    {
       accessorKey: 'isManager',
       header: 'isManager',
       enableEditing: false,
@@ -166,13 +166,25 @@ const Table = ({ employeesFromStore }) => {
       Edit: () => null,
     },
     {
-      accessorKey: 'selfEvaluationPrevious',
-      header: 'Самооценка H1 2024',
+      accessorKey: 'target',
+      header: 'Цель',
+      enableEditing: false,
+    },
+    {
+      accessorKey: 'areTargetsSetOnSelfReview',
+      header: 'Цели поставлены только в самооценку',
       enableEditing: false,
     },
     {
       accessorKey: 'selfEvaluation',
-      header: 'Самооценка H2 2024',
+      header: 'Результат самооценки',
+      enableEditing: false,
+      grow: true,
+      minSize: 400,
+    },
+    {
+      accessorKey: 'selfEvaluationComment',
+      header: 'Комментарий к самооценке',
       enableEditing: false,
       grow: true,
       minSize: 400,
@@ -211,35 +223,13 @@ const Table = ({ employeesFromStore }) => {
       size: 250,
     },
     {
-      accessorKey: 'feedbackPeer',
-      header: 'Оценка от коллег',
+      accessorKey: 'managerEvaluationPrevious',
+      header: 'Оценка руководителя H2 2024',
       enableEditing: false,
-      Edit: () => null,
-    },
-    {
-      accessorKey: 'feedbackProjectsAndTasks',
-      header: 'Проекты и задачи',
-      enableEditing: false,
-      Edit: () => null,
       grow: true,
-      size: 350,
+      minSize: 300,
     },
-    {
-      accessorKey: 'feedbackCooperation',
-      header: 'Взаимодействие',
-      enableEditing: false,
-      Edit: () => null,
-      grow: true,
-      size: 600,
-    },
-    {
-      accessorKey: 'feedbackComment',
-      header: 'Комментарии коллег',
-      enableEditing: false,
-      Edit: () => null,
-      grow: true,
-      size: 600,
-    },
+
     {
       accessorKey: 'targetBonusBudget',
       header: 'targetBonusBudget',
@@ -297,14 +287,14 @@ const Table = ({ employeesFromStore }) => {
     //   },
     // }),
 
-    muiTableBodyProps: {
-      sx: {
-        //stripe the rows, make odd rows a darker color
-        '& tr:nth-of-type(odd) > td': {
-          backgroundColor: '#f5f5f5',
-        },
-      },
-    },
+    // muiTableBodyProps: {
+    //   sx: {
+    //     //stripe the rows, make odd rows a darker color
+    //     '& tr:nth-of-type(odd) > td': {
+    //       backgroundColor: '#f5f5f5',
+    //     },
+    //   },
+    // },
 
     initialState: {
       columnVisibility: {

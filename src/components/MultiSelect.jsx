@@ -38,7 +38,7 @@ const MultiSelect = ({ options = [], selected = [], setSelected, label }) => {
   }, [])
 
   const filteredOptions = options?.filter((opt) =>
-    opt.label.toLowerCase().includes(searchTerm.toLowerCase())
+    opt?.label?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
