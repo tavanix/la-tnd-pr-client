@@ -30,7 +30,7 @@ const Employees = () => {
   const data = filteredEmployees.length ? filteredEmployees : employees
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col w-[1280px]'>
       <SectionTitle text='Калибровка' />
       <FilteringOptions />
       <Table employeesFromStore={data} />

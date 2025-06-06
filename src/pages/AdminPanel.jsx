@@ -3,12 +3,15 @@ import {
   SectionTitle,
   FormInput,
   ExportToExcel,
-  ExportToCsv,
   UploadData,
+  MultiSelect,
 } from '../components'
 import { toast } from 'react-toastify'
 import { customFetch } from '../utils'
 import { redirect } from 'react-router-dom'
+
+import { useSelector, useDispatch } from 'react-redux'
+import { setFilter } from '../features/employees/employeesSlice'
 
 import authHeader from '../utils/authHeader'
 
@@ -37,6 +40,17 @@ const initUserPassword = {
 }
 
 const AdminPanel = () => {
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.userState.user)
+
+  const optionsLevel1 = useSelector(
+    (state) => state.employeesState.optionsLevel1
+  )
+
+  let selectedLevel1FromStore = useSelector(
+    (state) => state.employeesState.filters.selectedLevel1
+  )
+
   const [userPassword, setUserPassword] = useState(initUserPassword)
   const [employees, setEmployees] = useState([])
 
@@ -76,52 +90,74 @@ const AdminPanel = () => {
   return (
     <div className='w-[1280px]'>
       <SectionTitle text='Панель администратора' />
-
-      {/* change password */}
-      {/* <div className='flex flex-col mb-4 p-6 w-full border rounded shadow-lg'>
-        <h3 className='font-bold'>Скинуть пароль</h3>
-        <p className='text-primary'>
-          Введите имя пользователя, которому нужно изменить пароль
-        </p>
-
-        <form className='form mt-4' onSubmit={onSubmitUserPassword}>
-          <div className='grid grid-cols-4 gap-2 mb-4'>
-            <FormInput
-              label='Username'
-              type='text'
-              maxLength='8'
-              name='username'
-              value={userPassword.username}
-              handleChange={handleChangeUserPassword}
-              required='required'
-            />
-            <FormInput
-              label='NEW Password'
-              type='text'
-              name='password'
-              placeholder='новый пароль'
-              value={userPassword.password}
-              handleChange={handleChangeUserPassword}
-            />
+      <div className=' flex flex-col flex-start gap-4'>
+        {/* import and export data */}
+        <div className='flex gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
+          {/* import data */}
+          <div className=''>
+            <h3 className='mb-2 font-bold'>Загрузить:</h3>
+            <UploadData />
           </div>
-          <button type='submit' className='btn btn-success btn-outline'>
-            Обновить
-          </button>
-        </form>
-      </div> */}
-
-      <div className='flex gap-8 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
-        {/* import data */}
-        <div className=''>
-          <h3 className='mb-4 font-bold'>Загрузить:</h3>
-          <UploadData />
+          {/* export data */}
+          <div className=''>
+            <h3 className='mb-2 font-bold'>Выгрузить:</h3>
+            <div className='flex gap-4 justify-start'>
+              <ExportToExcel data={employees} bookTitle={`PR_${Date.now()}`} />
+            </div>
+          </div>
         </div>
-        {/* export data */}
-        <div className=''>
-          <h3 className='mb-4 font-bold'>Выгрузить:</h3>
-          <div className='flex gap-4 justify-start'>
-            <ExportToExcel data={employees} bookTitle={`PR_${Date.now()}`} />
-          </div>
+
+        {/* level 1 filter */}
+        <div className='flex flex-col gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
+          <h2 className='font-bold'>Выбор популяции для калибровки</h2>
+          <MultiSelect
+            options={optionsLevel1}
+            selected={selectedLevel1FromStore}
+            setSelected={(optionsLevel1) =>
+              dispatch(
+                setFilter({
+                  field: 'selectedLevel1',
+                  values: [...optionsLevel1],
+                })
+              )
+            }
+            label='Для начала выберите Level 1, которое будем калибровать'
+          />
+
+          <p>а здесь будет кнопка Submit</p>
+        </div>
+
+        {/* change password */}
+        <div className='flex flex-col gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
+          <h3 className='font-bold'>Скинуть пароль</h3>
+          <p className='text-primary'>
+            Обязательно введите имя пользователя, которому нужно изменить пароль
+          </p>
+
+          <form className='form' onSubmit={onSubmitUserPassword}>
+            <div className='grid grid-cols-4 gap-2 mb-4'>
+              <FormInput
+                label='Username'
+                type='text'
+                maxLength='8'
+                name='username'
+                value={userPassword.username}
+                handleChange={handleChangeUserPassword}
+                required='required'
+              />
+              <FormInput
+                label='NEW Password'
+                type='text'
+                name='password'
+                placeholder='новый пароль'
+                value={userPassword.password}
+                handleChange={handleChangeUserPassword}
+              />
+            </div>
+            <button type='submit' className='btn btn-success btn-outline'>
+              Обновить
+            </button>
+          </form>
         </div>
       </div>
     </div>

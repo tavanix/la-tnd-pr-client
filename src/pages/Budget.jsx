@@ -41,7 +41,7 @@ const Budget = () => {
   const dataForTable = prepareDataForTable(data)
 
   return (
-    <div className='mb-4'>
+    <div className='mb-4 w-[1280px]'>
       <SectionTitle text='Бюджет' />
 
       <FilteringOptions />

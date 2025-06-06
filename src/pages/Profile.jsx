@@ -1,10 +1,9 @@
 import { toast } from 'react-toastify'
 import { redirect, Form } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { SectionTitle, MultiSelect, SubmitBtn } from '../components'
+import { SectionTitle, SubmitBtn } from '../components'
 import { customFetch } from '../utils'
 import { updatePassword } from '../features/user/userSlice'
-import { setFilter } from '../features/employees/employeesSlice'
 
 export const loader = (store) => () => {
   const user = store.getState().userState.user
@@ -24,7 +23,6 @@ export const action =
     const data = Object.fromEntries(formData)
 
     try {
-      console.log(data)
       const response = await customFetch.post('/auth/updatePassword', data)
       store.dispatch(updatePassword(response.data))
       return null
@@ -38,40 +36,13 @@ export const action =
   }
 
 const Profile = () => {
-  const dispatch = useDispatch()
   const user = useSelector((state) => state.userState.user)
-
-  const optionsLevel1 = useSelector(
-    (state) => state.employeesState.optionsLevel1
-  )
-
-  let selectedLevel1FromStore = useSelector(
-    (state) => state.employeesState.filters.selectedLevel1
-  )
 
   return (
     <div className='w-[1280px]'>
       <SectionTitle text='Профиль пользователя' />
-      <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
-        <h2 className='font-bold text-xl'>Выбор популяции для калибровки</h2>
-        <MultiSelect
-          options={optionsLevel1}
-          selected={selectedLevel1FromStore}
-          setSelected={(optionsLevel1) =>
-            dispatch(
-              setFilter({ field: 'selectedLevel1', values: [...optionsLevel1] })
-            )
-          }
-          label='Для начала выберите Level 1, которое будем калибровать'
-        />
-      </div>
 
-      <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
-        <h2 className='font-bold text-xl'>Закрыть калибровку</h2>
-        <p>здесь будет выпадающий список с Уровень 1</p>
-        <p>а здесь будет кнопка Submit</p>
-      </div>
-      <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
+      <div className='flex flex-col gap-2 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
         <h2 className='font-bold text-xl'>Данные пользователя</h2>
         <section className='flex flex-col gap-2'>
           <div className='grid grid-cols-2 w-32'>
@@ -94,12 +65,16 @@ const Profile = () => {
           </div>
         </section>
       </div>
-      <div className='flex flex-col gap-4 mb-4 p-4 w-full border rounded-[16px] shadow-lg'>
+      <div className='flex flex-col gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
         <h2 className='font-bold text-xl'>Сменить пароль</h2>
+        <p className='text-primary'>
+          (!) запомните новый пароль, после смены пароля его сбросить сможет
+          только администратор
+        </p>
 
         <Form
           method='POST'
-          className='card w-full bg-base-100 rounded-md flex flex-row gap-y-4 pb-4'
+          className='card w-full bg-base-100 rounded-md flex flex-row gap-y-4'
         >
           <input
             type='text'
@@ -121,7 +96,7 @@ const Profile = () => {
           <SubmitBtn
             text='Обновить'
             block='false'
-            btnType='primary'
+            btnType='neutral'
             btnOutline='true'
           />
         </Form>

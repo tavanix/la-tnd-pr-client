@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { redirect, useLoaderData } from 'react-router-dom'
 
-import { SectionTitle } from '../components'
+import { FilteringOptions, SectionTitle } from '../components'
 
 export const loader = (store, queryClient) => async (request) => {
   // ROLES CHECK
@@ -25,8 +25,9 @@ const Dashboard = () => {
   )
 
   return (
-    <div className='mb-4'>
+    <div className='w-[1280px]'>
       <SectionTitle text='Дешборд' />
+      <FilteringOptions />
       <div className=''>your role is {userRole}</div>
     </div>
   )
