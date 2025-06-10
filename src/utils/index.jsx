@@ -4,9 +4,21 @@ const url = 'http://localhost:1007/api/'
 // const url = 'http://192.168.1.84:1007/api/'
 // const url = 'http://10.163.17.110:1007/api/' // network
 
-export const customFetch = axios.create({
+const customFetch = axios.create({
   baseURL: url,
 })
+
+customFetch.interceptors.request.use((config) => {
+  const token = JSON.parse(localStorage.getItem('user'))?.token
+
+  if (token) {
+    // config.headers.Authorization = `Bearer ${token}`
+    config.headers['x-access-token'] = token
+  }
+  return config
+})
+
+export { customFetch }
 
 export const currentDate = () => {
   const date = new Date()

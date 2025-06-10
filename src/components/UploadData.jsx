@@ -16,7 +16,7 @@ const UploadData = () => {
       return res.data
     },
     onSuccess: () => {
-      toast.success('Сотрудники успешно загружены!')
+      toast.success('Данные успешно загружены!')
     },
     onError: () => {
       toast.error('Ошибка при загрузке сотрудников')

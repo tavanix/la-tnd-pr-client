@@ -18,7 +18,6 @@ import EditIcon from '@mui/icons-material/Edit'
 import { useDispatch, useSelector } from 'react-redux'
 import { editEmployee } from '../features/employees/employeesSlice'
 import { customFetch } from '../utils'
-import authHeader from '../utils/authHeader'
 
 const calibrationGrades = ['Топ', 'Отлично', 'Хорошо', 'Можешь лучше', 'Плохо']
 
@@ -29,11 +28,7 @@ function useGetUsers() {
   return useQuery({
     queryKey: ['users'],
     queryFn: async () => {
-      //send api request here
-      const employees = await customFetch.get(`/employees`, {
-        headers: authHeader(),
-      })
-
+      const employees = await customFetch.get(`/employees`)
       return null
     },
     refetchOnWindowFocus: false,
@@ -61,7 +56,7 @@ function useUpdateUser() {
   })
 }
 
-const Table = ({ employeesFromStore }) => {
+const Table = ({ employeesFromStore, approvedLevels = [] }) => {
   const dispatch = useDispatch()
   const [validationErrors, setValidationErrors] = useState({})
 
@@ -206,7 +201,7 @@ const Table = ({ employeesFromStore }) => {
     },
     {
       accessorKey: 'calibration',
-      header: 'Calibration',
+      header: 'Калибровка',
       muiEditTextFieldProps: {
         required: true,
       },
@@ -215,7 +210,7 @@ const Table = ({ employeesFromStore }) => {
     },
     {
       accessorKey: 'calibrationComment',
-      header: 'Calibration Comment',
+      header: 'Комментарий к калибровке',
       muiEditTextFieldProps: {
         required: true,
       },
@@ -357,15 +352,34 @@ const Table = ({ employeesFromStore }) => {
       </>
     ),
 
-    renderRowActions: ({ row, table }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
-        <Tooltip title='Edit'>
-          <IconButton onClick={() => table.setEditingRow(row)}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
-    ),
+    // renderRowActions: ({ row, table }) =>
+    //   true && (
+    //     <Box sx={{ display: 'flex', gap: '1rem' }}>
+    //       <Tooltip title='Калибровать'>
+    //         <IconButton onClick={() => table.setEditingRow(row)}>
+    //           <EditIcon />
+    //         </IconButton>
+    //       </Tooltip>
+    //     </Box>
+    //   ),
+
+    renderRowActions: ({ row, table }) => {
+      const isApproved = approvedLevels
+        .map((lvl) => lvl.level1)
+        .includes(row.original.level1)
+
+      if (isApproved) return <div className=''>-</div>
+
+      return (
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
+          <Tooltip title='Калибровать'>
+            <IconButton onClick={() => table.setEditingRow(row)}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      )
+    },
 
     state: {
       isLoading: isLoadingUsers,

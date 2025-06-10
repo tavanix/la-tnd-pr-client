@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setFilter } from '../features/employees/employeesSlice'
 
 import authHeader from '../utils/authHeader'
+import { AdminApprovalTable } from '../components/AdminApprovalTable'
 
 export const loader = (store, queryClient) => async () => {
   // ROLES CHECK
@@ -92,7 +93,7 @@ const AdminPanel = () => {
       <SectionTitle text='Панель администратора' />
       <div className=' flex flex-col flex-start gap-4'>
         {/* import and export data */}
-        <div className='flex gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
+        <div className='flex justify-between p-4 w-full border rounded-[16px] shadow-lg'>
           {/* import data */}
           <div className=''>
             <h3 className='mb-2 font-bold'>Загрузить:</h3>
@@ -124,13 +125,13 @@ const AdminPanel = () => {
             label='Для начала выберите Level 1, которое будем калибровать'
           />
 
-          <p>а здесь будет кнопка Submit</p>
+          <AdminApprovalTable />
         </div>
 
         {/* change password */}
         <div className='flex flex-col gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
           <h3 className='font-bold'>Скинуть пароль</h3>
-          <p className='text-primary'>
+          <p className='text-neutral'>
             Обязательно введите имя пользователя, которому нужно изменить пароль
           </p>
 
