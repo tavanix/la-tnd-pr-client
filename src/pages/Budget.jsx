@@ -44,7 +44,7 @@ const Budget = () => {
     <div className='mb-4 w-[1280px]'>
       <SectionTitle text='Бюджет' />
 
-      <FilteringOptions />
+      <FilteringOptions colsNumber='grid-cols-4' />
 
       <div className='flex flex-col gap-4 rounded-[16px] '>
         <ChartBudget

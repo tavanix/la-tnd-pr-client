@@ -27,8 +27,15 @@ const Dashboard = () => {
   return (
     <div className='w-[1280px]'>
       <SectionTitle text='Дешборд' />
-      <FilteringOptions />
-      <div className=''>your role is {userRole}</div>
+
+      <div className='grid grid-cols-[250px_1fr_250px] gap-2 h-full'>
+        <div className='p-2 bg-green-50 rounded-[16px]'>
+          <h2 className='font-bold'>Filters 1</h2>
+          <FilteringOptions colsNumber='grid-cols-1' />
+        </div>
+        <div className='p-2 bg-gray-50 rounded-[16px]'>1</div>
+        <div className='p-2 bg-red-50 rounded-[16px]'>1</div>
+      </div>
     </div>
   )
 }

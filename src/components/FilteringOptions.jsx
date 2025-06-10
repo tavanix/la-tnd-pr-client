@@ -2,7 +2,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { MultiSelect } from '../components'
 import { resetFilters, setFilter } from '../features/employees/employeesSlice'
 
-const FilteringOptions = () => {
+import { LuFilterX } from 'react-icons/lu'
+import { MdOutlineFilterAltOff } from 'react-icons/md'
+import { TbFilterX } from 'react-icons/tb'
+
+const FilteringOptions = ({ colsNumber }) => {
   const dispatch = useDispatch()
 
   // level 2
@@ -71,7 +75,7 @@ const FilteringOptions = () => {
   }
 
   return (
-    <div className='grid grid-cols-4 gap-2 mb-8'>
+    <div className={`grid ${colsNumber} gap-2 mb-4`}>
       <MultiSelect
         options={optionsForLevel2}
         selected={selectedLevel2FromStore}
@@ -177,10 +181,11 @@ const FilteringOptions = () => {
         label='Оценка после калибровки'
       />
       <button
-        className='btn btn-outline btn-secondary mt-4'
+        className='btn btn-outline btn-secondary mt-9 flex flex-row'
         onClick={resetFiltersHandler}
       >
-        Сбросить все фильтры
+        <TbFilterX className='font-bold text-lg' />
+        <span>Сбросить все фильтры</span>
       </button>
     </div>
   )

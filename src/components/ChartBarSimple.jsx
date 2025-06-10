@@ -36,7 +36,6 @@ const ChartBarSimple = ({ title, data }) => {
           }}
         >
           <XAxis dataKey='rate' tick={{ strokeWidth: 2 }} />
-          {/* <YAxis domain={[0, employees.length]} width={0} /> */}
           <YAxis width={0} />
           <Tooltip />
           <Legend />

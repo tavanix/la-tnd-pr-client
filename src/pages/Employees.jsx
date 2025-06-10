@@ -48,7 +48,7 @@ const Employees = () => {
   return (
     <div className='flex flex-col w-[1280px]'>
       <SectionTitle text='Калибровка' />
-      <FilteringOptions />
+      <FilteringOptions colsNumber='grid-cols-5' />
       <Table employeesFromStore={data} approvedLevels={approvedLevels} />
       <div className='mt-4 mb-4'>
         <ExportToExcel

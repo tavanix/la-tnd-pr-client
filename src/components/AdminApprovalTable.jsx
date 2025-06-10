@@ -69,7 +69,7 @@ export const AdminApprovalTable = () => {
                   <td className='w-[1200px]'>{lvl}</td>
                   <td>
                     <button
-                      className='btn btn-sm btn-success btn-outline'
+                      className='btn btn-sm btn-error btn-outline'
                       onClick={() => approveMutation.mutate(lvl)}
                       disabled={approveMutation.isLoading}
                     >
@@ -99,7 +99,7 @@ export const AdminApprovalTable = () => {
                   <td className='w-[1200px]'>{lvl.level1}</td>
                   <td>
                     <button
-                      className='btn btn-sm btn-error btn-outline'
+                      className='btn btn-sm btn-success btn-outline'
                       onClick={() => declineMutation.mutate(lvl.level1)}
                     >
                       Открыть

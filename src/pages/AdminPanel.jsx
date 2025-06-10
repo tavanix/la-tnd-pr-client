@@ -124,7 +124,15 @@ const AdminPanel = () => {
             }
             label='Для начала выберите Level 1, которое будем калибровать'
           />
+        </div>
 
+        {/* change single employee */}
+        <div className='flex flex-col gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
+          тут будут точечные изменения оценок у сотрудника
+        </div>
+
+        {/* approve or decline level1 */}
+        <div className='flex flex-col gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
           <AdminApprovalTable />
         </div>
 
@@ -154,10 +162,13 @@ const AdminPanel = () => {
                 value={userPassword.password}
                 handleChange={handleChangeUserPassword}
               />
+              <button
+                type='submit'
+                className='mt-9 btn btn-success btn-outline'
+              >
+                Обновить
+              </button>
             </div>
-            <button type='submit' className='btn btn-success btn-outline'>
-              Обновить
-            </button>
           </form>
         </div>
       </div>
