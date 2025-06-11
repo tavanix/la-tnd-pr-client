@@ -2,8 +2,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { MultiSelect } from '../components'
 import { resetFilters, setFilter } from '../features/employees/employeesSlice'
 
-import { LuFilterX } from 'react-icons/lu'
-import { MdOutlineFilterAltOff } from 'react-icons/md'
 import { TbFilterX } from 'react-icons/tb'
 
 const FilteringOptions = ({ colsNumber }) => {
@@ -14,19 +12,19 @@ const FilteringOptions = ({ colsNumber }) => {
     (state) => state.employeesState.optionsLevel2
   )
   const selectedLevel2FromStore = useSelector(
-    (state) => state.employeesState.filters.selectedLevel2
+    (state) => state.employeesState.filters.selectedLevel2 || []
   )
 
   // level 3
   const optionsForLevel3 = useSelector((s) => s.employeesState.optionsLevel3)
   const selectedLevel3FromStore = useSelector(
-    (s) => s.employeesState.filters.selectedLevel3
+    (s) => s.employeesState.filters.selectedLevel3 || []
   )
 
   // level 4
   const optionsForLevel4 = useSelector((s) => s.employeesState.optionsLevel4)
   const selectedLevel4FromStore = useSelector(
-    (s) => s.employeesState.filters.selectedLevel4
+    (s) => s.employeesState.filters.selectedLevel4 || []
   )
 
   // position titles
@@ -34,7 +32,7 @@ const FilteringOptions = ({ colsNumber }) => {
     (s) => s.employeesState.optionsPositionTitle
   )
   const selectedPositionTitleFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedPositionTitle
+    (s) => s.employeesState.filters.selectedPositionTitle || []
   )
 
   // employee names
@@ -42,7 +40,7 @@ const FilteringOptions = ({ colsNumber }) => {
     (s) => s.employeesState.optionsEmployeeName
   )
   const selectedEmployeeNameFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedEmployeeName
+    (s) => s.employeesState.filters.selectedEmployeeName || []
   )
 
   // has bonus
@@ -50,7 +48,7 @@ const FilteringOptions = ({ colsNumber }) => {
     (s) => s.employeesState.optionsHasBonus
   )
   const selectedHasBonusFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedHasBonus
+    (s) => s.employeesState.filters.selectedHasBonus || []
   )
 
   // level from ceo
@@ -58,7 +56,7 @@ const FilteringOptions = ({ colsNumber }) => {
     (s) => s.employeesState.optionsLevelFromCeo
   )
   const selectedLevelFromCeoFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedLevelFromCeo
+    (s) => s.employeesState.filters.selectedLevelFromCeo || []
   )
 
   // calibrated score
@@ -66,7 +64,7 @@ const FilteringOptions = ({ colsNumber }) => {
     (s) => s.employeesState.optionsCalibration
   )
   const selectedCalibrationFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedCalibration
+    (s) => s.employeesState.filters.selectedCalibration || []
   )
 
   // reset filters

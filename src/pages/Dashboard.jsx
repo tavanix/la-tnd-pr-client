@@ -17,8 +17,6 @@ export const loader = (store, queryClient) => async (request) => {
 
 const Dashboard = () => {
   const { user } = useLoaderData()
-  const userRole = user.roles[0]
-  const isAdmin = userRole === 'ROLE_ADMIN'
 
   const employeesInitialState = useSelector(
     (state) => state.employeesState.employees
@@ -42,7 +40,6 @@ const Dashboard = () => {
         <div className='p-2 bg-gray-50 rounded-[16px] flex flex-col gap-4 shadow-lg'>
           <h2 className='font-bold'>Сравнение двух выбранных популяций:</h2>
           {/* table */}
-          {/* treemap */}
           {/* barchart */}
         </div>
         <div className='p-2 bg-red-50 rounded-[16px] shadow-lg'>

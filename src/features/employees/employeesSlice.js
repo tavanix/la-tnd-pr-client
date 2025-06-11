@@ -48,7 +48,6 @@ const applyAllFilters = (state) => {
   state.filteredEmployees = filtered
 
   // Шаг 2. Обновляем options* для всех фильтров, с исключением самого себя
-
   const getOptions = (excludeKey) => {
     const base = employees.filter((employee) =>
       Object.entries(filters).every(([key, selected]) => {
@@ -63,12 +62,13 @@ const applyAllFilters = (state) => {
     )
 
     return (key) =>
-      [...new Set(base.map((e) => e[key]))]
-        // .filter(Boolean)
-        .map((value) => ({ label: value, value }))
+      [...new Set(base.map((e) => e[key]))].map((value) => ({
+        label: value,
+        value,
+      }))
   }
 
-  const get = getOptions // удобный alias
+  const get = getOptions
 
   state.optionsLevel1 = get('selectedLevel1')('level1')
   state.optionsLevel2 = get('selectedLevel2')('level2')
@@ -111,7 +111,6 @@ const employeesSlice = createSlice({
       applyAllFilters(state)
     },
 
-    // TODO!!!
     editEmployee: (state, action) => {
       const updatedEmployee = action.payload
       const { email: updatedEmail } = updatedEmployee
