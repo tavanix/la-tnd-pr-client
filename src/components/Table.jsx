@@ -169,13 +169,14 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       accessorKey: 'areTargetsSetOnSelfReview',
       header: 'Цели поставлены только в самооценку',
       enableEditing: false,
+      minSize: 300,
     },
     {
       accessorKey: 'selfEvaluation',
       header: 'Результат самооценки',
       enableEditing: false,
       grow: true,
-      minSize: 400,
+      minSize: 150,
     },
     {
       accessorKey: 'selfEvaluationComment',
@@ -189,7 +190,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       header: 'Оценка руководителя',
       enableEditing: false,
       grow: true,
-      minSize: 250,
+      minSize: 200,
       enableHiding: false,
     },
     {
@@ -207,6 +208,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       },
       editVariant: 'select',
       editSelectOptions: calibrationGrades,
+      minSize: 100,
     },
     {
       accessorKey: 'calibrationComment',
@@ -215,7 +217,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
         required: true,
       },
       grow: true,
-      size: 250,
+      minSize: 250,
     },
     {
       accessorKey: 'managerEvaluationPrevious',
@@ -352,23 +354,12 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       </>
     ),
 
-    // renderRowActions: ({ row, table }) =>
-    //   true && (
-    //     <Box sx={{ display: 'flex', gap: '1rem' }}>
-    //       <Tooltip title='Калибровать'>
-    //         <IconButton onClick={() => table.setEditingRow(row)}>
-    //           <EditIcon />
-    //         </IconButton>
-    //       </Tooltip>
-    //     </Box>
-    //   ),
-
     renderRowActions: ({ row, table }) => {
       const isApproved = approvedLevels
         .map((lvl) => lvl.level1)
         .includes(row.original.level1)
 
-      if (isApproved) return <div className=''>-</div>
+      if (isApproved) return <div className='ml-2'>Ok</div>
 
       return (
         <Box sx={{ display: 'flex', gap: '1rem' }}>

@@ -83,7 +83,6 @@ const AdminPanel = () => {
       setUserPassword(initUserPassword)
       toast.success('Изменения успешно сохранены!')
     } catch (error) {
-      // error handler via slicer with thunkAPI
       toast.error('Возникла непредвиденная ошибка...')
     }
   }
@@ -128,7 +127,7 @@ const AdminPanel = () => {
 
         {/* change single employee */}
         <div className='flex flex-col gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
-          тут будут точечные изменения оценок у сотрудника
+          тут будут точечные изменения оценок у конкретного сотрудника
         </div>
 
         {/* approve or decline level1 */}
