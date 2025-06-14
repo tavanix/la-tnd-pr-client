@@ -44,12 +44,37 @@ const AdminPanel = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.userState.user)
 
-  const optionsLevel1 = useSelector(
-    (state) => state.employeesState.optionsLevel1
-  )
+  const employeesAll = useSelector((state) => state.employeesState.employees)
+  const filters = useSelector((state) => state.employeesState.filters.filters1)
+
+  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
+
+  const getFilteredEmployeesExcluding = (excludeKey) => {
+    return employeesAll.filter((employee) =>
+      Object.entries(filters).every(([key, selected]) => {
+        if (key === excludeKey || !selected?.length) return true
+        const field =
+          key
+            .replace(/^selected/, '')
+            .charAt(0)
+            .toLowerCase() + key.replace(/^selected/, '').slice(1)
+        return selected.includes(employee[field])
+      })
+    )
+  }
+
+  const getOptions = (fieldKey) => {
+    const filtered = getFilteredEmployeesExcluding(
+      `selected${capitalize(fieldKey)}`
+    )
+    return [...new Set(filtered.map((e) => e[fieldKey]))].map((value) => ({
+      label: value,
+      value,
+    }))
+  }
 
   let selectedLevel1FromStore = useSelector(
-    (state) => state.employeesState.filters.selectedLevel1
+    (state) => state.employeesState.filters.filters1.selectedLevel1
   )
 
   const [userPassword, setUserPassword] = useState(initUserPassword)
@@ -111,11 +136,12 @@ const AdminPanel = () => {
         <div className='flex flex-col gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
           <h2 className='font-bold'>Выбор популяции для калибровки</h2>
           <MultiSelect
-            options={optionsLevel1}
+            options={getOptions('level1')}
             selected={selectedLevel1FromStore}
             setSelected={(optionsLevel1) =>
               dispatch(
                 setFilter({
+                  filterId: 'filters1',
                   field: 'selectedLevel1',
                   values: [...optionsLevel1],
                 })

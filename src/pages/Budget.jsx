@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { redirect, useLoaderData } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { redirect } from 'react-router-dom'
 
 import {
   SectionTitle,
@@ -26,7 +25,7 @@ export const loader = (store, queryClient) => async (request) => {
 const Budget = () => {
   const employees = useSelector((state) => state.employeesState.employees)
   const filteredEmployees = useSelector(
-    (state) => state.employeesState.filteredEmployees
+    (state) => state.employeesState.filteredEmployees1
   )
   const data = filteredEmployees.length > 0 ? filteredEmployees : employees
 
@@ -44,7 +43,7 @@ const Budget = () => {
     <div className='mb-4 w-[1280px]'>
       <SectionTitle text='Бюджет' />
 
-      <FilteringOptions colsNumber='grid-cols-5' />
+      <FilteringOptions colsNumber='grid-cols-5' filterId='filters1' />
 
       <div className='flex flex-col gap-4 rounded-[16px] '>
         <ChartBudget

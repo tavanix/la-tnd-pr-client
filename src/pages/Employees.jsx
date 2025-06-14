@@ -27,7 +27,7 @@ const Employees = () => {
 
   const employees = useSelector((state) => state.employeesState.employees)
   const filteredEmployees = useSelector(
-    (state) => state.employeesState.filteredEmployees
+    (state) => state.employeesState.filteredEmployees1
   )
   const data = filteredEmployees.length ? filteredEmployees : employees
 
@@ -48,7 +48,7 @@ const Employees = () => {
   return (
     <div className='flex flex-col w-[1280px]'>
       <SectionTitle text='Калибровка' />
-      <FilteringOptions colsNumber='grid-cols-5' />
+      <FilteringOptions colsNumber='grid-cols-5' filterId='filters1' />
       <Table employeesFromStore={data} approvedLevels={approvedLevels} />
       <div className='mt-4 mb-4'>
         <ExportToExcel

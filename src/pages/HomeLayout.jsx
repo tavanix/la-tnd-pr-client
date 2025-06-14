@@ -48,7 +48,8 @@ export const loader = (store, queryClient) => async () => {
     store.dispatch(setEmployees(result))
   } catch (error) {
     const errorMesssage =
-      error?.response?.data?.error?.message || 'Что-то пошло не так...'
+      error?.response?.data?.error?.message ||
+      'Что-то пошло не так в HomeLayout...'
     toast.error(errorMesssage)
     return null
   }

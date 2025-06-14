@@ -1,85 +1,55 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { MultiSelect } from '../components'
 import { resetFilters, setFilter } from '../features/employees/employeesSlice'
-
 import { TbFilterX } from 'react-icons/tb'
 
-const FilteringOptions = ({ colsNumber }) => {
+const FilteringOptions = ({ colsNumber, filterId }) => {
   const dispatch = useDispatch()
 
-  // level 2
-  const optionsForLevel2 = useSelector(
-    (state) => state.employeesState.optionsLevel2
-  )
-  const selectedLevel2FromStore = useSelector(
-    (state) => state.employeesState.filters.selectedLevel2 || []
-  )
+  const employees = useSelector((state) => state.employeesState.employees)
+  const filters = useSelector((state) => state.employeesState.filters[filterId])
 
-  // level 3
-  const optionsForLevel3 = useSelector((s) => s.employeesState.optionsLevel3)
-  const selectedLevel3FromStore = useSelector(
-    (s) => s.employeesState.filters.selectedLevel3 || []
-  )
-
-  // level 4
-  const optionsForLevel4 = useSelector((s) => s.employeesState.optionsLevel4)
-  const selectedLevel4FromStore = useSelector(
-    (s) => s.employeesState.filters.selectedLevel4 || []
-  )
-
-  // position titles
-  const optionsForPositionTitle = useSelector(
-    (s) => s.employeesState.optionsPositionTitle
-  )
-  const selectedPositionTitleFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedPositionTitle || []
-  )
-
-  // employee names
-  const optionsForEmployeeName = useSelector(
-    (s) => s.employeesState.optionsEmployeeName
-  )
-  const selectedEmployeeNameFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedEmployeeName || []
-  )
-
-  // has bonus
-  const optionsForHasBonus = useSelector(
-    (s) => s.employeesState.optionsHasBonus
-  )
-  const selectedHasBonusFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedHasBonus || []
-  )
-
-  // level from ceo
-  const optionsForLevelFromCeo = useSelector(
-    (s) => s.employeesState.optionsLevelFromCeo
-  )
-  const selectedLevelFromCeoFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedLevelFromCeo || []
-  )
-
-  // calibrated score
-  const optionsForCalibration = useSelector(
-    (s) => s.employeesState.optionsCalibration
-  )
-  const selectedCalibrationFromStore = useSelector(
-    (s) => s.employeesState.filters.selectedCalibration || []
-  )
-
-  // reset filters
-  const resetFiltersHandler = () => {
-    dispatch(resetFilters())
+  const getFilteredEmployeesExcluding = (excludeKey) => {
+    return employees.filter((employee) =>
+      Object.entries(filters).every(([key, selected]) => {
+        if (key === excludeKey || !selected?.length) return true
+        const field =
+          key
+            .replace(/^selected/, '')
+            .charAt(0)
+            .toLowerCase() + key.replace(/^selected/, '').slice(1)
+        return selected.includes(employee[field])
+      })
+    )
   }
+
+  const getOptions = (fieldKey) => {
+    const filtered = getFilteredEmployeesExcluding(
+      `selected${capitalize(fieldKey)}`
+    )
+    return [...new Set(filtered.map((e) => e[fieldKey]))].map((value) => ({
+      label: value,
+      value,
+    }))
+  }
+
+  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
+
+  const resetFiltersHandler = () => {
+    dispatch(resetFilters({ filterId }))
+  }
+
+  const selected = (key) => filters?.[key] || []
 
   return (
     <div className={`grid ${colsNumber} gap-2 mb-4`}>
       <MultiSelect
-        options={optionsForLevel2}
-        selected={selectedLevel2FromStore}
+        options={getOptions('level2')}
+        selected={selected('selectedLevel2')}
         setSelected={(optionsForLevel2) =>
           dispatch(
             setFilter({
+              filterId,
               field: 'selectedLevel2',
               values: [...optionsForLevel2],
             })
@@ -88,11 +58,12 @@ const FilteringOptions = ({ colsNumber }) => {
         label='Level 2'
       />
       <MultiSelect
-        options={optionsForLevel3}
-        selected={selectedLevel3FromStore}
+        options={getOptions('level3')}
+        selected={selected('selectedLevel3')}
         setSelected={(optionsForLevel3) =>
           dispatch(
             setFilter({
+              filterId,
               field: 'selectedLevel3',
               values: [...optionsForLevel3],
             })
@@ -101,11 +72,12 @@ const FilteringOptions = ({ colsNumber }) => {
         label='Level 3'
       />
       <MultiSelect
-        options={optionsForLevel4}
-        selected={selectedLevel4FromStore}
+        options={getOptions('level4')}
+        selected={selected('selectedLevel4')}
         setSelected={(optionsForLevel4) =>
           dispatch(
             setFilter({
+              filterId,
               field: 'selectedLevel4',
               values: [...optionsForLevel4],
             })
@@ -114,11 +86,12 @@ const FilteringOptions = ({ colsNumber }) => {
         label='Level 4'
       />
       <MultiSelect
-        options={optionsForHasBonus}
-        selected={selectedHasBonusFromStore}
+        options={getOptions('hasBonus')}
+        selected={selected('selectedHasBonus')}
         setSelected={(optionsForHasBonus) =>
           dispatch(
             setFilter({
+              filterId,
               field: 'selectedHasBonus',
               values: [...optionsForHasBonus],
             })
@@ -127,11 +100,12 @@ const FilteringOptions = ({ colsNumber }) => {
         label='Has Bonus'
       />
       <MultiSelect
-        options={optionsForPositionTitle}
-        selected={selectedPositionTitleFromStore}
+        options={getOptions('positionTitle')}
+        selected={selected('selectedPositionTitle')}
         setSelected={(optionsForPositionTitle) =>
           dispatch(
             setFilter({
+              filterId,
               field: 'selectedPositionTitle',
               values: [...optionsForPositionTitle],
             })
@@ -140,11 +114,12 @@ const FilteringOptions = ({ colsNumber }) => {
         label='Должность'
       />
       <MultiSelect
-        options={optionsForEmployeeName}
-        selected={selectedEmployeeNameFromStore}
+        options={getOptions('employeeName')}
+        selected={selected('selectedEmployeeName')}
         setSelected={(optionsForEmployeeName) =>
           dispatch(
             setFilter({
+              filterId,
               field: 'selectedEmployeeName',
               values: [...optionsForEmployeeName],
             })
@@ -153,11 +128,12 @@ const FilteringOptions = ({ colsNumber }) => {
         label='ФИО Сотрудника'
       />
       <MultiSelect
-        options={optionsForLevelFromCeo}
-        selected={selectedLevelFromCeoFromStore}
+        options={getOptions('levelFromCeo')}
+        selected={selected('selectedLevelFromCeo')}
         setSelected={(optionsForLevelFromCeo) =>
           dispatch(
             setFilter({
+              filterId,
               field: 'selectedLevelFromCeo',
               values: [...optionsForLevelFromCeo],
             })
@@ -166,11 +142,12 @@ const FilteringOptions = ({ colsNumber }) => {
         label='Уровень от CEO'
       />
       <MultiSelect
-        options={optionsForCalibration}
-        selected={selectedCalibrationFromStore}
+        options={getOptions('calibration')}
+        selected={selected('selectedCalibration')}
         setSelected={(optionsForCalibration) =>
           dispatch(
             setFilter({
+              filterId,
               field: 'selectedCalibration',
               values: [...optionsForCalibration],
             })
