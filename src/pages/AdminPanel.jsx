@@ -138,7 +138,7 @@ const AdminPanel = () => {
           <MultiSelect
             options={getOptions('level1')}
             selected={selectedLevel1FromStore}
-            setSelected={(optionsLevel1) =>
+            setSelected={(optionsLevel1) => {
               dispatch(
                 setFilter({
                   filterId: 'filters1',
@@ -146,7 +146,14 @@ const AdminPanel = () => {
                   values: [...optionsLevel1],
                 })
               )
-            }
+              dispatch(
+                setFilter({
+                  filterId: 'filters2',
+                  field: 'selectedLevel1',
+                  values: [...optionsLevel1],
+                })
+              )
+            }}
             label='Для начала выберите Level 1, которое будем калибровать'
           />
         </div>

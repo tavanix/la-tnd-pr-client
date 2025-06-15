@@ -39,8 +39,6 @@ const Budget = () => {
   const bonusAfterCalibration = calculateTotalBonus(data, 'after')
   const dataForTable = prepareDataForTable(data)
 
-  console.log(dataForTable)
-
   // transform data
   const translitData = dataForTable.map((item) => {
     return {
