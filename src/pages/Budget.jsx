@@ -39,6 +39,17 @@ const Budget = () => {
   const bonusAfterCalibration = calculateTotalBonus(data, 'after')
   const dataForTable = prepareDataForTable(data)
 
+  console.log(dataForTable)
+
+  // transform data
+  const translitData = dataForTable.map((item) => {
+    return {
+      rate: item.rate,
+      до: item.beforeHc,
+      после: item.afterHc,
+    }
+  })
+
   return (
     <div className='mb-4 w-[1280px]'>
       <SectionTitle text='Бюджет' />
@@ -54,7 +65,11 @@ const Budget = () => {
 
         <ChartBarSimple
           title='Распределение оценок (до/после калибровки)'
-          data={dataForTable}
+          data={translitData}
+          arg1='до'
+          arg2='после'
+          color1='#b9b9ba'
+          color2='#47b872'
         />
 
         <ChartTable
