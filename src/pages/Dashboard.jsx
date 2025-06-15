@@ -1,7 +1,12 @@
 import { useSelector } from 'react-redux'
 import { redirect } from 'react-router-dom'
 
-import { FilteringOptions, SectionTitle, ChartBarSimple } from '../components'
+import {
+  FilteringOptions,
+  SectionTitle,
+  ChartBarSimple,
+  ChartTableComparison,
+} from '../components'
 
 export const loader = (store, queryClient) => async (request) => {
   // ROLES CHECK
@@ -40,8 +45,8 @@ const Dashboard = () => {
 
     return allRates.map((rate) => ({
       rate,
-      data1: count1[rate],
-      data2: count2[rate],
+      'Фильтр 1': count1[rate],
+      'Фильтр 2': count2[rate],
     }))
   }
 
@@ -52,27 +57,29 @@ const Dashboard = () => {
       <SectionTitle text='Дешборд' />
 
       <div className='grid grid-cols-[265px_1fr_265px] gap-2 h-full'>
-        <div className='p-2 bg-green-50 rounded-[16px] shadow-lg'>
-          <h2 className='font-bold'>Фильтры: калибровка</h2>
+        <div className='p-2  rounded-[16px] shadow-lg'>
+          <h2 className='font-bold'>Фильтр 1</h2>
           <FilteringOptions colsNumber='grid-cols-1' filterId='filters1' />
         </div>
         <div className='p-2 bg-gray-50 rounded-[16px] flex flex-col gap-4 shadow-lg'>
-          <h2 className='font-bold'>Сравнение двух выбранных популяций:</h2>
           {/* table */}
+          <div className='p-2 pt-6  rounded-[16px]  shadow-lg'>
+            <ChartTableComparison data={data} />
+          </div>
           {/* barchart */}
           <div className=''>
             <ChartBarSimple
-              title='Сравнение оценок'
+              title=''
               data={data}
-              arg1='data1'
-              arg2='data2'
+              arg1='Фильтр 1'
+              arg2='Фильтр 2'
               color1='#b9b9ba'
               color2='#47b872'
             />
           </div>
         </div>
-        <div className='p-2 bg-red-50 rounded-[16px] shadow-lg'>
-          <h2 className='font-bold'>Фильтры: для сравнения</h2>
+        <div className='p-2 rounded-[16px] shadow-lg'>
+          <h2 className='font-bold'>Фильтр 2: для сравнения</h2>
           <FilteringOptions colsNumber='grid-cols-1' filterId='filters2' />
         </div>
         {/* buffer */}
