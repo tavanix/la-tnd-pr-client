@@ -7,6 +7,7 @@ const FormSelect = ({
   required,
   span,
   value,
+  handleChange,
 }) => {
   let listToRender = [...new Set(list)]
 
@@ -19,7 +20,8 @@ const FormSelect = ({
         required={required}
         name={name}
         id={name}
-        defaultValue={value}
+        value={value}
+        onChange={handleChange}
         className={`select select-bordered ${size}`}
       >
         {listToRender.map((item) => {

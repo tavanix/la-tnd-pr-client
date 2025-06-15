@@ -83,7 +83,7 @@ const Dashboard = () => {
           <FilteringOptions colsNumber='grid-cols-1' filterId='filters2' />
         </div>
         {/* buffer */}
-        <div className='h-[200px] m-4'></div>
+        <div className='h-[25px]'></div>
       </div>
     </div>
   )

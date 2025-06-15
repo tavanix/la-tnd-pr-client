@@ -54,7 +54,7 @@ export const AdminApprovalTable = () => {
       {levels.length > 0 && (
         <>
           <h2 className='font-bold mt-8'>
-            Согласовать и закрыть на редактирование
+            Согласовать или закрыть на редактирование
           </h2>
           <table className='table w-full'>
             <thead>

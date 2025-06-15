@@ -5,6 +5,7 @@ import {
   ExportToExcel,
   UploadData,
   MultiSelect,
+  FormSelect,
 } from '../components'
 import { toast } from 'react-toastify'
 import { customFetch } from '../utils'
@@ -38,6 +39,12 @@ export const loader = (store, queryClient) => async () => {
 const initUserPassword = {
   username: '',
   password: '',
+}
+
+const initUpdateEmployeeData = {
+  email: '',
+  calibration: '',
+  calibrationComment: '',
 }
 
 const AdminPanel = () => {
@@ -79,6 +86,9 @@ const AdminPanel = () => {
 
   const [userPassword, setUserPassword] = useState(initUserPassword)
   const [employees, setEmployees] = useState([])
+  const [updateEmployeeData, setUpdateEmployeeData] = useState(
+    initUpdateEmployeeData
+  )
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,15 +110,32 @@ const AdminPanel = () => {
     setUserPassword({ ...userPassword, [name]: value })
   }
 
+  const handleUpdateEmployee = (e) => {
+    const { name, value } = e.target
+    setUpdateEmployeeData({ ...updateEmployeeData, [name]: value })
+  }
+
   const onSubmitUserPassword = (e) => {
     e.preventDefault()
-
     try {
       customFetch.post('/auth/updatePassword', userPassword)
       setUserPassword(initUserPassword)
       toast.success('Изменения успешно сохранены!')
     } catch (error) {
-      toast.error('Возникла непредвиденная ошибка...')
+      toast.error('Возникла непредвиденная ошибка при обновлении пароля...')
+    }
+  }
+
+  const onSubmitUpdateEmployee = (e) => {
+    console.log(updateEmployeeData)
+
+    e.preventDefault()
+    try {
+      customFetch.put('/updateEmployee', updateEmployeeData)
+      setUpdateEmployeeData(initUpdateEmployeeData)
+      toast.success('Изменения успешно сохранены!')
+    } catch (error) {
+      toast.error('Возникла непредвиденная ошибка при обновлении сотрудника...')
     }
   }
 
@@ -160,7 +187,40 @@ const AdminPanel = () => {
 
         {/* change single employee */}
         <div className='flex flex-col gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
-          тут будут точечные изменения оценок у конкретного сотрудника
+          <h2 className='font-bold'>Перекалибровать сотрудника</h2>
+          <form className='form' onSubmit={onSubmitUpdateEmployee}>
+            <div className='grid grid-cols-4 gap-2 mb-4'>
+              <FormInput
+                label='Email'
+                type='email'
+                name='email'
+                value={updateEmployeeData.email || ''}
+                handleChange={handleUpdateEmployee}
+                required='required'
+              />
+              <FormSelect
+                label='Калибровка'
+                name='calibration'
+                list={['', 'Топ', 'Отлично', 'Хорошо', 'Можешь лучше', 'Плохо']}
+                value={updateEmployeeData.calibration || ''}
+                handleChange={handleUpdateEmployee}
+                required='required'
+              />
+              <FormInput
+                label='Комментарий'
+                type='text'
+                name='calibrationComment'
+                value={updateEmployeeData.calibrationComment || ''}
+                handleChange={handleUpdateEmployee}
+              />
+              <button
+                type='submit'
+                className='mt-9 btn btn-success btn-outline'
+              >
+                Обновить
+              </button>
+            </div>
+          </form>
         </div>
 
         {/* approve or decline level1 */}
@@ -169,8 +229,8 @@ const AdminPanel = () => {
         </div>
 
         {/* change password */}
-        <div className='flex flex-col gap-2 p-4 w-full border rounded-[16px] shadow-lg'>
-          <h3 className='font-bold'>Скинуть пароль</h3>
+        <div className='flex flex-col gap-2 p-4 w-full border rounded-[16px] shadow-lg mb-8'>
+          <h3 className='font-bold'>Скинуть пароль активного пользователя</h3>
           <p className='text-neutral'>
             Обязательно введите имя пользователя, которому нужно изменить пароль
           </p>
