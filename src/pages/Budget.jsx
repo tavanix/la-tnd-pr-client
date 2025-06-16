@@ -48,6 +48,50 @@ const Budget = () => {
     }
   })
 
+  const totalAfterSum = dataForTable.reduce(
+    (acc, item) => acc + (item.afterSum || 0),
+    0
+  )
+
+  const mergedDataForTable = (() => {
+    const rest = dataForTable.filter(
+      (item) => item.rate !== 'Можешь лучше' && item.rate !== 'Плохо'
+    )
+
+    const ml = dataForTable.find((item) => item.rate === 'Можешь лучше') || {}
+    const bad = dataForTable.find((item) => item.rate === 'Плохо') || {}
+
+    const sumNumeric = (a, b) => (a || 0) + (b || 0)
+    const sumPercent = (a = '0%', b = '0%') =>
+      `${(
+        parseFloat(a.replace('%', '')) + parseFloat(b.replace('%', ''))
+      ).toFixed(1)}%`
+
+    const merged = {
+      rate: 'Можешь лучше / Плохо',
+      target: `${sumPercent(ml.target, bad.target)}`,
+      beforeHc: sumNumeric(ml.beforeHc, bad.beforeHc),
+      beforePercent: sumPercent(ml.beforePercent, bad.beforePercent),
+      beforeFundPercent: sumPercent(
+        ml.beforeFundPercent,
+        bad.beforeFundPercent
+      ),
+      afterHc: sumNumeric(ml.afterHc, bad.afterHc),
+      afterPercent: sumPercent(ml.afterPercent, bad.afterPercent),
+      afterFundPercent: 0, // временно, будет пересчитан позже
+    }
+
+    return [...rest, merged]
+  })()
+
+  const mergedDataForTableFinal = mergedDataForTable.map((item) => ({
+    ...item,
+    afterFundPercent:
+      totalAfterSum === 0
+        ? '0%'
+        : `${((item.afterSum / totalAfterSum) * 100).toFixed(1)}%`,
+  }))
+
   return (
     <div className='mb-4 w-[1280px]'>
       <SectionTitle text='Бюджет' />
@@ -72,7 +116,7 @@ const Budget = () => {
 
         <ChartTable
           title='Распределение оценок и бюджета (до/после калибровки)'
-          data={dataForTable}
+          data={mergedDataForTableFinal}
         />
       </div>
     </div>

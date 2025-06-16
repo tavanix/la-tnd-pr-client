@@ -4,11 +4,10 @@ const targetDistribution = {
   Топ: 1,
   Отлично: 15,
   Хорошо: 75,
-  'Можешь лучше': 7,
-  Плохо: 2,
+  'Можешь лучше / Плохо': 9,
 }
 
-const allRates = ['Топ', 'Отлично', 'Хорошо', 'Можешь лучше', 'Плохо']
+const allRates = ['Топ', 'Отлично', 'Хорошо', 'Можешь лучше / Плохо']
 
 const ComparisonTable = ({ data }) => {
   const row = (label, getValue) => (
@@ -26,6 +25,17 @@ const ComparisonTable = ({ data }) => {
   data.forEach((entry) => {
     dataMap[entry.rate] = entry
   })
+
+  // Объединение "Можешь лучше" + "Плохо"
+  dataMap['Можешь лучше / Плохо'] = {
+    rate: 'Можешь лучше / Плохо',
+    'Фильтр 1':
+      (dataMap['Можешь лучше']?.['Фильтр 1'] ?? 0) +
+      (dataMap['Плохо']?.['Фильтр 1'] ?? 0),
+    'Фильтр 2':
+      (dataMap['Можешь лучше']?.['Фильтр 2'] ?? 0) +
+      (dataMap['Плохо']?.['Фильтр 2'] ?? 0),
+  }
 
   const sumValues = (key) =>
     allRates.reduce((sum, rate) => sum + (dataMap[rate]?.[key] ?? 0), 0)

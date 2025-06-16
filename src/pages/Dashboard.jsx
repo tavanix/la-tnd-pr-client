@@ -63,13 +63,12 @@ const Dashboard = () => {
         </div>
         <div className='p-2 bg-gray-50 rounded-[16px] flex flex-col gap-4 shadow-lg'>
           {/* table */}
-          <div className='p-2 pt-6  rounded-[16px]  shadow-lg'>
+          <div className='p-2 pt-6 pb-6 rounded-[16px]  shadow-lg'>
             <ChartTableComparison data={data} />
           </div>
           {/* barchart */}
           <div className=''>
             <ChartBarSimple
-              title=''
               data={data}
               arg1='Фильтр 1'
               arg2='Фильтр 2'
