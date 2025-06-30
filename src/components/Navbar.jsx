@@ -13,6 +13,7 @@ import { RiArrowRightSLine } from 'react-icons/ri'
 import { FaPersonWalking } from 'react-icons/fa6'
 import { FaUserCircle } from 'react-icons/fa'
 import { GiReceiveMoney } from 'react-icons/gi'
+import { MdTextSnippet } from 'react-icons/md'
 
 const Navbar = () => {
   const dispatch = useDispatch()
@@ -54,6 +55,19 @@ const Navbar = () => {
               </div>
             </Link>
           )}
+
+          {/* landing */}
+          <Link
+            to='/'
+            className='group h-12 flex justify-start items-center cursor-pointer rounded-[16px] transition-all duration-500 ease-in-out hover:transition-all hover:bg-[#484848]'
+          >
+            <div className='ml-7 flex gap-4'>
+              <MdTextSnippet className='w-6 h-6 text-white' />
+              <span className='text-[#ededed] hidden group-hover:flex'>
+                Стартовая
+              </span>
+            </div>
+          </Link>
 
           {/* calibration */}
           <Link

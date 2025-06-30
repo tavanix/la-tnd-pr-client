@@ -81,7 +81,7 @@ const AdminPanel = () => {
   }
 
   let selectedLevel1FromStore = useSelector(
-    (state) => state.employeesState.filters.filters1.selectedLevel1
+    (state) => state.employeesState.filters.filters1?.selectedLevel1
   )
 
   const [userPassword, setUserPassword] = useState(initUserPassword)
@@ -127,8 +127,6 @@ const AdminPanel = () => {
   }
 
   const onSubmitUpdateEmployee = (e) => {
-    console.log(updateEmployeeData)
-
     e.preventDefault()
     try {
       customFetch.put('/updateEmployee', updateEmployeeData)

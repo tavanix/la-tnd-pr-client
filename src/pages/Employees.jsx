@@ -31,8 +31,6 @@ const Employees = () => {
   )
   const data = filteredEmployees.length ? filteredEmployees : employees
 
-  //
-
   const { data: approvedLevels = [] } = useQuery({
     queryKey: ['approvedLevels'],
     queryFn: async () => {
@@ -42,8 +40,6 @@ const Employees = () => {
     },
     refetchOnWindowFocus: false,
   })
-
-  //
 
   return (
     <div className='flex flex-col w-[1280px]'>
