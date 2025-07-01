@@ -133,11 +133,23 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       accessorKey: 'startDate',
       header: 'Дата приема',
       enableEditing: false,
+      Cell: ({ cell }) => {
+        const raw = cell.getValue()
+        if (!raw) return ''
+        const [year, month, day] = raw.split('-')
+        return `${day}.${month}.${year}`
+      },
     },
     {
       accessorKey: 'positionEntryDate',
       header: 'В должности с',
       enableEditing: false,
+      Cell: ({ cell }) => {
+        const raw = cell.getValue()
+        if (!raw) return ''
+        const [year, month, day] = raw.split('-')
+        return `${day}.${month}.${year}`
+      },
     },
     {
       accessorKey: 'hasBonus',
