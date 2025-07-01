@@ -57,11 +57,6 @@ const Budget = () => {
     }
   })
 
-  // const totalAfterSum = dataForTable.reduce(
-  //   (acc, item) => acc + (item.afterSum || 0),
-  //   0
-  // )
-
   const mergedDataForTable = (() => {
     const rest = dataForTable.filter(
       (item) => item.rate !== 'Можешь лучше' && item.rate !== 'Плохо'
@@ -89,6 +84,7 @@ const Budget = () => {
       afterHc: sumNumeric(ml.afterHc, bad.afterHc),
       afterPercent: sumPercent(ml.afterPercent, bad.afterPercent),
       afterSum: sumNumeric(ml.afterSum, bad.afterSum),
+      afterFund: sumNumeric(ml.afterFund, bad.afterFund),
       afterFundPercent: 0, // временно, будет пересчитан позже
     }
 
@@ -132,6 +128,7 @@ const Budget = () => {
 
         <ChartTable
           title='Распределение оценок и бюджета (до/после калибровки)'
+          // data={dataForTable}
           data={mergedDataForTableFinal}
         />
       </div>

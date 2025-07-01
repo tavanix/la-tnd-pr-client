@@ -67,8 +67,8 @@ const Dashboard = () => {
       <SectionTitle text='Дешборд' />
 
       <div className='grid grid-cols-[265px_1fr_265px] gap-2 h-full'>
-        <div className='p-2  rounded-[16px] shadow-lg'>
-          <h2 className='font-bold'>Фильтр 1</h2>
+        <div className='p-2 bg-green-50 rounded-[16px] shadow-lg'>
+          <h2 className='font-bold'>Фильтр 1: исходный</h2>
           <FilteringOptions colsNumber='grid-cols-1' filterId='filters1' />
         </div>
         <div className='p-2 bg-gray-50 rounded-[16px] flex flex-col gap-4 shadow-lg'>
@@ -82,12 +82,12 @@ const Dashboard = () => {
               data={data}
               arg1='Фильтр 1'
               arg2='Фильтр 2'
-              color1='#b9b9ba'
-              color2='#47b872'
+              color1='#47b872'
+              color2='#b9b9ba'
             />
           </div>
         </div>
-        <div className='p-2 rounded-[16px] shadow-lg'>
+        <div className='p-2 bg-gray-100 rounded-[16px] shadow-lg'>
           <h2 className='font-bold'>Фильтр 2: для сравнения</h2>
           <FilteringOptions colsNumber='grid-cols-1' filterId='filters2' />
         </div>
