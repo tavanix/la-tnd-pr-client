@@ -27,7 +27,16 @@ const Budget = () => {
   const filteredEmployees = useSelector(
     (state) => state.employeesState.filteredEmployees1
   )
-  const data = filteredEmployees.length > 0 ? filteredEmployees : employees
+
+  function normalizeCalibration(data) {
+    return data.map((employee) => ({
+      ...employee,
+      calibration: employee.calibration || employee.managerEvaluation || '',
+    }))
+  }
+
+  const rawData = filteredEmployees.length > 0 ? filteredEmployees : employees
+  const data = normalizeCalibration(rawData)
 
   // DATA FOR KPI CARDS
   const bonusBudget = data
@@ -48,10 +57,10 @@ const Budget = () => {
     }
   })
 
-  const totalAfterSum = dataForTable.reduce(
-    (acc, item) => acc + (item.afterSum || 0),
-    0
-  )
+  // const totalAfterSum = dataForTable.reduce(
+  //   (acc, item) => acc + (item.afterSum || 0),
+  //   0
+  // )
 
   const mergedDataForTable = (() => {
     const rest = dataForTable.filter(
@@ -62,10 +71,11 @@ const Budget = () => {
     const bad = dataForTable.find((item) => item.rate === 'Плохо') || {}
 
     const sumNumeric = (a, b) => (a || 0) + (b || 0)
+
     const sumPercent = (a = '0%', b = '0%') =>
-      `${(
+      `${Math.round(
         parseFloat(a.replace('%', '')) + parseFloat(b.replace('%', ''))
-      ).toFixed(1)}%`
+      )}%`
 
     const merged = {
       rate: 'Можешь лучше / Плохо',
@@ -78,18 +88,24 @@ const Budget = () => {
       ),
       afterHc: sumNumeric(ml.afterHc, bad.afterHc),
       afterPercent: sumPercent(ml.afterPercent, bad.afterPercent),
+      afterSum: sumNumeric(ml.afterSum, bad.afterSum),
       afterFundPercent: 0, // временно, будет пересчитан позже
     }
 
     return [...rest, merged]
   })()
 
+  const totalAfterSum = mergedDataForTable.reduce(
+    (acc, item) => acc + (item.afterFund || 0),
+    0
+  )
+
   const mergedDataForTableFinal = mergedDataForTable.map((item) => ({
     ...item,
     afterFundPercent:
-      totalAfterSum === 0
+      totalAfterSum === 0 || !item.afterFund
         ? '0%'
-        : `${((item.afterSum / totalAfterSum) * 100).toFixed(1)}%`,
+        : `${Math.round((item.afterFund / totalAfterSum) * 100)}%`,
   }))
 
   return (

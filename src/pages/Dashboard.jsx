@@ -23,6 +23,13 @@ const Dashboard = () => {
   const data1 = useSelector((state) => state.employeesState.filteredEmployees1)
   const data2 = useSelector((state) => state.employeesState.filteredEmployees2)
 
+  function normalizeCalibration(data) {
+    return data.map((employee) => ({
+      ...employee,
+      calibration: employee.calibration || employee.managerEvaluation || '',
+    }))
+  }
+
   function compareRates(data1, data2) {
     const allRates = ['Топ', 'Отлично', 'Хорошо', 'Можешь лучше', 'Плохо']
 
@@ -50,7 +57,10 @@ const Dashboard = () => {
     }))
   }
 
-  const data = compareRates(data1, data2)
+  const data = compareRates(
+    normalizeCalibration(data1),
+    normalizeCalibration(data2)
+  )
 
   return (
     <div className='w-[1280px]'>
