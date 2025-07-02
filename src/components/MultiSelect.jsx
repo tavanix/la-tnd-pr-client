@@ -64,7 +64,7 @@ const MultiSelect = ({ options = [], selected = [], setSelected, label }) => {
           {selected.length === 0 ? (
             <span className='text-gray-400'>Выберите...</span>
           ) : selected.length === 1 ? (
-            <span className='p-4 badge badge-sm bg-gray-100 text-gray-800 h-8'>
+            <span className='p-4 badge badge-sm bg-gray-100 text-gray-800 h-8 overflow-hidden text-nowrap'>
               {selected}
             </span>
           ) : (
