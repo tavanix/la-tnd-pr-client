@@ -44,8 +44,6 @@ function useUpdateUser(modifier) {
       //send api update request here
       user.lastModifiedBy = modifier.username
       user.lastModifiedOn = currentDate(Date.now())
-      console.log(user)
-
       await customFetch.put(`/updateEmployee`, user)
     },
     //client side optimistic update
@@ -62,7 +60,7 @@ function useUpdateUser(modifier) {
 
 const Table = ({ employeesFromStore, approvedLevels = [] }) => {
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.userState.user)
+  const currentUser = useSelector((state) => state.userState.user)
 
   const [validationErrors, setValidationErrors] = useState({})
 
@@ -267,10 +265,9 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       minSize: 400,
       muiEditTextFieldProps: {
         multiline: true,
-        minRows: 5,
+        minRows: 18,
         sx: {
-          minHeight: '60%',
-          maxHeight: '70%',
+          minHeight: '100px',
           overflowY: 'auto',
           paddingRight: '4px',
         },
@@ -313,7 +310,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
 
   //call UPDATE hook
   const { mutateAsync: updateUser, isPending: isUpdatingUser } =
-    useUpdateUser(user)
+    useUpdateUser(currentUser)
 
   //UPDATE action
   const handleSaveUser = async ({ values, table }) => {
