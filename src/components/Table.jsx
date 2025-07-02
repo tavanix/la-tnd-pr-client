@@ -283,15 +283,17 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       accessorKey: 'targetBonusBudget',
       header: 'targetBonusBudget',
       enableEditing: false,
-      Edit: () => null,
+      enableHiding: false,
       visibleInShowHideMenu: false,
+      Edit: () => null,
     },
     {
       accessorKey: 'targetBonusSum',
       header: 'targetBonusSum',
       enableEditing: false,
-      Edit: () => null,
+      enableHiding: false,
       visibleInShowHideMenu: false,
+      Edit: () => null,
     },
   ]
 

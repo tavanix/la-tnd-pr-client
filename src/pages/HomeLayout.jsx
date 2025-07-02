@@ -26,24 +26,25 @@ export const loader = (store, queryClient) => async () => {
     if (user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_ALL'))
       result = employees.data
 
-    if (user.roles.includes('ROLE_TND'))
+    if (user.roles.includes('ROLE_CIS_ALL'))
+      result = employees.data.filter(
+        (item) => item.level1 === 'Казахстан' || item.level1 === 'Беларусь'
+      )
+
+    if (user.roles.includes('ROLE_CIS_KZ'))
+      result = employees.data.filter((item) => item.level1 === 'Казахстан')
+
+    if (user.roles.includes('ROLE_CIS_BY'))
+      result = employees.data.filter((item) => item.level1 === 'Беларусь')
+
+    if (user.roles.includes('ROLE_AUDIT'))
       result = employees.data.filter(
         (item) =>
           item.level1 ===
           'Департамент по внутреннему контролю, аудиту и управлению рисками'
       )
 
-    if (user.roles.includes('ROLE_HRBP_IT'))
-      result = employees.data.filter(
-        (item) => item.level1 === 'Дирекция информационных технологий'
-      )
-
-    if (user.roles.includes('ROLE_HRBP_HR'))
-      result = employees.data.filter(
-        (item) =>
-          item.level1 ===
-          'Дирекция по управлению персоналом и административной деятельности'
-      )
+    //
 
     store.dispatch(setEmployees(result))
   } catch (error) {
