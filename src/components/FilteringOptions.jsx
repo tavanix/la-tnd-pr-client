@@ -55,7 +55,7 @@ const FilteringOptions = ({ colsNumber, filterId }) => {
             })
           )
         }
-        label='Level 2'
+        label='Уровень 2'
       />
       <MultiSelect
         options={getOptions('level3')}
@@ -69,7 +69,7 @@ const FilteringOptions = ({ colsNumber, filterId }) => {
             })
           )
         }
-        label='Level 3'
+        label='Уровень 3'
       />
       <MultiSelect
         options={getOptions('level4')}
@@ -83,7 +83,7 @@ const FilteringOptions = ({ colsNumber, filterId }) => {
             })
           )
         }
-        label='Level 4'
+        label='Уровень 4'
       />
       <MultiSelect
         options={getOptions('hasBonus')}
@@ -97,7 +97,7 @@ const FilteringOptions = ({ colsNumber, filterId }) => {
             })
           )
         }
-        label='Has Bonus'
+        label='Бонус'
       />
       <MultiSelect
         options={getOptions('positionTitle')}
@@ -125,7 +125,7 @@ const FilteringOptions = ({ colsNumber, filterId }) => {
             })
           )
         }
-        label='ФИО Сотрудника'
+        label='Сотрудник'
       />
       <MultiSelect
         options={getOptions('levelFromCeo')}
@@ -153,7 +153,7 @@ const FilteringOptions = ({ colsNumber, filterId }) => {
             })
           )
         }
-        label='Оценка после калибровки'
+        label='Изменение оценки на калибровке'
       />
       <button
         className='btn btn-outline btn-secondary mt-9 flex flex-row'

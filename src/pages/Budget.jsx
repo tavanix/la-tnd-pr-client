@@ -130,7 +130,6 @@ const Budget = () => {
 
         <ChartTable
           title='Распределение оценок и бюджета (до/после калибровки)'
-          // data={dataForTable}
           data={mergedDataForTableFinal}
         />
       </div>

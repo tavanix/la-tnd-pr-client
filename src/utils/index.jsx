@@ -80,9 +80,9 @@ export const prepareDataForTable = (employees) => {
 
   const iterationKeys = [
     { rate: 'Топ', target: '1%', multiplier: 3 },
-    { rate: 'Отлично', target: '15%', multiplier: 1.5 },
+    { rate: 'Отлично', target: '12%', multiplier: 1.5 },
     { rate: 'Хорошо', target: '75%', multiplier: 1 },
-    { rate: 'Можешь лучше', target: '7%', multiplier: 0.5 },
+    { rate: 'Можешь лучше', target: '10%', multiplier: 0.5 },
     { rate: 'Плохо', target: '2%', multiplier: 0 },
   ]
 

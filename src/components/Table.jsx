@@ -63,7 +63,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
   const columns = [
     {
       accessorKey: 'employeeId',
-      header: 'Employee ID',
+      header: 'Табельный номер',
       enableEditing: false,
       grow: true,
       size: 160,
@@ -71,46 +71,47 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
     },
     {
       accessorKey: 'employeeName',
-      header: 'Employee Name',
+      header: 'Сотрудник',
       enableEditing: false,
+      enableHiding: false,
     },
     {
       accessorKey: 'email',
-      header: 'Email',
+      header: 'E-mail',
       enableEditing: false,
       Edit: () => null,
     },
     {
       accessorKey: 'level1',
-      header: 'Level 1',
+      header: 'Уровень 1',
       enableEditing: false,
       grow: true,
       size: 300,
     },
     {
       accessorKey: 'level2',
-      header: 'Level 2',
+      header: 'Уровень 2',
       enableEditing: false,
       grow: true,
       size: 350,
     },
     {
       accessorKey: 'level3',
-      header: 'Level 3',
+      header: 'Уровень 3',
       enableEditing: false,
       grow: true,
       size: 300,
     },
     {
       accessorKey: 'level4',
-      header: 'Level 4',
+      header: 'Уровень 4',
       enableEditing: false,
       grow: true,
       size: 300,
     },
     {
       accessorKey: 'level5',
-      header: 'Level 5',
+      header: 'Уровень   5',
       enableEditing: false,
       grow: true,
       size: 300,
@@ -126,6 +127,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       accessorKey: 'directManager',
       header: 'Руководитель',
       enableEditing: false,
+      enableHiding: false,
       grow: true,
       minSize: 200,
     },
@@ -143,7 +145,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
     },
     {
       accessorKey: 'positionEntryDate',
-      header: 'В должности с',
+      header: 'Дата приема на должность',
       enableEditing: false,
 
       Cell: ({ cell }) => {
@@ -155,7 +157,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
     },
     {
       accessorKey: 'hasBonus',
-      header: 'hasBonus',
+      header: 'Бонус',
       enableEditing: false,
       grow: true,
       size: 150,
@@ -163,12 +165,12 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
     },
     {
       accessorKey: 'levelFromCeo',
-      header: 'N- уровень',
+      header: 'Уровень от СЕО',
       enableEditing: false,
     },
     {
       accessorKey: 'isManager',
-      header: 'isManager',
+      header: 'Признак руководителя',
       enableEditing: false,
       grow: true,
       size: 150,
@@ -176,26 +178,27 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
     },
     {
       accessorKey: 'target',
-      header: 'Цель',
+      header: 'Цели',
       enableEditing: false,
     },
     {
       accessorKey: 'areTargetsSetOnSelfReview',
-      header: 'Цели поставлены только в самооценку',
+      header: 'Цели поставлены до ревью',
       enableEditing: false,
       minSize: 300,
     },
     {
       accessorKey: 'selfEvaluation',
-      header: 'Результат самооценки',
+      header: 'Оценка реализации целей',
       enableEditing: false,
       grow: true,
-      minSize: 150,
+      minSize: 200,
     },
     {
       accessorKey: 'selfEvaluationComment',
-      header: 'Комментарий к самооценке',
+      header: 'Самооценка',
       enableEditing: false,
+      enableHiding: false,
       grow: true,
       minSize: 400,
       muiEditTextFieldProps: {
@@ -213,16 +216,18 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       accessorKey: 'managerEvaluation',
       header: 'Оценка руководителя',
       enableEditing: false,
+      enableHiding: false,
       grow: true,
       minSize: 200,
       enableHiding: false,
     },
     {
       accessorKey: 'managerEvaluationComment',
-      header: 'Комментарий руководителя',
+      header: 'Комментарий к оценке руководителя',
       enableEditing: false,
+      enableHiding: false,
       grow: true,
-      minSize: 300,
+      minSize: 400,
       muiEditTextFieldProps: {
         multiline: true,
         minRows: 1,
@@ -235,30 +240,25 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       },
     },
     {
-      accessorKey: 'managerEvaluationPrevious',
-      header: 'Оценка руководителя H2 2024',
-      enableEditing: false,
-      grow: true,
-      minSize: 300,
-    },
-    {
       accessorKey: 'calibration',
-      header: 'Калибровка',
+      header: 'Изменение оценки на калибровке',
+      enableHiding: false,
       muiEditTextFieldProps: {
         required: true,
       },
       editVariant: 'select',
       editSelectOptions: calibrationGrades,
-      minSize: 100,
+      minSize: 200,
     },
     {
       accessorKey: 'calibrationComment',
-      header: 'Комментарий к калибровке',
+      header: 'Комментарий к изменению оценки',
+      enableHiding: false,
       muiEditTextFieldProps: {
         required: true,
       },
       grow: true,
-      minSize: 250,
+      minSize: 400,
       muiEditTextFieldProps: {
         multiline: true,
         minRows: 5,
@@ -269,6 +269,14 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
           paddingRight: '8px',
         },
       },
+    },
+    {
+      accessorKey: 'managerEvaluationPrevious',
+      header: 'Оценка ревью H2 2024',
+      enableEditing: false,
+      enableHiding: false,
+      grow: true,
+      minSize: 200,
     },
 
     {
@@ -339,7 +347,22 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
 
     initialState: {
       columnVisibility: {
+        employeeId: false,
         email: false,
+        level1: false,
+        level2: false,
+        level3: false,
+        level4: false,
+        level5: false,
+        startDate: false,
+        positionEntryDate: false,
+        positionTitle: false,
+        hasBonus: false,
+        levelFromCeo: false,
+        isManager: false,
+        target: false,
+        areTargetsSetOnSelfReview: false,
+        selfEvaluation: false,
         targetBonusBudget: false,
         targetBonusSum: false,
       },
@@ -440,6 +463,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
+                justifyContent: 'space-between',
                 gap: 2,
                 overflowY: 'auto',
               }}
@@ -452,6 +476,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
+                justifyContent: 'space-between',
                 gap: 2,
                 overflowY: 'auto',
                 maxHeight: '60vh',
@@ -466,6 +491,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
+                justifyContent: 'space-between',
                 gap: 2,
                 overflowY: 'auto',
                 maxHeight: '60vh',
@@ -514,28 +540,3 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
 export default Table
 
 // https://github.com/KevinVandy/material-react-table/blob/v3/apps/material-react-table-docs/examples/editing-crud-modal/sandbox/src/TS.tsx
-
-// renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
-//   <>
-//     <DialogTitle variant='p' className='font-bold'>
-//       Форма каллибровки
-//     </DialogTitle>
-//     <DialogContent
-//       sx={{
-//         display: 'grid',
-//         gridTemplateColumns: 'repeat(3, 4fr)',
-//         gap: 3,
-//       }}
-//     >
-//       {/* {internalEditComponents} or render custom edit components here */}
-//       {internalEditComponents.filter(
-//         (editComp) =>
-//           editComp?.props?.cell?.column?.id &&
-//           columnsToShowInModal.includes(editComp.props.cell.column.id)
-//       )}
-//     </DialogContent>
-//     <DialogActions>
-//       <MRT_EditActionButtons variant='text' table={table} row={row} />
-//     </DialogActions>
-//   </>
-// ),
