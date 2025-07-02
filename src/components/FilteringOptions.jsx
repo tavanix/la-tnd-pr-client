@@ -44,6 +44,20 @@ const FilteringOptions = ({ colsNumber, filterId }) => {
   return (
     <div className={`grid ${colsNumber} gap-2 mb-4`}>
       <MultiSelect
+        options={getOptions('level1')}
+        selected={selected('selectedLevel1')}
+        setSelected={(optionsForLevel1) =>
+          dispatch(
+            setFilter({
+              filterId,
+              field: 'selectedLevel1',
+              values: [...optionsForLevel1],
+            })
+          )
+        }
+        label='Уровень 1'
+      />
+      <MultiSelect
         options={getOptions('level2')}
         selected={selected('selectedLevel2')}
         setSelected={(optionsForLevel2) =>

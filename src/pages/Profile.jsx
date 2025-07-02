@@ -50,10 +50,6 @@ const Profile = () => {
             <span className='text-secondary font-light'>{user.username}</span>
           </div>
           <div className='grid grid-cols-2 w-32'>
-            <span className=''>E-mail:</span>
-            <span className='text-secondary font-light'>{user.email}</span>
-          </div>
-          <div className='grid grid-cols-2 w-32'>
             <span className='text-md'>Роль:</span>
             <ul className='container'>
               {user.roles.map((role) => (

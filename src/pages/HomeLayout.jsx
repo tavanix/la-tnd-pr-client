@@ -23,7 +23,7 @@ export const loader = (store, queryClient) => async () => {
 
     // user roles and access management
     let result = []
-    if (user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_CNB'))
+    if (user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_ALL'))
       result = employees.data
 
     if (user.roles.includes('ROLE_TND'))

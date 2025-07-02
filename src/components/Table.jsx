@@ -208,7 +208,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
           // minHeight: '40%',
           maxHeight: '250px',
           overflowY: 'auto',
-          paddingRight: '8px',
+          paddingRight: '4px',
         },
       },
     },
@@ -235,7 +235,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
           // minHeight: '30%',
           // maxHeight: '250px',
           overflowY: 'auto',
-          paddingRight: '8px',
+          paddingRight: '4px',
         },
       },
     },
@@ -266,7 +266,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
           minHeight: '60%',
           maxHeight: '70%',
           overflowY: 'auto',
-          paddingRight: '8px',
+          paddingRight: '4px',
         },
       },
     },
@@ -326,15 +326,11 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
 
     displayColumnDefOptions: {
       'mrt-row-actions': {
+        header: 'Изменить',
+        size: 80,
         visibleInShowHideMenu: false, //hide the built-in row actions column from the show hide menu
       },
     },
-
-    // muiTablePaperProps: ({ table }) => ({
-    //   style: {
-    //     zIndex: table.getState().isFullScreen ? 1000 : 2222222,
-    //   },
-    // }),
 
     muiTableBodyProps: {
       sx: {
