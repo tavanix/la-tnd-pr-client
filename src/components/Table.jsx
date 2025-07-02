@@ -17,7 +17,7 @@ import EditIcon from '@mui/icons-material/Edit'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { editEmployee } from '../features/employees/employeesSlice'
-import { customFetch } from '../utils'
+import { customFetch, currentDate } from '../utils'
 
 const calibrationGrades = ['Топ', 'Отлично', 'Хорошо', 'Можешь лучше', 'Плохо']
 
@@ -36,12 +36,16 @@ function useGetUsers() {
 }
 
 //UPDATE hook (put user in api)
-function useUpdateUser() {
+function useUpdateUser(modifier) {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async (user) => {
       //send api update request here
+      user.lastModifiedBy = modifier.username
+      user.lastModifiedOn = currentDate(Date.now())
+      console.log(user)
+
       await customFetch.put(`/updateEmployee`, user)
     },
     //client side optimistic update
@@ -58,6 +62,8 @@ function useUpdateUser() {
 
 const Table = ({ employeesFromStore, approvedLevels = [] }) => {
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.userState.user)
+
   const [validationErrors, setValidationErrors] = useState({})
 
   const columns = [
@@ -306,7 +312,8 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
   } = useGetUsers()
 
   //call UPDATE hook
-  const { mutateAsync: updateUser, isPending: isUpdatingUser } = useUpdateUser()
+  const { mutateAsync: updateUser, isPending: isUpdatingUser } =
+    useUpdateUser(user)
 
   //UPDATE action
   const handleSaveUser = async ({ values, table }) => {
