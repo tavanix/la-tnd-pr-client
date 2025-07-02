@@ -133,6 +133,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       accessorKey: 'startDate',
       header: 'Дата приема',
       enableEditing: false,
+
       Cell: ({ cell }) => {
         const raw = cell.getValue()
         if (!raw) return ''
@@ -144,6 +145,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       accessorKey: 'positionEntryDate',
       header: 'В должности с',
       enableEditing: false,
+
       Cell: ({ cell }) => {
         const raw = cell.getValue()
         if (!raw) return ''
@@ -196,6 +198,16 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       enableEditing: false,
       grow: true,
       minSize: 400,
+      muiEditTextFieldProps: {
+        multiline: true,
+        minRows: 1,
+        sx: {
+          // minHeight: '40%',
+          maxHeight: '250px',
+          overflowY: 'auto',
+          paddingRight: '8px',
+        },
+      },
     },
     {
       accessorKey: 'managerEvaluation',
@@ -208,6 +220,23 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
     {
       accessorKey: 'managerEvaluationComment',
       header: 'Комментарий руководителя',
+      enableEditing: false,
+      grow: true,
+      minSize: 300,
+      muiEditTextFieldProps: {
+        multiline: true,
+        minRows: 1,
+        sx: {
+          // minHeight: '30%',
+          // maxHeight: '250px',
+          overflowY: 'auto',
+          paddingRight: '8px',
+        },
+      },
+    },
+    {
+      accessorKey: 'managerEvaluationPrevious',
+      header: 'Оценка руководителя H2 2024',
       enableEditing: false,
       grow: true,
       minSize: 300,
@@ -230,13 +259,16 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       },
       grow: true,
       minSize: 250,
-    },
-    {
-      accessorKey: 'managerEvaluationPrevious',
-      header: 'Оценка руководителя H2 2024',
-      enableEditing: false,
-      grow: true,
-      minSize: 300,
+      muiEditTextFieldProps: {
+        multiline: true,
+        minRows: 5,
+        sx: {
+          minHeight: '60%',
+          maxHeight: '70%',
+          overflowY: 'auto',
+          paddingRight: '8px',
+        },
+      },
     },
 
     {
@@ -296,14 +328,14 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
     //   },
     // }),
 
-    // muiTableBodyProps: {
-    //   sx: {
-    //     //stripe the rows, make odd rows a darker color
-    //     '& tr:nth-of-type(odd) > td': {
-    //       backgroundColor: '#f5f5f5',
-    //     },
-    //   },
-    // },
+    muiTableBodyProps: {
+      sx: {
+        //stripe the rows, make odd rows a darker color
+        '& tr:nth-of-type(odd) > td': {
+          backgroundColor: '#f5f5f5',
+        },
+      },
+    },
 
     initialState: {
       columnVisibility: {
@@ -346,25 +378,109 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
       }
     },
 
-    renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
-      <>
-        <DialogTitle variant='p' className='font-bold'>
-          Форма каллибровки
-        </DialogTitle>
-        <DialogContent
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 4fr)',
-            gap: 3,
-          }}
-        >
-          {internalEditComponents} {/* or render custom edit components here */}
-        </DialogContent>
-        <DialogActions>
-          <MRT_EditActionButtons variant='text' table={table} row={row} />
-        </DialogActions>
-      </>
-    ),
+    renderEditRowDialogContent: ({ table, row, internalEditComponents }) => {
+      // Списки колонок по группам
+      const firstColIds = [
+        'employeeName',
+        'level2',
+        'level3',
+        'level4',
+        'positionTitle',
+        'directManager',
+        'startDate',
+        'positionEntryDate',
+        'levelFromCeo',
+        'email',
+      ]
+      const secondColIds = [
+        'selfEvaluationComment',
+        'managerEvaluation',
+        'managerEvaluationComment',
+      ]
+      const thirdColIds = [
+        'managerEvaluationPrevious',
+        'calibration',
+        'calibrationComment',
+        'targetBonusBudget',
+        'targetBonusSum',
+      ]
+
+      // Фильтруем internalEditComponents для каждой колонки
+      const firstColComponents = internalEditComponents.filter(
+        (comp) =>
+          comp?.props?.cell?.column?.id &&
+          firstColIds.includes(comp.props.cell.column.id)
+      )
+      const secondColComponents = internalEditComponents.filter(
+        (comp) =>
+          comp?.props?.cell?.column?.id &&
+          secondColIds.includes(comp.props.cell.column.id)
+      )
+      const thirdColComponents = internalEditComponents.filter(
+        (comp) =>
+          comp?.props?.cell?.column?.id &&
+          thirdColIds.includes(comp.props.cell.column.id)
+      )
+
+      return (
+        <>
+          <DialogTitle variant='p' className='font-bold'>
+            Форма каллибровки
+          </DialogTitle>
+          <DialogContent
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1.5fr 1.5fr',
+              gap: 3,
+              maxHeight: '70vh', // ограничиваем высоту модалки
+            }}
+          >
+            {/* Первая колонка */}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                overflowY: 'auto',
+              }}
+            >
+              {firstColComponents}
+            </Box>
+
+            {/* Вторая колонка (комментарии) */}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                overflowY: 'auto',
+                maxHeight: '60vh',
+                paddingRight: 1,
+              }}
+            >
+              {secondColComponents}
+            </Box>
+
+            {/* Третья колонка (комментарии) */}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                overflowY: 'auto',
+                maxHeight: '60vh',
+                paddingRight: 1,
+              }}
+            >
+              {thirdColComponents}
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <MRT_EditActionButtons variant='text' table={table} row={row} />
+          </DialogActions>
+        </>
+      )
+    },
 
     renderRowActions: ({ row, table }) => {
       const isApproved = approvedLevels
@@ -398,3 +514,28 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
 export default Table
 
 // https://github.com/KevinVandy/material-react-table/blob/v3/apps/material-react-table-docs/examples/editing-crud-modal/sandbox/src/TS.tsx
+
+// renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
+//   <>
+//     <DialogTitle variant='p' className='font-bold'>
+//       Форма каллибровки
+//     </DialogTitle>
+//     <DialogContent
+//       sx={{
+//         display: 'grid',
+//         gridTemplateColumns: 'repeat(3, 4fr)',
+//         gap: 3,
+//       }}
+//     >
+//       {/* {internalEditComponents} or render custom edit components here */}
+//       {internalEditComponents.filter(
+//         (editComp) =>
+//           editComp?.props?.cell?.column?.id &&
+//           columnsToShowInModal.includes(editComp.props.cell.column.id)
+//       )}
+//     </DialogContent>
+//     <DialogActions>
+//       <MRT_EditActionButtons variant='text' table={table} row={row} />
+//     </DialogActions>
+//   </>
+// ),

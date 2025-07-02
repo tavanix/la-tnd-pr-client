@@ -38,6 +38,8 @@ const Budget = () => {
   const rawData = filteredEmployees.length > 0 ? filteredEmployees : employees
   const data = normalizeCalibration(rawData)
 
+  console.log('Данные после формы:', data)
+
   // DATA FOR KPI CARDS
   const bonusBudget = data
     .map((employee) => {

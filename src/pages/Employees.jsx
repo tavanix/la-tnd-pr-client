@@ -48,7 +48,9 @@ const Employees = () => {
       <Table employeesFromStore={data} approvedLevels={approvedLevels} />
       <div className='mt-4 mb-4'>
         <ExportToExcel
-          data={data}
+          data={data.map(
+            ({ targetBonusBudget, targetBonusSum, ...rest }) => rest
+          )}
           bookTitle={`Калибровка_${user.roles[0].slice(5)}_${Date.now()}`}
         />
       </div>
