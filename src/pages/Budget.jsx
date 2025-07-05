@@ -39,6 +39,7 @@ const Budget = () => {
   const data = normalizeCalibration(rawData)
 
   // DATA FOR KPI CARDS
+
   const bonusBudget = data
     .map((employee) => {
       return +employee.targetBonusBudget

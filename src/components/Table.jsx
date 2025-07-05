@@ -329,6 +329,7 @@ const Table = ({ employeesFromStore, approvedLevels = [] }) => {
     enableEditing: true,
     enableStickyHeader: true,
     enableColumnResizing: true,
+    enableColumnOrdering: true,
 
     displayColumnDefOptions: {
       'mrt-row-actions': {
